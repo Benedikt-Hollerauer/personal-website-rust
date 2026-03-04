@@ -24,6 +24,14 @@ server:
   host: http://localhost
   # Out of the box middleware configuration. to disable middleware you can changed the `enable` field to `false` of comment the middleware block
   middlewares:
+    static:
+      enable: true
+      must_exist: true
+      precompressed: false
+      folder:
+        uri: "/"
+        path: "../frontend/dist" # Relative path to your React build
+      fallback: "index.html"
 
 # Worker Configuration
 workers:
