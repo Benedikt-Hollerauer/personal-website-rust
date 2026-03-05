@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import './App.css'
@@ -65,6 +65,25 @@ function App() {
   useEffect(() => {
     previousPathRef.current = location.pathname
   }, [location.pathname])
+
+  const [message, setMessage] = useState<string>("Loading...")
+
+  useEffect(() => {
+    // This hits http://localhost:5173/api/projects 
+    // Vite proxies it to http://localhost:5150/api/projects
+    fetch('/api/projects')
+      .then((res) => res.json())
+      .then((data) => setMessage(data))
+      .catch((err) => setMessage("Error connecting to backend: " + err));
+  }, [])
+
+  // Backend test
+  return (
+    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
+      <h1>Portfolio Test</h1>
+      <p>Backend says: <strong>{message}</strong></p>
+    </div>
+  )
 
   return (
     <div className="app-canvas">

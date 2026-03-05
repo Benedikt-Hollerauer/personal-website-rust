@@ -1,14 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // This matches any request starting with "/api"
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: 'http://localhost:5150', // Loco's default port
         changeOrigin: true,
         secure: false,
       },
