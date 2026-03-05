@@ -1,0 +1,30 @@
+.homePage {
+  position: relative;
+  min-height: 100vh;
+  background: var(--color-light);
+  overflow: hidden;
+}
+
+.homePageContent {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 1rem;
+  color: var(--color-text);
+}
+
+.homePageContent h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.homePageContent p {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 400;
+  opacity: 0.8;
+}

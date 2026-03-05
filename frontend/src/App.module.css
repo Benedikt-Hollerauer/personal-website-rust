@@ -1,0 +1,10 @@
+.appCanvas {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.pageShell {
+  position: absolute;
+  inset: 0;
+}

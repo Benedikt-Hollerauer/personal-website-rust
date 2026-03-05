@@ -1,0 +1,110 @@
+.sliderShell {
+  width: min(100%, 54rem);
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  user-select: none;
+}
+
+.sliderHint {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.sliderViewport {
+  width: 100%;
+  min-height: 22rem;
+  display: grid;
+  align-items: center;
+}
+
+.projectCard {
+  width: 100%;
+  min-height: 22rem;
+  border: 1px solid rgba(8, 22, 29, 0.14);
+  border-radius: 1.1rem;
+  padding: 1.4rem;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(242, 244, 247, 0.95));
+  box-shadow: 0 18px 42px rgba(8, 22, 29, 0.08);
+  display: grid;
+  align-content: space-between;
+  gap: 1.2rem;
+}
+
+.projectHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.projectHeader h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.projectHeader span {
+  font-size: 0.9rem;
+  opacity: 0.68;
+}
+
+.projectSummary {
+  margin: 0;
+  font-size: 1.04rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.projectTags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.projectTags li {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(8, 22, 29, 0.22);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.sliderCounter {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  opacity: 0.68;
+}
+
+.sliderEmpty {
+  width: min(100%, 54rem);
+  min-height: 16rem;
+  border: 1px dashed rgba(8, 22, 29, 0.25);
+  border-radius: 1rem;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+@media (max-width: 680px) {
+  .projectCard {
+    min-height: 18rem;
+    padding: 1.1rem;
+  }
+
+  .projectSummary {
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+}

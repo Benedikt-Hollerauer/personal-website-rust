@@ -1,0 +1,31 @@
+.routePage {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.5rem;
+  background: var(--color-light);
+  color: var(--color-text);
+  text-align: center;
+  padding: 2rem;
+}
+
+.routePage h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.routePage p {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.routePageReturn {
+  z-index: 2;
+}

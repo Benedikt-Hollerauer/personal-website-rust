@@ -1,0 +1,177 @@
+.edgeArrow {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--color-dark);
+  text-decoration: none;
+  pointer-events: auto;
+  overflow: visible;
+  border: none;
+  transition: all 200ms ease;
+}
+
+.edgeArrow:hover {
+  color: var(--color-dark);
+  transform: scale(1.05);
+}
+
+.edgeArrow:active {
+  transform: scale(0.98);
+}
+
+.edgeArrow:focus-visible {
+  outline: 2px solid var(--color-dark);
+  outline-offset: 2px;
+}
+
+.edgeArrowContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.edgeArrowArrow {
+  opacity: 1;
+  transition: opacity 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.edgeArrow:hover .edgeArrowArrow {
+  opacity: 0;
+}
+
+.edgeArrowIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  position: absolute;
+}
+
+.edgeArrow:hover .edgeArrowIcon {
+  opacity: 1;
+}
+
+.edgeArrowIcon svg,
+.edgeArrowArrow svg {
+  display: block;
+  stroke: currentColor;
+  width: 2.2rem;
+  height: 2.2rem;
+  stroke-width: 1.75;
+}
+
+.edgeArrowLabel {
+  position: absolute;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 200ms ease;
+  pointer-events: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.edgeArrow:hover .edgeArrowLabel {
+  opacity: 1;
+}
+
+.edgeArrowLabelTop {
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.edgeArrow:hover .edgeArrowLabelTop {
+  transform: translateX(-50%) translateY(-0.3rem);
+}
+
+.edgeArrowLabelBottom {
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.edgeArrow:hover .edgeArrowLabelBottom {
+  transform: translateX(-50%) translateY(0.3rem);
+}
+
+.edgeArrowLabelLeft {
+  right: -4.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.edgeArrow:hover .edgeArrowLabelLeft {
+  transform: translateY(-50%) translateX(-0.3rem);
+}
+
+.edgeArrowLabelRight {
+  left: -4.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.edgeArrow:hover .edgeArrowLabelRight {
+  transform: translateY(-50%) translateX(0.3rem);
+}
+
+.edgeArrowTop {
+  top: 1.2rem;
+  left: 6rem;
+  right: 6rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+.edgeArrowBottom {
+  bottom: 1.2rem;
+  left: 6rem;
+  right: 6rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+.edgeArrowLeft {
+  top: 6rem;
+  bottom: 6rem;
+  left: 1.2rem;
+  width: 3.5rem;
+  border-radius: 50%;
+}
+
+.edgeArrowRight {
+  top: 6rem;
+  bottom: 6rem;
+  right: 1.2rem;
+  width: 3.5rem;
+  border-radius: 50%;
+}
+
+@media (max-width: 680px) {
+  .edgeArrowTop,
+  .edgeArrowBottom {
+    left: 3.5rem;
+    right: 3.5rem;
+    height: 3.75rem;
+  }
+
+  .edgeArrowLeft,
+  .edgeArrowRight {
+    top: 5.25rem;
+    bottom: 5.25rem;
+    width: 3.75rem;
+  }
+}
