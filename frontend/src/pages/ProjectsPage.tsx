@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
+import { PageSectionLayout } from '../components/PageSectionLayout'
 import { ProjectCardSlider, type ProjectCard } from '../components/ProjectCardSlider'
 import { Direction } from '../types'
 import styles from './ProjectsPage.module.css'
@@ -92,8 +93,6 @@ export function ProjectsPage() {
     }
   }, [])
 
-  const heading = useMemo(() => `Projects (${projects.length})`, [projects.length])
-
   return (
     <main className={styles.projectsPage}>
       <EdgeArrowButton
@@ -106,11 +105,15 @@ export function ProjectsPage() {
         className={styles.projectsPageReturn}
       />
 
-      <section className={styles.projectsContent} aria-label="Projects content">
-        <h1>{heading}</h1>
-        <p>Use your mouse wheel to cycle through projects. The slider loops infinitely.</p>
-        <ProjectCardSlider projects={projects} />
-      </section>
+      <PageSectionLayout title="Projects" titlePosition="top" className={styles.projectsLayout}>
+        <section className={styles.projectsContent} aria-label="Projects content">
+          <p>
+            {projects.length} projects loaded. Use your mouse wheel to cycle through them. The slider loops
+            infinitely.
+          </p>
+          <ProjectCardSlider projects={projects} />
+        </section>
+      </PageSectionLayout>
     </main>
   )
 }

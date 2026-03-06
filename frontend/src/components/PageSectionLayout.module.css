@@ -1,0 +1,103 @@
+.layout {
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  gap: 2rem;
+  padding: 6.5rem 8.5rem 3rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.6rem, 6.1vw, 5.3rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-weight: 600;
+  color: var(--color-dark);
+  white-space: nowrap;
+  inline-size: 11ch;
+}
+
+.content {
+  min-width: 0;
+}
+
+.layoutTop {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'title'
+    'content';
+}
+
+.layoutTop .title {
+  grid-area: title;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.layoutTop .content {
+  grid-area: content;
+}
+
+.layoutLeft,
+.layoutRight {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.layoutLeft {
+  grid-template-areas: 'title content';
+}
+
+.layoutLeft .title {
+  grid-area: title;
+  justify-self: start;
+  align-self: center;
+}
+
+.layoutLeft .content {
+  grid-area: content;
+}
+
+.layoutRight {
+  grid-template-areas: 'content title';
+}
+
+.layoutRight .title {
+  grid-area: title;
+  justify-self: end;
+  align-self: center;
+  text-align: right;
+}
+
+.layoutRight .content {
+  grid-area: content;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    padding: 6rem 4.5rem 2.5rem;
+    gap: 1.4rem;
+  }
+
+  .layoutLeft,
+  .layoutRight {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'content';
+  }
+
+  .layoutLeft .title,
+  .layoutRight .title,
+  .layoutTop .title {
+    justify-self: start;
+    text-align: left;
+      inline-size: auto;
+      white-space: normal;
+  }
+}
+
+@media (max-width: 720px) {
+  .layout {
+    padding: 5.5rem 1.5rem 1.5rem;
+  }
+}

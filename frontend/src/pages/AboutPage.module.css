@@ -1,0 +1,46 @@
+.aboutPage {
+  position: relative;
+  min-height: 100vh;
+  background: var(--color-light);
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+.aboutLayout {
+  min-height: 100vh;
+}
+
+.aboutCard {
+  margin: 0 auto;
+  max-width: 52rem;
+  border-radius: 1.6rem;
+  border: 1px solid rgba(8, 22, 29, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  padding: 2rem;
+  box-shadow: 0 16px 36px rgba(8, 22, 29, 0.07);
+}
+
+.aboutCard p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.aboutList {
+  margin: 1.1rem 0 0;
+  padding-left: 1rem;
+}
+
+.aboutList li {
+  margin-top: 0.5rem;
+}
+
+.aboutPageReturn {
+  z-index: 4;
+}
+
+@media (max-width: 720px) {
+  .aboutCard {
+    padding: 1.35rem;
+    border-radius: 1.1rem;
+  }
+}

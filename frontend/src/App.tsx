@@ -4,9 +4,10 @@ import { Route, Routes } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import styles from './App.module.css'
 import { HomePage } from './pages/HomePage'
+import { AboutPage } from './pages/AboutPage'
+import { ContactPage } from './pages/ContactPage'
 import { ProjectsPage } from './pages/ProjectsPage'
-import { RoutePlaceholderPage } from './pages/RoutePlaceholderPage'
-import { Direction } from './types'
+import { ResourcesPage } from './pages/ResourcesPage'
 
 type CanvasPoint = {
   x: number
@@ -102,18 +103,15 @@ function App() {
         >
           <Routes location={location}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<RoutePlaceholderPage title="About" returnDirection={Direction.Right} />} />
-            <Route
-              path="/resources"
-              element={<RoutePlaceholderPage title="Resources" returnDirection={Direction.Bottom} />}
-            />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
             <Route
               path="/projects"
               element={<ProjectsPage />}
             />
             <Route
               path="/contact"
-              element={<RoutePlaceholderPage title="Contact" returnDirection={Direction.Top} />}
+              element={<ContactPage />}
             />
           </Routes>
         </motion.div>

@@ -6,22 +6,17 @@
   overflow: hidden;
 }
 
-.projectsContent {
+.projectsLayout {
   min-height: 100vh;
+}
+
+.projectsContent {
   display: grid;
-  align-content: center;
+  align-content: start;
   justify-items: center;
   gap: 1rem;
   text-align: center;
-  padding: 2.5rem 7rem;
-}
-
-.projectsContent h1 {
-  margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  padding: 0;
 }
 
 .projectsContent p {
@@ -33,16 +28,4 @@
 
 .projectsPageReturn {
   z-index: 3;
-}
-
-@media (max-width: 880px) {
-  .projectsContent {
-    padding: 2.2rem 4.5rem;
-  }
-}
-
-@media (max-width: 680px) {
-  .projectsContent {
-    padding: 1.6rem 2rem;
-  }
 }
