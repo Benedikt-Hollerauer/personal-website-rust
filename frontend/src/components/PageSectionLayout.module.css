@@ -1,9 +1,12 @@
 .layout {
+  --section-space: clamp(2.5rem, 5.5vw, 8.5rem);
   min-height: 100vh;
   display: grid;
   align-items: center;
-  gap: 2rem;
-  padding: 6.5rem 8.5rem 3rem;
+  row-gap: 2rem;
+  column-gap: var(--section-space);
+  padding: 6.5rem var(--section-space) 3rem;
+  position: relative;
 }
 
 .title {
@@ -15,10 +18,12 @@
   color: var(--color-dark);
   white-space: nowrap;
   inline-size: 11ch;
+  z-index: 2;
 }
 
 .content {
   min-width: 0;
+  z-index: 1;
 }
 
 .layoutTop {
@@ -40,7 +45,7 @@
 
 .layoutLeft,
 .layoutRight {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(12rem, 20vw) minmax(0, 1fr);
 }
 
 .layoutLeft {
@@ -49,8 +54,10 @@
 
 .layoutLeft .title {
   grid-area: title;
-  justify-self: start;
+  justify-self: stretch;
   align-self: center;
+  text-align: center;
+  max-inline-size: 100%;
 }
 
 .layoutLeft .content {
@@ -58,14 +65,16 @@
 }
 
 .layoutRight {
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 20vw);
   grid-template-areas: 'content title';
 }
 
 .layoutRight .title {
   grid-area: title;
-  justify-self: end;
+  justify-self: stretch;
   align-self: center;
-  text-align: right;
+  text-align: center;
+  max-inline-size: 100%;
 }
 
 .layoutRight .content {
@@ -74,8 +83,9 @@
 
 @media (max-width: 1100px) {
   .layout {
-    padding: 6rem 4.5rem 2.5rem;
-    gap: 1.4rem;
+    --section-space: clamp(1.5rem, 4vw, 4.5rem);
+    padding: 6rem var(--section-space) 2.5rem;
+    row-gap: 1.4rem;
   }
 
   .layoutLeft,
@@ -91,8 +101,8 @@
   .layoutTop .title {
     justify-self: start;
     text-align: left;
-      inline-size: auto;
-      white-space: normal;
+    inline-size: auto;
+    white-space: normal;
   }
 }
 

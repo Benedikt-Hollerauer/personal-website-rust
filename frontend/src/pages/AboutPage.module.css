@@ -10,28 +10,125 @@
   min-height: 100vh;
 }
 
+.aboutStack {
+  display: grid;
+  gap: 1.65rem;
+}
+
 .aboutCard {
-  margin: 0 auto;
-  max-width: 52rem;
-  border-radius: 1.6rem;
-  border: 1px solid rgba(8, 22, 29, 0.14);
-  background: rgba(255, 255, 255, 0.72);
-  padding: 2rem;
-  box-shadow: 0 16px 36px rgba(8, 22, 29, 0.07);
+  width: 100%;
 }
 
-.aboutCard p {
+.aboutTextBlock {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.aboutTextBlock p {
   margin: 0;
-  line-height: 1.7;
+  line-height: 1.65;
+  font-size: 1.03rem;
 }
 
-.aboutList {
-  margin: 1.1rem 0 0;
-  padding-left: 1rem;
+.skillsHeadingCard {
+  width: 100%;
+  text-align: center;
 }
 
-.aboutList li {
-  margin-top: 0.5rem;
+.skillsHeadingCard h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.skillsContainer {
+  width: 100%;
+}
+
+.skillsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.skillTile {
+  width: 6.5rem;
+  height: 6.5rem;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.skillTile:hover {
+  transform: translateY(-5px) scale(1.04);
+  box-shadow: 0 14px 26px rgba(8, 22, 29, 0.12);
+  border-color: rgba(8, 22, 29, 0.22);
+}
+
+.skillIconImage {
+  max-width: 70%;
+  max-height: 70%;
+  object-fit: contain;
+}
+
+.skillFallbackIcon {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #102027;
+}
+
+.skillLabel {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 0.6rem);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moreSkillsBubble {
+  width: 6.5rem;
+  height: 6.5rem;
+  border: 1px solid rgba(43, 111, 204, 0.35);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #5f9be8, #3678d2);
+  color: #f8fbff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(54, 120, 210, 0.32);
+  text-decoration: none;
+  transition: transform 170ms ease, filter 170ms ease, box-shadow 170ms ease;
+}
+
+.moreSkillsBubble:hover {
+  transform: translateY(-4px) scale(1.03);
+  filter: brightness(1.03);
+  box-shadow: 0 16px 28px rgba(54, 120, 210, 0.4);
+}
+
+.moreSkillsBubble span {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.moreSkillsBubble small {
+  margin-top: -0.2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .aboutPageReturn {
@@ -39,8 +136,18 @@
 }
 
 @media (max-width: 720px) {
-  .aboutCard {
-    padding: 1.35rem;
-    border-radius: 1.1rem;
+  .skillsHeadingCard h2 {
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+  }
+
+  .skillTile,
+  .moreSkillsBubble {
+    width: 5.3rem;
+    height: 5.3rem;
+  }
+
+  .skillFallbackIcon {
+    font-size: 1.45rem;
   }
 }
