@@ -8,6 +8,9 @@ import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ResourcesPage } from './pages/ResourcesPage'
+import { LoginPage } from './pages/LoginPage'
+import { AdminPage } from './pages/AdminPage'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
 type CanvasPoint = {
   x: number
@@ -69,6 +72,10 @@ function App() {
     previousPathRef.current = location.pathname
   }, [location.pathname])
 
+  // Check if current route is admin or login (no canvas transitions)
+  const isAdminRoute =
+    location.pathname === '/login' || location.pathname.startsWith('/admin')
+
   // Backend test
   // const [message, setMessage] = useState<string>("Loading...")
 
@@ -87,6 +94,23 @@ function App() {
   //     <p>Backend says: <strong>{message}</strong></p>
   //   </div>
   // )
+
+  // Admin routes bypass canvas transition system
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    )
+  }
 
   return (
     <div className={styles.appCanvas}>

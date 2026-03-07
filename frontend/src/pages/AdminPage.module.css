@@ -1,0 +1,206 @@
+.adminPage {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  min-height: 100vh;
+  background: var(--color-light);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-dark);
+  color: var(--color-light);
+  border-right: 1px solid rgba(8, 22, 29, 0.15);
+}
+
+.sidebarHeader {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(242, 244, 247, 0.1);
+}
+
+.sidebarTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-light);
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.menuPlaceholder {
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  color: rgba(242, 244, 247, 0.5);
+  font-style: italic;
+  text-align: center;
+}
+
+.sidebarFooter {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(242, 244, 247, 0.1);
+}
+
+.logoutButton {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(242, 244, 247, 0.2);
+  border-radius: 0.35rem;
+  background: transparent;
+  color: var(--color-light);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.logoutButton:hover {
+  background: rgba(242, 244, 247, 0.08);
+  border-color: rgba(242, 244, 247, 0.35);
+}
+
+.logoutButton:active {
+  background: rgba(242, 244, 247, 0.12);
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.contentHeader {
+  padding: 2rem 2.5rem;
+  border-bottom: 1px solid rgba(8, 22, 29, 0.08);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.contentBody {
+  flex: 1;
+  padding: 2.5rem;
+}
+
+.welcomeCard {
+  max-width: 42rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(8, 22, 29, 0.12);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 8px 20px rgba(8, 22, 29, 0.06);
+}
+
+.welcomeTitle {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.welcomeText {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(16, 32, 39, 0.75);
+}
+
+.verificationNotice {
+  margin-top: 1.5rem;
+  padding: 0.85rem 1rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 0.35rem;
+  color: #b45309;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .adminPage {
+    grid-template-columns: 14rem 1fr;
+  }
+
+  .sidebarHeader {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .sidebarTitle {
+    font-size: 1.1rem;
+  }
+
+  .contentHeader {
+    padding: 1.75rem 2rem;
+  }
+
+  .pageTitle {
+    font-size: 1.75rem;
+  }
+
+  .contentBody {
+    padding: 2rem;
+  }
+
+  .welcomeCard {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .adminPage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(8, 22, 29, 0.15);
+  }
+
+  .sidebarHeader {
+    padding: 1.2rem 1.5rem;
+  }
+
+  .sidebarNav {
+    display: none;
+  }
+
+  .sidebarFooter {
+    padding: 1rem 1.5rem;
+  }
+
+  .contentHeader {
+    padding: 1.5rem;
+  }
+
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+
+  .contentBody {
+    padding: 1.5rem;
+  }
+
+  .welcomeCard {
+    padding: 1.75rem;
+  }
+
+  .welcomeTitle {
+    font-size: 1.3rem;
+  }
+}
