@@ -149,7 +149,7 @@ export function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
       >
-        <PageSectionLayout title="Contact" titlePosition="right" className={styles.contactShell}>
+        <PageSectionLayout title="Contact" titlePosition="right" navRail="top" className={styles.contactShell}>
           <motion.section
             className={styles.contactPanel}
             initial={{ opacity: 0, y: 18 }}

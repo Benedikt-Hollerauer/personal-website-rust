@@ -105,7 +105,7 @@ export function ProjectsPage() {
         className={styles.projectsPageReturn}
       />
 
-      <PageSectionLayout title="Projects" titlePosition="top" className={styles.projectsLayout}>
+      <PageSectionLayout title="Projects" titlePosition="top" navRail="left" className={styles.projectsLayout}>
         <section className={styles.projectsContent} aria-label="Projects content">
           <p>
             {projects.length} projects loaded. Use your mouse wheel to cycle through them. The slider loops

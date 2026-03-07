@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BackgroundCard } from '../components/BackgroundCard'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
@@ -36,6 +36,50 @@ type SkillItem = {
   iconUrl?: string
 }
 
+type ApiTestimonial = {
+  id?: string | number
+  name?: string
+  author?: string
+  role?: string
+  title?: string
+  position?: string
+  text?: string
+  message?: string
+  content?: string
+  quote?: string
+}
+
+type TestimonialItem = {
+  id: string
+  name: string
+  role: string
+  text: string
+}
+
+type ApiWorkHistory = {
+  id?: string | number
+  year?: string | number
+  title?: string
+  role?: string
+  position?: string
+  text?: string
+  description?: string
+  summary?: string
+  emoji?: string
+  icon?: string
+  accentColor?: string
+  color?: string
+}
+
+type WorkHistoryItem = {
+  id: string
+  year: string
+  title: string
+  text: string
+  emoji: string
+  accentColor: string
+}
+
 const FALLBACK_ABOUT_PARAGRAPHS = [
   'Hey there, I am Bene.',
   'I am a software engineer based in Bavaria, Germany.',
@@ -54,6 +98,72 @@ const FALLBACK_SKILLS: SkillItem[] = [
   { id: 'linux', label: 'Linux', iconText: 'LX' },
   { id: 'sql', label: 'SQL', iconText: 'SQL' },
   { id: 'cloud', label: 'Cloud', iconText: 'CL' },
+]
+
+const FALLBACK_TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: 't-1',
+    name: 'Thomas Hofer',
+    role: 'Senior Software Engineer',
+    text:
+      'Bene combines technical depth with clear communication. He contributes reliable code and helps teams move faster with pragmatic solutions.',
+  },
+  {
+    id: 't-2',
+    name: 'Markus Ziegler',
+    role: 'Senior Software Engineer',
+    text:
+      'Fast to adapt, calm under pressure, and consistently focused on quality. A strong teammate for challenging engineering tasks.',
+  },
+  {
+    id: 't-3',
+    name: 'Jannik Meier',
+    role: 'Software Developer',
+    text:
+      'Working with Bene is productive and enjoyable. He supports collaboration and keeps delivery standards high.',
+  },
+  {
+    id: 't-4',
+    name: 'Basit Rehman',
+    role: 'Software Developer',
+    text:
+      'Bene quickly understands new stacks and improves existing architecture with practical, maintainable changes.',
+  },
+]
+
+const FALLBACK_WORK_HISTORY: WorkHistoryItem[] = [
+  {
+    id: 'history-1',
+    year: '2021',
+    title: 'Full-Stack Software Engineer',
+    text: 'At boerse.de Group AG, I processed large data sets, built internal tools, and delivered new website features.',
+    emoji: '👨‍💻',
+    accentColor: '#8b5cf6',
+  },
+  {
+    id: 'history-2',
+    year: '2022',
+    title: 'Career Transition',
+    text: 'In a bridging warehouse role, I managed stock, coordinated shipments, and kept operations running smoothly.',
+    emoji: '📦',
+    accentColor: '#f59e0b',
+  },
+  {
+    id: 'history-3',
+    year: '2024',
+    title: 'Software Engineer',
+    text: 'I returned full-time to software and focused on architecture, delivery quality, and maintainable implementations.',
+    emoji: '🧠',
+    accentColor: '#22c55e',
+  },
+  {
+    id: 'history-4',
+    year: '2025',
+    title: 'Software Engineer, Founder',
+    text: 'I started building products independently while continuing to deliver robust software engineering projects.',
+    emoji: '🚀',
+    accentColor: '#ef4444',
+  },
 ]
 
 const MORE_SKILLS_LINK = '/resources'
@@ -87,9 +197,57 @@ function normalizeAboutParagraphs(payload: ApiAbout): string[] {
     .filter(Boolean)
 }
 
+function normalizeTestimonial(item: ApiTestimonial, index: number): TestimonialItem {
+  const name = item.name?.trim() || item.author?.trim() || `Reference ${index + 1}`
+  const role = item.role?.trim() || item.title?.trim() || item.position?.trim() || 'Professional Reference'
+  const text = item.text?.trim() || item.message?.trim() || item.content?.trim() || item.quote?.trim() || 'Recommendation unavailable.'
+
+  return {
+    id: String(item.id ?? `testimonial-${index}`),
+    name,
+    role,
+    text,
+  }
+}
+
+function normalizeWorkHistory(item: ApiWorkHistory, index: number): WorkHistoryItem {
+  const yearRaw = item.year ?? `20${20 + index}`
+  const title = item.title?.trim() || item.role?.trim() || item.position?.trim() || `Career Milestone ${index + 1}`
+  const text = item.text?.trim() || item.description?.trim() || item.summary?.trim() || 'More details coming soon.'
+  const emoji = item.emoji?.trim() || item.icon?.trim() || '💼'
+  const accentColor = item.accentColor?.trim() || item.color?.trim() || '#3b82f6'
+
+  return {
+    id: String(item.id ?? `history-${index}`),
+    year: String(yearRaw),
+    title,
+    text,
+    emoji,
+    accentColor,
+  }
+}
+
 export function AboutPage() {
   const [aboutParagraphs, setAboutParagraphs] = useState<string[]>(FALLBACK_ABOUT_PARAGRAPHS)
   const [skills, setSkills] = useState<SkillItem[]>(FALLBACK_SKILLS)
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(FALLBACK_TESTIMONIALS)
+  const [workHistory, setWorkHistory] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY)
+  const [timelineProgress, setTimelineProgress] = useState(0)
+  const timelineRef = useRef<HTMLElement | null>(null)
+  const markerRefs = useRef<Array<HTMLDivElement | null>>([])
+
+  const getMarkerProgress = (index: number): number => {
+    const timelineElement = timelineRef.current
+    const markerElement = markerRefs.current[index]
+
+    if (!timelineElement || !markerElement) {
+      return workHistory.length <= 1 ? 0 : index / (workHistory.length - 1)
+    }
+
+    const sectionHeight = timelineElement.scrollHeight || timelineElement.getBoundingClientRect().height || 1
+    const markerCenter = markerElement.offsetTop + markerElement.offsetHeight / 2
+    return Math.max(0, Math.min(1, markerCenter / sectionHeight))
+  }
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -110,6 +268,141 @@ export function AboutPage() {
       })
       .catch(() => {
         // Keep fallback about text when backend is unavailable.
+      })
+
+    return () => {
+      abortController.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    fetch('/api/work-history', { signal: abortController.signal })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to load work history')
+        }
+
+        return response.json() as Promise<
+          ApiWorkHistory[] | { history?: ApiWorkHistory[]; timeline?: ApiWorkHistory[]; items?: ApiWorkHistory[] }
+        >
+      })
+      .then((payload) => {
+        const list = Array.isArray(payload)
+          ? payload
+          : payload.history || payload.timeline || payload.items
+
+        if (!Array.isArray(list) || list.length === 0) {
+          return
+        }
+
+        setWorkHistory(list.map(normalizeWorkHistory))
+      })
+      .catch(() => {
+        // Keep fallback work history when backend is unavailable.
+      })
+
+    return () => {
+      abortController.abort()
+    }
+  }, [])
+
+  useEffect(() => {
+    const updateTimelineProgress = () => {
+      const timelineElement = timelineRef.current
+      if (!timelineElement) {
+        return
+      }
+
+      const scrollContainer = timelineElement.closest<HTMLElement>('[data-page-content-scroll="true"]')
+
+      const rect = timelineElement.getBoundingClientRect()
+      const sectionHeight = timelineElement.scrollHeight || rect.height || 1
+
+      let sectionTop = 0
+      let triggerPoint = 0
+
+      if (scrollContainer) {
+        const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight
+        if (scrollContainer.scrollTop >= maxScrollTop - 2) {
+          setTimelineProgress(1)
+          return
+        }
+
+        const containerRect = scrollContainer.getBoundingClientRect()
+        sectionTop = rect.top - containerRect.top + scrollContainer.scrollTop
+        // Use the container bottom edge as the trigger so the final item is always reachable.
+        triggerPoint = scrollContainer.scrollTop + scrollContainer.clientHeight
+
+        const sectionBottom = sectionTop + sectionHeight
+        if (triggerPoint >= sectionBottom - 2) {
+          setTimelineProgress(1)
+          return
+        }
+      } else {
+        sectionTop = rect.top + window.scrollY
+        // Fallback for non-container scrolling contexts.
+        triggerPoint = window.scrollY + window.innerHeight
+
+        const sectionBottom = sectionTop + sectionHeight
+        if (triggerPoint >= sectionBottom - 2) {
+          setTimelineProgress(1)
+          return
+        }
+      }
+
+      const rawProgress = (triggerPoint - sectionTop) / sectionHeight
+      const clampedProgress = Math.max(0, Math.min(1, rawProgress))
+
+      setTimelineProgress(clampedProgress)
+    }
+
+    const timelineElement = timelineRef.current
+    const scrollContainer = timelineElement?.closest<HTMLElement>('[data-page-content-scroll="true"]') ?? null
+
+    updateTimelineProgress()
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', updateTimelineProgress, { passive: true })
+    } else {
+      window.addEventListener('scroll', updateTimelineProgress, { passive: true })
+    }
+
+    window.addEventListener('resize', updateTimelineProgress)
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', updateTimelineProgress)
+      } else {
+        window.removeEventListener('scroll', updateTimelineProgress)
+      }
+
+      window.removeEventListener('resize', updateTimelineProgress)
+    }
+  }, [])
+
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    fetch('/api/testimonials', { signal: abortController.signal })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to load testimonials')
+        }
+
+        return response.json() as Promise<ApiTestimonial[] | { testimonials?: ApiTestimonial[] }>
+      })
+      .then((payload) => {
+        const list = Array.isArray(payload) ? payload : payload.testimonials
+        if (!Array.isArray(list) || list.length === 0) {
+          return
+        }
+
+        setTestimonials(list.map(normalizeTestimonial))
+      })
+      .catch(() => {
+        // Keep fallback testimonials when backend is unavailable.
       })
 
     return () => {
@@ -160,7 +453,7 @@ export function AboutPage() {
         className={styles.aboutPageReturn}
       />
 
-      <PageSectionLayout title="About" titlePosition="top" className={styles.aboutLayout}>
+      <PageSectionLayout title="About" titlePosition="top" navRail="right" className={styles.aboutLayout}>
         <motion.div
           className={styles.aboutStack}
           initial={{ opacity: 0, y: 20 }}
@@ -213,6 +506,96 @@ export function AboutPage() {
               </Link>
             </section>
           </BackgroundCard>
+
+          <BackgroundCard className={styles.testimonialsHeadingCard}>
+            <h2>MY TESTIMONIALS</h2>
+          </BackgroundCard>
+
+          <BackgroundCard className={styles.testimonialsContainer} size="lg">
+            <section className={styles.testimonialsGrid} aria-label="Testimonials">
+              {testimonials.map((testimonial, index) => (
+                <BackgroundCard
+                  key={testimonial.id}
+                  as="article"
+                  size="md"
+                  className={`${styles.testimonialCard} ${index % 3 === 0 ? styles.testimonialCardWide : ''}`.trim()}
+                >
+                  <div className={styles.testimonialHead}>
+                    <span className={styles.quoteMark} aria-hidden="true">
+                      {'\u275D'}
+                    </span>
+                    <div className={styles.testimonialIdentity}>
+                      <h3>{testimonial.name}</h3>
+                      <p>{testimonial.role}</p>
+                    </div>
+                  </div>
+                  <p className={styles.testimonialText}>{testimonial.text}</p>
+                </BackgroundCard>
+              ))}
+            </section>
+          </BackgroundCard>
+
+          <BackgroundCard className={styles.timelineHeadingCard}>
+            <h2>MY WORK HISTORY</h2>
+          </BackgroundCard>
+
+          <section ref={timelineRef} className={styles.timelineSection} aria-label="Work history timeline">
+            <div className={styles.timelineLineBase} aria-hidden="true" />
+            <div
+              className={styles.timelineLineFill}
+              aria-hidden="true"
+              style={{ height: `${timelineProgress * 100}%` }}
+            />
+
+            <div className={styles.timelineRows}>
+              {workHistory.map((item, index) => {
+                const isLeft = index % 2 === 0
+                const markerProgress = getMarkerProgress(index)
+                const isRevealed = timelineProgress >= markerProgress
+
+                return (
+                  <article key={item.id} className={styles.timelineRow}>
+                    <motion.div
+                      className={`${styles.timelineCardWrap} ${isLeft ? styles.timelineCardLeft : styles.timelineCardRight}`}
+                      initial={false}
+                      animate={{
+                        opacity: isRevealed ? 1 : 0,
+                        x: isRevealed ? 0 : isLeft ? -72 : 72,
+                        y: isRevealed ? 0 : 16,
+                      }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <BackgroundCard as="div" size="md" className={styles.timelineCard}>
+                        <div
+                          className={styles.timelineCardTop}
+                          style={{ background: item.accentColor }}
+                          aria-hidden="true"
+                        >
+                          <span>{item.emoji}</span>
+                        </div>
+                        <p className={styles.timelineCardText}>{item.text}</p>
+                      </BackgroundCard>
+                    </motion.div>
+
+                    <div className={styles.timelineMarkerColumn}>
+                      <div
+                        ref={(element) => {
+                          markerRefs.current[index] = element
+                        }}
+                        className={`${styles.timelineYearDot} ${isRevealed ? styles.timelineYearDotActive : ''}`}
+                      >
+                        {item.year}
+                      </div>
+                    </div>
+
+                    <div className={`${styles.timelineRoleLabel} ${isLeft ? styles.timelineRoleLabelRight : styles.timelineRoleLabelLeft}`}>
+                      {item.title}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          </section>
         </motion.div>
       </PageSectionLayout>
     </main>

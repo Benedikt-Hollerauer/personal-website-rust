@@ -27,5 +27,6 @@
 }
 
 .projectsPageReturn {
+  position: fixed;
   z-index: 3;
 }

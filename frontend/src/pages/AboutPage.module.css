@@ -132,7 +132,228 @@
 }
 
 .aboutPageReturn {
-  z-index: 4;
+  position: fixed;
+  z-index: 12;
+}
+
+.testimonialsHeadingCard {
+  width: 100%;
+  text-align: center;
+}
+
+.testimonialsHeadingCard h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.timelineHeadingCard {
+  width: 100%;
+  text-align: center;
+}
+
+.timelineHeadingCard h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.testimonialsContainer {
+  width: 100%;
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.testimonialCard {
+  grid-column: span 6;
+  display: grid;
+  gap: 0.9rem;
+  min-height: 10.5rem;
+  border-color: rgba(8, 22, 29, 0.14);
+  transition: transform 170ms ease, box-shadow 170ms ease, border-color 170ms ease;
+}
+
+.testimonialCardWide {
+  grid-column: span 8;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(8, 22, 29, 0.11);
+  border-color: rgba(8, 22, 29, 0.22);
+}
+
+.testimonialHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.quoteMark {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #111827;
+  margin-top: 0.05rem;
+}
+
+.testimonialIdentity {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.testimonialIdentity h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #4c1d95;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+
+.testimonialIdentity p {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: rgba(16, 32, 39, 0.7);
+}
+
+.testimonialText {
+  margin: 0;
+  line-height: 1.48;
+  font-size: 0.94rem;
+  color: rgba(16, 32, 39, 0.95);
+}
+
+.timelineSection {
+  position: relative;
+  min-height: 34rem;
+  padding: 1.5rem 0.25rem clamp(5rem, 16vh, 8.5rem);
+}
+
+.timelineLineBase,
+.timelineLineFill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.timelineLineBase {
+  height: 100%;
+  background: rgba(8, 22, 29, 0.2);
+}
+
+.timelineLineFill {
+  background: linear-gradient(180deg, #111827, #0b1720);
+  transition: height 120ms linear;
+}
+
+.timelineRows {
+  display: grid;
+  gap: 2.2rem;
+}
+
+.timelineRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 1.35rem;
+  min-height: 11rem;
+  position: relative;
+}
+
+.timelineCardWrap {
+  max-width: 21rem;
+}
+
+.timelineCardLeft {
+  grid-column: 1;
+  justify-self: end;
+}
+
+.timelineCardRight {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.timelineCard {
+  overflow: hidden;
+  padding: 0;
+}
+
+.timelineCardTop {
+  min-height: 5.5rem;
+  display: grid;
+  place-items: center;
+  color: #f8fafc;
+}
+
+.timelineCardTop span {
+  font-size: 2.35rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.18));
+}
+
+.timelineCardText {
+  margin: 0;
+  padding: 0.95rem 1rem 1rem;
+  font-size: 0.89rem;
+  line-height: 1.5;
+}
+
+.timelineMarkerColumn {
+  grid-column: 2;
+  position: relative;
+  z-index: 1;
+}
+
+.timelineYearDot {
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 999px;
+  border: 2px solid #111827;
+  display: grid;
+  place-items: center;
+  background: #f2f4f7;
+  color: #111827;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transform: scale(0.92);
+  transition: transform 170ms ease, background 170ms ease, color 170ms ease;
+}
+
+.timelineYearDotActive {
+  background: #111827;
+  color: #f8fafc;
+  transform: scale(1);
+}
+
+.timelineRoleLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: rgba(16, 32, 39, 0.92);
+}
+
+.timelineRoleLabelRight {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.timelineRoleLabelLeft {
+  grid-column: 1;
+  justify-self: end;
+  text-align: right;
 }
 
 @media (max-width: 720px) {
@@ -149,5 +370,115 @@
 
   .skillFallbackIcon {
     font-size: 1.45rem;
+  }
+
+  .testimonialsHeadingCard h2 {
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+  }
+
+  .timelineHeadingCard h2 {
+    font-size: 1.2rem;
+    letter-spacing: 0.06em;
+  }
+
+  .timelineSection {
+    padding: 1rem 0 0.25rem;
+  }
+
+  .timelineLineBase,
+  .timelineLineFill {
+    left: 1.15rem;
+    transform: none;
+  }
+
+  .timelineRows {
+    gap: 1.35rem;
+  }
+
+  .timelineRow {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.95rem;
+    min-height: auto;
+    padding-left: 0;
+  }
+
+  .timelineCardWrap,
+  .timelineCardLeft,
+  .timelineCardRight {
+    grid-column: 2;
+    justify-self: stretch;
+    max-width: none;
+    order: 3;
+  }
+
+  .timelineMarkerColumn {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    margin-top: 0.1rem;
+  }
+
+  .timelineRoleLabel,
+  .timelineRoleLabelRight,
+  .timelineRoleLabelLeft {
+    grid-column: 2;
+    justify-self: start;
+    text-align: left;
+    font-size: 0.9rem;
+    order: 2;
+    margin-bottom: 0.2rem;
+  }
+
+  .timelineCardTop {
+    min-height: 4.6rem;
+  }
+
+  .timelineCardTop span {
+    font-size: 2rem;
+  }
+
+  .timelineCardText {
+    font-size: 0.85rem;
+    padding: 0.85rem 0.9rem 0.9rem;
+  }
+
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonialCard,
+  .testimonialCardWide {
+    grid-column: auto;
+  }
+
+  .testimonialIdentity h3 {
+    font-size: 1.2rem;
+  }
+
+  .testimonialText {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1080px) {
+  .testimonialsGrid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .testimonialCard {
+    grid-column: span 4;
+  }
+
+  .testimonialCardWide {
+    grid-column: span 8;
+  }
+
+  .timelineCardWrap {
+    max-width: 16.5rem;
+  }
+
+  .timelineRoleLabel {
+    font-size: 0.86rem;
   }
 }

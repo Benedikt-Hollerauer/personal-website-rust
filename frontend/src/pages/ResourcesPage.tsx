@@ -139,7 +139,7 @@ export function ResourcesPage() {
         className={styles.resourcesPageReturn}
       />
 
-      <PageSectionLayout title="Resources" titlePosition="left" className={styles.resourcesLayout}>
+      <PageSectionLayout title="Resources" titlePosition="left" navRail="bottom" className={styles.resourcesLayout}>
         <motion.section
           className={styles.resourcesGrid}
           initial={{ opacity: 0, x: 24 }}
