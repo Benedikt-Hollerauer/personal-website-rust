@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './ProjectCardSlider.module.css'
 
 export type ProjectCard = {
@@ -44,6 +44,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(1)
   const isLockedRef = useRef(false)
+  const sliderRef = useRef<HTMLElement>(null)
 
   // Include a special "github" card at the end
   const allItems = [...projects, { id: 'github-card', isGithubCard: true } as any]
@@ -70,7 +71,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
     }, 360)
   }
 
-  const handleWheel: React.WheelEventHandler<HTMLElement> = (event) => {
+  const handleWheel = (event: WheelEvent) => {
     if (Math.abs(event.deltaY) < 8) {
       return
     }
@@ -78,6 +79,16 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
     event.preventDefault()
     moveBy(event.deltaY > 0 ? 1 : -1)
   }
+
+  useEffect(() => {
+    const slider = sliderRef.current
+    if (!slider) return
+
+    slider.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      slider.removeEventListener('wheel', handleWheel)
+    }
+  }, [totalItems, isLockedRef])
 
   if (!hasItems) {
     return (
@@ -88,7 +99,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
   }
 
   return (
-    <section className={styles.sliderShell} onWheel={handleWheel} aria-label="Project slider">
+    <section className={styles.sliderShell} ref={sliderRef} aria-label="Project slider">
       <p className={styles.sliderHint}>Scroll to explore projects</p>
 
       <div className={styles.sliderViewport}>
