@@ -18,6 +18,7 @@ pub struct Model {
     pub key_points: Option<Json>,
     pub start_date: Option<Date>,
     pub end_date: Option<Date>,
+    pub active: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

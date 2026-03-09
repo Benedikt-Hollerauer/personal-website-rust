@@ -8,6 +8,12 @@ export type ProjectCard = {
   summary: string
   tags: string[]
   year?: string
+  keyPoints?: string[]
+  location?: string
+  link?: string
+  startDate?: string
+  endDate?: string
+  active?: boolean
 }
 
 type ProjectCardSliderProps = {
@@ -39,21 +45,23 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(1)
   const isLockedRef = useRef(false)
 
-  const hasProjects = projects.length > 0
-  const activeProject = useMemo(
-    () => (hasProjects ? projects[activeIndex] : null),
-    [activeIndex, hasProjects, projects],
-  )
+  // Include a special "github" card at the end
+  const allItems = [...projects, { id: 'github-card', isGithubCard: true } as any]
+  const totalItems = allItems.length
+
+  const hasItems = totalItems > 0
+  const isGithubCard = hasItems && activeIndex === projects.length
+  const activeProject = hasItems ? allItems[activeIndex] : null
 
   const moveBy = (step: SlideDirection) => {
-    if (projects.length <= 1 || isLockedRef.current) {
+    if (totalItems <= 1 || isLockedRef.current) {
       return
     }
 
     isLockedRef.current = true
     setSlideDirection(step)
     setActiveIndex((current) => {
-      const nextIndex = (current + step + projects.length) % projects.length
+      const nextIndex = (current + step + totalItems) % totalItems
       return nextIndex
     })
 
@@ -71,7 +79,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
     moveBy(event.deltaY > 0 ? 1 : -1)
   }
 
-  if (!activeProject) {
+  if (!hasItems) {
     return (
       <section className={styles.sliderEmpty} aria-live="polite">
         <p>No projects yet.</p>
@@ -85,34 +93,96 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
 
       <div className={styles.sliderViewport}>
         <AnimatePresence mode="wait" custom={slideDirection} initial={false}>
-          <motion.article
-            key={activeProject.id}
-            className={styles.projectCard}
-            custom={slideDirection}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <header className={styles.projectHeader}>
-              <h2>{activeProject.title}</h2>
-              {activeProject.year ? <span>{activeProject.year}</span> : null}
-            </header>
+          {isGithubCard ? (
+            <motion.article
+              key="github-card"
+              className={styles.githubCard}
+              custom={slideDirection}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className={styles.githubCardContent}>
+                <h2>More Projects</h2>
+                <p className={styles.githubCardText}>
+                  Currently no projects eingetragen. Check out more projects on my{' '}
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.githubLink}>
+                    GitHub
+                  </a>
+                </p>
+              </div>
+            </motion.article>
+          ) : (
+            <motion.article
+              key={activeProject.id}
+              className={styles.projectCard}
+              custom={slideDirection}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <header className={styles.projectHeader}>
+                <div className={styles.projectTitleSection}>
+                  <h2>{activeProject.title}</h2>
+                  {activeProject.year ? <span className={styles.year}>{activeProject.year}</span> : null}
+                </div>
+                {activeProject.location && (
+                  <p className={styles.location}>📍 {activeProject.location}</p>
+                )}
+              </header>
 
-            <p className={styles.projectSummary}>{activeProject.summary}</p>
+              <p className={styles.projectSummary}>{activeProject.summary}</p>
 
-            <ul className={styles.projectTags} aria-label="Project tags">
-              {activeProject.tags.map((tag) => (
-                <li key={`${activeProject.id}-${tag}`}>{tag}</li>
-              ))}
-            </ul>
-          </motion.article>
+              {activeProject.link && (
+                <a href={activeProject.link} target="_blank" rel="noopener noreferrer" className={styles.projectLink}>
+                  → Visit Project
+                </a>
+              )}
+
+              {(activeProject.startDate || activeProject.endDate) && (
+                <div className={styles.projectDates}>
+                  {activeProject.startDate && (
+                    <span>
+                      Start: {new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                    </span>
+                  )}
+                  {activeProject.endDate && (
+                    <span>
+                      End: {new Date(activeProject.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {activeProject.keyPoints && activeProject.keyPoints.length > 0 && (
+                <div className={styles.keyPoints}>
+                  <h3>Key Points</h3>
+                  <ul>
+                    {activeProject.keyPoints.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {activeProject.tags && activeProject.tags.length > 0 && (
+                <ul className={styles.projectTags} aria-label="Project tags">
+                  {activeProject.tags.map((tag) => (
+                    <li key={`${activeProject.id}-${tag}`}>{tag}</li>
+                  ))}
+                </ul>
+              )}
+            </motion.article>
+          )}
         </AnimatePresence>
       </div>
 
       <p className={styles.sliderCounter}>
-        {activeIndex + 1} / {projects.length}
+        {activeIndex + 1} / {totalItems}
       </p>
     </section>
   )

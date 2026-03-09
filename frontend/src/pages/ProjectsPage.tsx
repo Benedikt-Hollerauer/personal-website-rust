@@ -14,6 +14,12 @@ type ApiProject = {
   description?: string
   tags?: string[]
   year?: string | number
+  key_points?: Record<string, unknown>
+  location?: string
+  link?: string
+  start_date?: string
+  end_date?: string
+  active?: boolean
 }
 
 const HOME_ARROW = (
@@ -29,6 +35,9 @@ const FALLBACK_PROJECTS: ProjectCard[] = [
     summary: 'A fast, scroll-first portfolio focused on clear routes, expressive motion, and low visual noise.',
     tags: ['react', 'typescript', 'motion'],
     year: '2026',
+    location: 'Remote',
+    link: 'https://example.com/portfolio',
+    keyPoints: ['Smooth page transitions', 'Component-based architecture', 'Dark mode support'],
   },
   {
     id: 'resource-lab',
@@ -36,6 +45,8 @@ const FALLBACK_PROJECTS: ProjectCard[] = [
     summary: 'A curated resource hub with topic maps and directional navigation patterns for quick discovery.',
     tags: ['ux', 'content', 'navigation'],
     year: '2025',
+    location: 'San Francisco, CA',
+    keyPoints: ['Intuitive categorization', 'Search optimization', 'Community contributions'],
   },
   {
     id: 'project-atlas',
@@ -43,6 +54,9 @@ const FALLBACK_PROJECTS: ProjectCard[] = [
     summary: 'A compact project tracker with clean card interactions and keyboard-friendly browsing patterns.',
     tags: ['frontend', 'architecture', 'api-ready'],
     year: '2024',
+    location: 'New York, NY',
+    link: 'https://example.com/atlas',
+    keyPoints: ['Real-time updates', 'Collaborative features', 'Keyboard navigation'],
   },
 ]
 
@@ -53,17 +67,39 @@ function normalizeProject(project: ApiProject, index: number): ProjectCard {
     project.description ??
     'A project card loaded from the backend API.'
 
+  // Convert key_points object to array of strings
+  let keyPoints: string[] = []
+  if (project.key_points && typeof project.key_points === 'object') {
+    keyPoints = Object.values(project.key_points).map((v) => String(v))
+  }
+
+  // Extract year from start_date if available
+  let year = project.year ? String(project.year) : undefined
+  if (!year && project.start_date) {
+    try {
+      year = new Date(project.start_date).getFullYear().toString()
+    } catch {
+      // Ignore date parsing errors
+    }
+  }
+
   return {
     id: String(project.id ?? `project-${index}`),
     title,
     summary,
-    tags: Array.isArray(project.tags) ? project.tags : ['project'],
-    year: project.year ? String(project.year) : undefined,
+    tags: Array.isArray(project.tags) && project.tags.length > 0 ? project.tags : [],
+    year,
+    keyPoints: keyPoints.length > 0 ? keyPoints : undefined,
+    location: project.location,
+    link: project.link,
+    startDate: project.start_date,
+    endDate: project.end_date,
+    active: project.active !== false, // default to true if not specified
   }
 }
 
 export function ProjectsPage() {
-  const [projects, setProjects] = useState<ProjectCard[]>(FALLBACK_PROJECTS)
+  const [projects, setProjects] = useState<ProjectCard[]>([])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -78,14 +114,20 @@ export function ProjectsPage() {
       })
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.projects
-        if (!Array.isArray(list) || list.length === 0) {
+        if (!Array.isArray(list)) {
           return
         }
 
-        setProjects(list.map(normalizeProject))
+        // Filter only active projects and normalize them
+        const activeProjects = list
+          .filter((p) => p.active !== false)
+          .map(normalizeProject)
+        
+        setProjects(activeProjects)
       })
       .catch(() => {
-        // Keep fallback projects when the backend is not ready yet.
+        // Empty array when backend is not ready (shows only GitHub card)
+        setProjects([])
       })
 
     return () => {
@@ -107,10 +149,6 @@ export function ProjectsPage() {
 
       <PageSectionLayout title="Projects" titlePosition="top" navRail="left" className={styles.projectsLayout}>
         <section className={styles.projectsContent} aria-label="Projects content">
-          <p>
-            {projects.length} projects loaded. Use your mouse wheel to cycle through them. The slider loops
-            infinitely.
-          </p>
           <ProjectCardSlider projects={projects} />
         </section>
       </PageSectionLayout>

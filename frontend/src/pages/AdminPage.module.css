@@ -30,6 +30,35 @@
   flex: 1;
   padding: 1.5rem 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuItem {
+  padding: 0.85rem 1.5rem;
+  margin: 0;
+  background: none;
+  border: none;
+  color: rgba(242, 244, 247, 0.7);
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 180ms ease;
+  letter-spacing: 0.02em;
+}
+
+.menuItem:hover {
+  background: rgba(242, 244, 247, 0.08);
+  color: var(--color-light);
+}
+
+.menuItemActive {
+  background: rgba(242, 244, 247, 0.12);
+  color: var(--color-light);
+  border-left: 3px solid var(--color-light);
+  padding-left: calc(1.5rem - 3px);
+  font-weight: 500;
 }
 
 .menuPlaceholder {
@@ -81,6 +110,59 @@
   padding: 2rem 2.5rem;
   border-bottom: 1px solid rgba(8, 22, 29, 0.08);
   background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.createButton {
+  padding: 0.7rem 1.5rem;
+  border: 1px solid rgba(8, 22, 29, 0.12);
+  border-radius: 0.35rem;
+  background: var(--color-primary, #1976d2);
+  color: white;
+  font: inherit;
+ 
+
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.loadingMessage,
+.emptyMessage {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: rgba(16, 32, 39, 0.6);
+  font-size: 1.1rem;
+}
+
+.errorMessage {
+  padding: 1rem 1.5rem;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  border-radius: 0.35rem;
+  color: #991b1b;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+} font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 180ms ease;
+  white-space: nowrap;
+}
+
+.createButton:hover {
+  background: var(--color-primary-dark, #1565c0);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+.createButton:active {
+  transform: scale(0.98);
 }
 
 .pageTitle {

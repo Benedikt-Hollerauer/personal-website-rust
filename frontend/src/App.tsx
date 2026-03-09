@@ -10,6 +10,7 @@ import { ProjectsPage } from './pages/ProjectsPage'
 import { ResourcesPage } from './pages/ResourcesPage'
 import { LoginPage } from './pages/LoginPage'
 import { AdminPage } from './pages/AdminPage'
+import { AdminProjectsPage } from './pages/AdminProjectsPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 type CanvasPoint = {
@@ -105,6 +106,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/projects"
+          element={
+            <ProtectedRoute>
+              <AdminProjectsPage />
             </ProtectedRoute>
           }
         />

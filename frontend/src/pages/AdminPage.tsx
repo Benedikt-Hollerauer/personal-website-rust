@@ -19,10 +19,12 @@ export function AdminPage() {
         </div>
 
         <nav className={styles.sidebarNav}>
-          {/* Menu items will be added here later */}
-          <div className={styles.menuPlaceholder}>
-            Menu items coming soon...
-          </div>
+          <button
+            className={styles.menuItem}
+            onClick={() => navigate('/admin/projects')}
+          >
+            Projects
+          </button>
         </nav>
 
         <div className={styles.sidebarFooter}>
@@ -43,8 +45,7 @@ export function AdminPage() {
               Welcome, {user?.name || 'Admin'}!
             </h2>
             <p className={styles.welcomeText}>
-              This is your admin dashboard. Menu items and functionality will be
-              added here.
+              This is your admin dashboard. Select a menu item to get started.
             </p>
             {user && !user.is_verified && (
               <div className={styles.verificationNotice}>
