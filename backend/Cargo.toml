@@ -36,6 +36,9 @@ validator = { version = "0.20" }
 uuid = { version = "1.6", features = ["v4"] }
 include_dir = { version = "0.7" }
 
+# file upload helpers
+mime_guess = "2.0"
+
 [[bin]]
 name = "backend-cli"
 path = "src/bin/main.rs"

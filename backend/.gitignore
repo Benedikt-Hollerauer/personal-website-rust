@@ -21,3 +21,6 @@ target/
 .env
 .idea
 target
+
+# uploaded files
+uploads/

@@ -36,6 +36,16 @@ pub async fn list(State(ctx): State<AppContext>) -> Result<Response> {
 }
 
 #[debug_handler]
+pub async fn get_active(State(ctx): State<AppContext>) -> Result<Response> {
+    use sea_orm::ColumnTrait;
+    let items = Projects::find()
+        .filter(crate::models::_entities::projects::Column::Active.eq(true))
+        .all(&ctx.db)
+        .await?;
+    format::json(items)
+}
+
+#[debug_handler]
 pub async fn create(
     State(ctx): State<AppContext>,
     Json(params): Json<CreateProjectParams>,
@@ -126,6 +136,7 @@ pub async fn delete_project(
 
 pub fn routes() -> Routes {
     Routes::new()
+        .add("/api/projects-public", get(get_active))
         .add("/api/projects", get(list))
         .add("/api/projects", post(create))
         .add("/api/projects/{id}", get(get_project))

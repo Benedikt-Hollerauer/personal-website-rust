@@ -14,7 +14,12 @@ use migration::Migrator;
 use std::path::Path;
 
 #[allow(unused_imports)]
-use crate::{controllers, models::_entities::users, tasks, workers::downloader::DownloadWorker};
+use crate::{
+    controllers,
+    models::_entities::{about_texts, projects, resources, skills, testimonials, timelines, users},
+    tasks,
+    workers::downloader::DownloadWorker,
+};
 
 pub struct App;
 #[async_trait]
@@ -47,8 +52,14 @@ impl Hooks for App {
 
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes() // controller routes below
-            .add_route(controllers::projects::routes())
+            .add_route(controllers::about_texts::routes())
             .add_route(controllers::auth::routes())
+            .add_route(controllers::projects::routes())
+            .add_route(controllers::resources::routes())
+            .add_route(controllers::skills::routes())
+            .add_route(controllers::testimonials::routes())
+            .add_route(controllers::timeline::routes())
+            .add_route(controllers::files::routes())
     }
     async fn connect_workers(ctx: &AppContext, queue: &Queue) -> Result<()> {
         queue.register(DownloadWorker::build(ctx)).await?;
@@ -60,6 +71,12 @@ impl Hooks for App {
         // tasks-inject (do not remove)
     }
     async fn truncate(ctx: &AppContext) -> Result<()> {
+        truncate_table(&ctx.db, about_texts::Entity).await?;
+        truncate_table(&ctx.db, projects::Entity).await?;
+        truncate_table(&ctx.db, resources::Entity).await?;
+        truncate_table(&ctx.db, skills::Entity).await?;
+        truncate_table(&ctx.db, testimonials::Entity).await?;
+        truncate_table(&ctx.db, timelines::Entity).await?;
         truncate_table(&ctx.db, users::Entity).await?;
         Ok(())
     }
