@@ -9,6 +9,7 @@ interface Testimonial {
   id: number
   name: string
   role: string
+  link?: string
   content: string
   active: boolean
   order: number
@@ -33,7 +34,7 @@ export function TestimonialsAdminPage() {
       const response = await fetchAuthenticated('/api/testimonials')
       if (!response.ok) throw new Error('Failed to load testimonials')
       const data = await response.json()
-      setTestimonials(Array.isArray(data) ? data : [])
+      setTestimonials(Array.isArray(data) ? data.sort((a, b) => Number(a.order) - Number(b.order)) : [])
     } catch (error) {
       console.error('Failed to load testimonials:', error)
       alert('Failed to load testimonials')
@@ -86,10 +87,15 @@ export function TestimonialsAdminPage() {
     try {
       const url = editingTestimonial ? `/api/testimonials/${editingTestimonial.id}` : '/api/testimonials'
       const method = editingTestimonial ? 'PATCH' : 'POST'
+      const normalizedData = {
+        ...data,
+        order: Number(data.order),
+        link: typeof data.link === 'string' && data.link.trim() ? data.link.trim() : undefined,
+      }
 
       const response = await fetchAuthenticated(url, {
         method,
-        body: JSON.stringify(data),
+        body: JSON.stringify(normalizedData),
       })
 
       if (!response.ok) throw new Error(`Failed to ${editingTestimonial ? 'update' : 'create'} testimonial`)
@@ -106,8 +112,9 @@ export function TestimonialsAdminPage() {
   const formFields: FormField[] = [
     { name: 'name', label: 'Name', type: 'text', required: true },
     { name: 'role', label: 'Role', type: 'text', required: true },
+    { name: 'link', label: 'Link', type: 'url' },
     { name: 'content', label: 'Testimonial', type: 'textarea', required: true },
-    { name: 'order', label: 'Order', type: 'text', required: true },
+    { name: 'order', label: 'Order', type: 'number', required: true },
     { name: 'active', label: 'Active', type: 'checkbox' },
   ]
 

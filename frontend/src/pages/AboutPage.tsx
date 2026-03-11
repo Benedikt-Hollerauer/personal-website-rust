@@ -28,6 +28,7 @@ type ApiSkill = {
   id?: string | number
   name?: string
   title?: string
+  order?: number
   icon?: string
   emoji?: string
   iconUrl?: string
@@ -46,7 +47,9 @@ type ApiTestimonial = {
   id?: string | number
   name?: string
   author?: string
+  order?: number
   role?: string
+  link?: string
   title?: string
   position?: string
   text?: string
@@ -59,12 +62,14 @@ type TestimonialItem = {
   id: string
   name: string
   role: string
+  link?: string
   text: string
 }
 
 type ApiWorkHistory = {
   id?: string | number
   year?: string | number
+  order?: number
   title?: string
   role?: string
   position?: string
@@ -211,12 +216,14 @@ function normalizeAboutParagraphs(payload: ApiAbout): string[] {
 function normalizeTestimonial(item: ApiTestimonial, index: number): TestimonialItem {
   const name = item.name?.trim() || item.author?.trim() || `Reference ${index + 1}`
   const role = item.role?.trim() || item.title?.trim() || item.position?.trim() || 'Professional Reference'
+  const link = item.link?.trim() || undefined
   const text = item.text?.trim() || item.message?.trim() || item.content?.trim() || item.quote?.trim() || 'Recommendation unavailable.'
 
   return {
     id: String(item.id ?? `testimonial-${index}`),
     name,
     role,
+    link,
     text,
   }
 }
@@ -311,7 +318,8 @@ export function AboutPage() {
           return
         }
 
-        setWorkHistory(list.map(normalizeWorkHistory))
+        const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+        setWorkHistory(sorted.map(normalizeWorkHistory))
       })
       .catch(() => {
         setWorkHistory([])
@@ -414,7 +422,8 @@ export function AboutPage() {
           return
         }
 
-        setTestimonials(list.map(normalizeTestimonial))
+        const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+        setTestimonials(sorted.map(normalizeTestimonial))
       })
       .catch(() => {
         setTestimonials([])
@@ -443,7 +452,8 @@ export function AboutPage() {
           return
         }
 
-        setSkills(list.map(normalizeSkill))
+        const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+        setSkills(sorted.map(normalizeSkill))
       })
       .catch(() => {
         setSkills([])
@@ -553,7 +563,15 @@ export function AboutPage() {
                         {'\u275D'}
                       </span>
                       <div className={styles.testimonialIdentity}>
-                        <h3>{testimonial.name}</h3>
+                        <h3>
+                          {testimonial.link ? (
+                            <a href={testimonial.link} target="_blank" rel="noopener noreferrer">
+                              {testimonial.name}
+                            </a>
+                          ) : (
+                            testimonial.name
+                          )}
+                        </h3>
                         <p>{testimonial.role}</p>
                       </div>
                     </div>

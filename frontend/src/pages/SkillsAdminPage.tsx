@@ -96,9 +96,14 @@ export function SkillsAdminPage() {
       const url = editingSkill ? `/api/skills/${editingSkill.id}` : '/api/skills'
       const method = editingSkill ? 'PATCH' : 'POST'
 
+      const normalizedData = {
+        ...data,
+        order: data.order === undefined || data.order === '' ? undefined : Number(data.order),
+      }
+
       const response = await fetchAuthenticated(url, {
         method,
-        body: JSON.stringify(data),
+        body: JSON.stringify(normalizedData),
       })
 
       if (!response.ok) throw new Error(`Failed to ${editingSkill ? 'update' : 'create'} skill`)
@@ -116,7 +121,7 @@ export function SkillsAdminPage() {
     { name: 'name', label: 'Skill Name', type: 'text', required: true, placeholder: 'e.g., React' },
     { name: 'icon_file', label: 'Icon File', type: 'file' },
     { name: 'link', label: 'Link', type: 'url', placeholder: 'https://react.dev' },
-    { name: 'order', label: 'Display Order', type: 'text' },
+    { name: 'order', label: 'Display Order', type: 'number' },
     { name: 'active', label: 'Active', type: 'checkbox' },
   ]
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchAuthenticated, uploadFile, deleteFile } from '../utils/api'
+import { fetchAuthenticated, uploadFile } from '../utils/api'
 import { FormModal, type FormField } from '../components/FormModal'
 import { AdminGrid, type GridColumn, type GridAction } from '../components/AdminGrid'
 import { AdminLayout } from '../components/AdminLayout'
@@ -33,7 +33,7 @@ export function ResourcesAdminPage() {
       const response = await fetchAuthenticated('/api/resources')
       if (!response.ok) throw new Error('Failed to load resources')
       const data = await response.json()
-      setResources(Array.isArray(data) ? data : [])
+      setResources(Array.isArray(data) ? data.sort((a, b) => Number(a.order) - Number(b.order)) : [])
     } catch (error) {
       console.error('Failed to load resources:', error)
       alert('Failed to load resources')
@@ -89,31 +89,24 @@ export function ResourcesAdminPage() {
         data.resource_url = result.url
       }
 
-      if (data.remove_file) {
-        if (editingResource?.resource_url) {
-          const parts = editingResource.resource_url.split('/')
-          const filename = parts.pop()
-          if (filename) {
-            await deleteFile('resources', filename)
-          }
-        }
-        data.resource_url = ''
-      }
-
       delete data.resource_file
-      delete data.remove_file
 
-      // ensure we have a URL before sending
-      if (!data.resource_url) {
-        throw new Error('Either upload a file or provide a URL')
+      // for new resources, file upload is required. for edits, keep existing file when no new one is uploaded.
+      if (!editingResource && !data.resource_url) {
+        throw new Error('Please upload a file for the resource')
       }
 
       const url = editingResource ? `/api/resources/${editingResource.id}` : '/api/resources'
       const method = editingResource ? 'PATCH' : 'POST'
 
+      const normalizedData = {
+        ...data,
+        order: Number(data.order),
+      }
+
       const response = await fetchAuthenticated(url, {
         method,
-        body: JSON.stringify(data),
+        body: JSON.stringify(normalizedData),
       })
 
       if (!response.ok) throw new Error(`Failed to ${editingResource ? 'update' : 'create'} resource`)
@@ -130,10 +123,8 @@ export function ResourcesAdminPage() {
   const formFields: FormField[] = [
     { name: 'title', label: 'Title', type: 'text', required: true },
     { name: 'description', label: 'Description', type: 'textarea', required: true },
-    { name: 'resource_file', label: 'Resource File', type: 'file' },
-    { name: 'remove_file', label: 'Remove existing file', type: 'checkbox' },
-    { name: 'resource_url', label: 'URL', type: 'url' },
-    { name: 'order', label: 'Order', type: 'text', required: true },
+    { name: 'resource_file', label: 'Resource File', type: 'file', required: !editingResource },
+    { name: 'order', label: 'Order', type: 'number', required: true },
     { name: 'active', label: 'Active', type: 'checkbox' },
   ]
 

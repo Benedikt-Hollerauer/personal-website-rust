@@ -10,6 +10,7 @@ mod m20260310_110000_create_skills;
 mod m20260310_120000_create_timeline;
 mod m20260310_130000_create_resources;
 mod m20260310_140000_create_testimonials;
+mod m20260311_120000_add_link_to_testimonials;
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -24,6 +25,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260310_120000_create_timeline::Migration),
             Box::new(m20260310_130000_create_resources::Migration),
             Box::new(m20260310_140000_create_testimonials::Migration),
+            Box::new(m20260311_120000_add_link_to_testimonials::Migration),
             // inject-above (do not remove this comment)
         ]
     }

@@ -216,6 +216,15 @@
   letter-spacing: 0.01em;
 }
 
+.testimonialIdentity h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.testimonialIdentity h3 a:hover {
+  text-decoration: underline;
+}
+
 .testimonialIdentity p {
   margin: 0;
   font-size: 0.8rem;

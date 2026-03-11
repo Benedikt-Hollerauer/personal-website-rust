@@ -5,6 +5,7 @@ interface Testimonial {
   id: number
   name: string
   role: string
+  link?: string
   content: string
   active: boolean
   order: number
@@ -75,7 +76,15 @@ export function TestimonialsCarousel() {
             </blockquote>
           </div>
           <div className={styles.attribution}>
-            <div className={styles.name}>{current.name}</div>
+            <div className={styles.name}>
+              {current.link ? (
+                <a href={current.link} target="_blank" rel="noopener noreferrer">
+                  {current.name}
+                </a>
+              ) : (
+                current.name
+              )}
+            </div>
             <div className={styles.role}>{current.role}</div>
           </div>
         </div>

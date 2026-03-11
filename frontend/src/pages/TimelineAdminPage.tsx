@@ -33,7 +33,7 @@ export function TimelineAdminPage() {
       const response = await fetchAuthenticated('/api/timeline')
       if (!response.ok) throw new Error('Failed to load timelines')
       const data = await response.json()
-      setTimelines(Array.isArray(data) ? data : [])
+      setTimelines(Array.isArray(data) ? data.sort((a, b) => Number(a.order) - Number(b.order)) : [])
     } catch (error) {
       console.error('Failed to load timelines:', error)
       alert('Failed to load timelines')
@@ -73,9 +73,14 @@ export function TimelineAdminPage() {
       const url = editingTimeline ? `/api/timeline/${editingTimeline.id}` : '/api/timeline'
       const method = editingTimeline ? 'PATCH' : 'POST'
 
+      const normalizedData = {
+        ...data,
+        order: Number(data.order),
+      }
+
       const response = await fetchAuthenticated(url, {
         method,
-        body: JSON.stringify(data),
+        body: JSON.stringify(normalizedData),
       })
 
       if (!response.ok) throw new Error(`Failed to ${editingTimeline ? 'update' : 'create'} timeline`)
@@ -94,7 +99,7 @@ export function TimelineAdminPage() {
     { name: 'description', label: 'Description', type: 'textarea', required: true },
     { name: 'start_date', label: 'Start Date', type: 'date', required: true },
     { name: 'end_date', label: 'End Date', type: 'date', required: false },
-    { name: 'order', label: 'Order', type: 'text', required: true },
+    { name: 'order', label: 'Order', type: 'number', required: true },
   ]
 
   const columns: GridColumn[] = [

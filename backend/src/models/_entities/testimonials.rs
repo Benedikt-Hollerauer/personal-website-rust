@@ -10,6 +10,7 @@ pub struct Model {
     pub id: i32,
     pub name: String,
     pub role: String,
+    pub link: Option<String>,
     #[sea_orm(column_type = "Text")]
     pub content: String,
     pub active: bool,

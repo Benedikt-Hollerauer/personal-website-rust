@@ -122,6 +122,15 @@ export function FormModal({
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
+          <button
+            type="button"
+            className={styles.closeButton}
+            onClick={onClose}
+            disabled={isSubmitting}
+            aria-label="Close modal"
+          >
+            {'\u2715'}
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} autoComplete="off" data-bwignore="true" data-lpignore="true">

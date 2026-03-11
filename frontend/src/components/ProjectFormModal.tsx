@@ -136,13 +136,36 @@ export function ProjectFormModal({
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || 'Failed to save project')
+        const contentType = response.headers.get('content-type') || ''
+        let message = `Failed to save project (HTTP ${response.status})`
+
+        if (contentType.includes('application/json')) {
+          const errorBody = await response.json().catch(() => null)
+          if (errorBody?.message) {
+            message = errorBody.message
+          } else if (errorBody?.error) {
+            message = errorBody.error
+          }
+        } else {
+          const text = await response.text().catch(() => '')
+          // 502 from Vite proxy usually means backend server is not running.
+          if (response.status === 502) {
+            message = 'Backend is not reachable. Start the backend server and try again.'
+          } else if (text.trim()) {
+            message = `${message}: ${text.slice(0, 140)}`
+          }
+        }
+
+        throw new Error(message)
       }
 
       onSave()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      if (err instanceof TypeError) {
+        setError('Network error. Ensure the backend server is running on port 5150.')
+      } else {
+        setError(err instanceof Error ? err.message : 'An error occurred')
+      }
     } finally {
       setLoading(false)
     }

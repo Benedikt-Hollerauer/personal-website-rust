@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct CreateTestimonialParams {
     pub name: String,
     pub role: String,
+    pub link: Option<String>,
     pub content: String,
     pub active: Option<bool>,
 }
@@ -18,6 +19,7 @@ pub struct CreateTestimonialParams {
 pub struct UpdateTestimonialParams {
     pub name: Option<String>,
     pub role: Option<String>,
+    pub link: Option<String>,
     pub content: Option<String>,
     pub active: Option<bool>,
     pub order: Option<i32>,
@@ -58,6 +60,7 @@ pub async fn create(
     let new_item = ActiveModel {
         name: Set(params.name),
         role: Set(params.role),
+        link: Set(params.link),
         content: Set(params.content),
         active: Set(params.active.unwrap_or(true)),
         order: Set(0),
@@ -98,6 +101,9 @@ pub async fn update_item(
     }
     if let Some(role) = params.role {
         active_model.role = Set(role);
+    }
+    if let Some(link) = params.link {
+        active_model.link = Set(Some(link));
     }
     if let Some(content) = params.content {
         active_model.content = Set(content);
