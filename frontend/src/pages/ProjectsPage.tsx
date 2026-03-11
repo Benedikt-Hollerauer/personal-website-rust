@@ -28,38 +28,6 @@ const HOME_ARROW = (
   </svg>
 )
 
-const FALLBACK_PROJECTS: ProjectCard[] = [
-  {
-    id: 'portfolio-redesign',
-    title: 'Portfolio Redesign',
-    summary: 'A fast, scroll-first portfolio focused on clear routes, expressive motion, and low visual noise.',
-    tags: ['react', 'typescript', 'motion'],
-    year: '2026',
-    location: 'Remote',
-    link: 'https://example.com/portfolio',
-    keyPoints: ['Smooth page transitions', 'Component-based architecture', 'Dark mode support'],
-  },
-  {
-    id: 'resource-lab',
-    title: 'Resource Lab',
-    summary: 'A curated resource hub with topic maps and directional navigation patterns for quick discovery.',
-    tags: ['ux', 'content', 'navigation'],
-    year: '2025',
-    location: 'San Francisco, CA',
-    keyPoints: ['Intuitive categorization', 'Search optimization', 'Community contributions'],
-  },
-  {
-    id: 'project-atlas',
-    title: 'Project Atlas',
-    summary: 'A compact project tracker with clean card interactions and keyboard-friendly browsing patterns.',
-    tags: ['frontend', 'architecture', 'api-ready'],
-    year: '2024',
-    location: 'New York, NY',
-    link: 'https://example.com/atlas',
-    keyPoints: ['Real-time updates', 'Collaborative features', 'Keyboard navigation'],
-  },
-]
-
 function normalizeProject(project: ApiProject, index: number): ProjectCard {
   const title = project.title ?? project.name ?? `Project ${index + 1}`
   const summary =
@@ -104,7 +72,7 @@ export function ProjectsPage() {
   useEffect(() => {
     const abortController = new AbortController()
 
-    fetch('/api/projects', { signal: abortController.signal })
+    fetch('/api/projects-public', { signal: abortController.signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load projects')
@@ -115,6 +83,7 @@ export function ProjectsPage() {
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.projects
         if (!Array.isArray(list)) {
+          setProjects([])
           return
         }
 

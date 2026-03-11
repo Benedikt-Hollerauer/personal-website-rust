@@ -22,6 +22,8 @@ type ProjectCardSliderProps = {
 
 type SlideDirection = 1 | -1
 
+const GITHUB_PROFILE_URL = 'https://github.com/benedikt-hollerauer'
+
 const slideVariants = {
   enter: (direction: SlideDirection) => ({
     x: direction > 0 ? 70 : -70,
@@ -118,8 +120,8 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
               <div className={styles.githubCardContent}>
                 <h2>More Projects</h2>
                 <p className={styles.githubCardText}>
-                  Currently no projects eingetragen. Check out more projects on my{' '}
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={styles.githubLink}>
+                  Check out more projects on my{' '}
+                  <a href={GITHUB_PROFILE_URL} target="_blank" rel="noopener noreferrer" className={styles.githubLink}>
                     GitHub
                   </a>
                 </p>

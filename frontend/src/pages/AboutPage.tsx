@@ -6,6 +6,10 @@ import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
 import { Direction } from '../types'
+import { AboutSection } from '../components/AboutSection'
+import { SkillsGallery } from '../components/SkillsGallery'
+import { TimelineDisplay } from '../components/TimelineDisplay'
+import { TestimonialsCarousel } from '../components/TestimonialsCarousel'
 import styles from './AboutPage.module.css'
 
 const ABOUT_HOME_ARROW = (
@@ -27,6 +31,8 @@ type ApiSkill = {
   icon?: string
   emoji?: string
   iconUrl?: string
+  // backend stores path in snake_case
+  icon_path?: string
 }
 
 type SkillItem = {
@@ -170,13 +176,18 @@ const MORE_SKILLS_LINK = '/resources'
 
 function normalizeSkill(skill: ApiSkill, index: number): SkillItem {
   const label = skill.name?.trim() || skill.title?.trim() || `Skill ${index + 1}`
-  const iconUrl = skill.iconUrl?.trim() || undefined
+  // backend may return icon_path or iconUrl or other fields depending on API
+  const iconUrl =
+    skill.iconUrl?.trim() ||
+    (skill as any).icon_path?.trim() ||
+    skill.icon?.trim() ||
+    skill.emoji?.trim()
   const iconText = skill.icon?.trim() || skill.emoji?.trim() || label.slice(0, 2).toUpperCase()
 
   return {
     id: String(skill.id ?? `skill-${index}`),
     label,
-    iconUrl,
+    iconUrl: iconUrl || undefined,
     iconText,
   }
 }
@@ -264,10 +275,12 @@ export function AboutPage() {
         const normalized = normalizeAboutParagraphs(payload)
         if (normalized.length > 0) {
           setAboutParagraphs(normalized)
+        } else {
+          setAboutParagraphs([])
         }
       })
       .catch(() => {
-        // Keep fallback about text when backend is unavailable.
+        setAboutParagraphs([])
       })
 
     return () => {
@@ -294,13 +307,14 @@ export function AboutPage() {
           : payload.history || payload.timeline || payload.items
 
         if (!Array.isArray(list) || list.length === 0) {
+          setWorkHistory([])
           return
         }
 
         setWorkHistory(list.map(normalizeWorkHistory))
       })
       .catch(() => {
-        // Keep fallback work history when backend is unavailable.
+        setWorkHistory([])
       })
 
     return () => {
@@ -385,7 +399,7 @@ export function AboutPage() {
   useEffect(() => {
     const abortController = new AbortController()
 
-    fetch('/api/testimonials', { signal: abortController.signal })
+    fetch('/api/testimonials-public', { signal: abortController.signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load testimonials')
@@ -396,13 +410,14 @@ export function AboutPage() {
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.testimonials
         if (!Array.isArray(list) || list.length === 0) {
+          setTestimonials([])
           return
         }
 
         setTestimonials(list.map(normalizeTestimonial))
       })
       .catch(() => {
-        // Keep fallback testimonials when backend is unavailable.
+        setTestimonials([])
       })
 
     return () => {
@@ -413,7 +428,7 @@ export function AboutPage() {
   useEffect(() => {
     const abortController = new AbortController()
 
-    fetch('/api/skills', { signal: abortController.signal })
+    fetch('/api/skills-public', { signal: abortController.signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load skills')
@@ -424,13 +439,14 @@ export function AboutPage() {
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.skills
         if (!Array.isArray(list) || list.length === 0) {
+          setSkills([])
           return
         }
 
         setSkills(list.map(normalizeSkill))
       })
       .catch(() => {
-        // Keep fallback skills when backend is unavailable.
+        setSkills([])
       })
 
     return () => {
@@ -460,142 +476,160 @@ export function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
-          <BackgroundCard className={styles.aboutCard} size="lg">
-            <div className={styles.aboutTextBlock}>
-              {aboutParagraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-            </div>
-          </BackgroundCard>
+          {/* About Text Section: Only render if there are active paragraphs */}
+          {aboutParagraphs.length > 0 && (
+            <BackgroundCard className={styles.aboutCard} size="lg">
+              <div className={styles.aboutTextBlock}>
+                {aboutParagraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+            </BackgroundCard>
+          )}
 
-          <BackgroundCard className={styles.skillsHeadingCard}>
-            <h2>THESE ARE MY CURRENT SKILLS</h2>
-          </BackgroundCard>
+          {/* Skills Section: Only render if there are active skills */}
+          {visibleSkills.length > 0 && (
+            <BackgroundCard className={styles.skillsHeadingCard}>
+              <h2>THESE ARE MY CURRENT SKILLS</h2>
+            </BackgroundCard>
+          )}
 
-          <BackgroundCard className={styles.skillsContainer} size="lg">
-            <section className={styles.skillsRow} aria-label="Current skills">
-              {visibleSkills.map((skill) => (
-                <BackgroundCard
-                  key={skill.id}
-                  as="article"
-                  size="sm"
-                  className={styles.skillTile}
+          {visibleSkills.length > 0 && (
+            <BackgroundCard className={styles.skillsContainer} size="lg">
+              <section className={styles.skillsRow} aria-label="Current skills">
+                {visibleSkills.map((skill) => (
+                  <BackgroundCard
+                    key={skill.id}
+                    as="article"
+                    size="sm"
+                    className={styles.skillTile}
+                  >
+                    {skill.iconUrl ? (
+                      <img className={styles.skillIconImage} src={skill.iconUrl} alt={skill.label} />
+                    ) : (
+                      <span className={styles.skillFallbackIcon} aria-hidden="true">
+                        {skill.iconText}
+                      </span>
+                    )}
+                    <span className={styles.skillLabel}>{skill.label}</span>
+                  </BackgroundCard>
+                ))}
+
+                <Link
+                  to={MORE_SKILLS_LINK}
+                  className={styles.moreSkillsBubble}
+                  aria-label={
+                    extraSkills > 0
+                      ? `${extraSkills} more skills available`
+                      : 'See more skills and resources'
+                  }
                 >
-                  {skill.iconUrl ? (
-                    <img className={styles.skillIconImage} src={skill.iconUrl} alt={skill.label} />
-                  ) : (
-                    <span className={styles.skillFallbackIcon} aria-hidden="true">
-                      {skill.iconText}
-                    </span>
-                  )}
-                  <span className={styles.skillLabel}>{skill.label}</span>
-                </BackgroundCard>
-              ))}
+                  <span>+</span>
+                  <small>{extraSkills > 0 ? `${extraSkills} more` : 'more skills'}</small>
+                </Link>
+              </section>
+            </BackgroundCard>
+          )}
 
-              <Link
-                to={MORE_SKILLS_LINK}
-                className={styles.moreSkillsBubble}
-                aria-label={
-                  extraSkills > 0
-                    ? `${extraSkills} more skills available`
-                    : 'See more skills and resources'
-                }
-              >
-                <span>+</span>
-                <small>{extraSkills > 0 ? `${extraSkills} more` : 'more skills'}</small>
-              </Link>
-            </section>
-          </BackgroundCard>
+          {/* Testimonials Section: Only render if there are active testimonials */}
+          {testimonials.length > 0 && (
+            <BackgroundCard className={styles.testimonialsHeadingCard}>
+              <h2>MY TESTIMONIALS</h2>
+            </BackgroundCard>
+          )}
 
-          <BackgroundCard className={styles.testimonialsHeadingCard}>
-            <h2>MY TESTIMONIALS</h2>
-          </BackgroundCard>
-
-          <BackgroundCard className={styles.testimonialsContainer} size="lg">
-            <section className={styles.testimonialsGrid} aria-label="Testimonials">
-              {testimonials.map((testimonial, index) => (
-                <BackgroundCard
-                  key={testimonial.id}
-                  as="article"
-                  size="md"
-                  className={`${styles.testimonialCard} ${index % 3 === 0 ? styles.testimonialCardWide : ''}`.trim()}
-                >
-                  <div className={styles.testimonialHead}>
-                    <span className={styles.quoteMark} aria-hidden="true">
-                      {'\u275D'}
-                    </span>
-                    <div className={styles.testimonialIdentity}>
-                      <h3>{testimonial.name}</h3>
-                      <p>{testimonial.role}</p>
-                    </div>
-                  </div>
-                  <p className={styles.testimonialText}>{testimonial.text}</p>
-                </BackgroundCard>
-              ))}
-            </section>
-          </BackgroundCard>
-
-          <BackgroundCard className={styles.timelineHeadingCard}>
-            <h2>MY WORK HISTORY</h2>
-          </BackgroundCard>
-
-          <section ref={timelineRef} className={styles.timelineSection} aria-label="Work history timeline">
-            <div className={styles.timelineLineBase} aria-hidden="true" />
-            <div
-              className={styles.timelineLineFill}
-              aria-hidden="true"
-              style={{ height: `${timelineProgress * 100}%` }}
-            />
-
-            <div className={styles.timelineRows}>
-              {workHistory.map((item, index) => {
-                const isLeft = index % 2 === 0
-                const markerProgress = getMarkerProgress(index)
-                const isRevealed = timelineProgress >= markerProgress
-
-                return (
-                  <article key={item.id} className={styles.timelineRow}>
-                    <motion.div
-                      className={`${styles.timelineCardWrap} ${isLeft ? styles.timelineCardLeft : styles.timelineCardRight}`}
-                      initial={false}
-                      animate={{
-                        opacity: isRevealed ? 1 : 0,
-                        x: isRevealed ? 0 : isLeft ? -72 : 72,
-                        y: isRevealed ? 0 : 16,
-                      }}
-                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <BackgroundCard as="div" size="md" className={styles.timelineCard}>
-                        <div
-                          className={styles.timelineCardTop}
-                          style={{ background: item.accentColor }}
-                          aria-hidden="true"
-                        >
-                          <span>{item.emoji}</span>
-                        </div>
-                        <p className={styles.timelineCardText}>{item.text}</p>
-                      </BackgroundCard>
-                    </motion.div>
-
-                    <div className={styles.timelineMarkerColumn}>
-                      <div
-                        ref={(element) => {
-                          markerRefs.current[index] = element
-                        }}
-                        className={`${styles.timelineYearDot} ${isRevealed ? styles.timelineYearDotActive : ''}`}
-                      >
-                        {item.year}
+          {testimonials.length > 0 && (
+            <BackgroundCard className={styles.testimonialsContainer} size="lg">
+              <section className={styles.testimonialsGrid} aria-label="Testimonials">
+                {testimonials.map((testimonial, index) => (
+                  <BackgroundCard
+                    key={testimonial.id}
+                    as="article"
+                    size="md"
+                    className={`${styles.testimonialCard} ${index % 3 === 0 ? styles.testimonialCardWide : ''}`.trim()}
+                  >
+                    <div className={styles.testimonialHead}>
+                      <span className={styles.quoteMark} aria-hidden="true">
+                        {'\u275D'}
+                      </span>
+                      <div className={styles.testimonialIdentity}>
+                        <h3>{testimonial.name}</h3>
+                        <p>{testimonial.role}</p>
                       </div>
                     </div>
+                    <p className={styles.testimonialText}>{testimonial.text}</p>
+                  </BackgroundCard>
+                ))}
+              </section>
+            </BackgroundCard>
+          )}
 
-                    <div className={`${styles.timelineRoleLabel} ${isLeft ? styles.timelineRoleLabelRight : styles.timelineRoleLabelLeft}`}>
-                      {item.title}
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          </section>
+          {/* Timeline Section: Only render if there are active work history items */}
+          {workHistory.length > 0 && (
+            <BackgroundCard className={styles.timelineHeadingCard}>
+              <h2>MY WORK HISTORY</h2>
+            </BackgroundCard>
+          )}
+
+          {workHistory.length > 0 && (
+            <section ref={timelineRef} className={styles.timelineSection} aria-label="Work history timeline">
+              <div className={styles.timelineLineBase} aria-hidden="true" />
+              <div
+                className={styles.timelineLineFill}
+                aria-hidden="true"
+                style={{ height: `${timelineProgress * 100}%` }}
+              />
+
+              <div className={styles.timelineRows}>
+                {workHistory.map((item, index) => {
+                  const isLeft = index % 2 === 0
+                  const markerProgress = getMarkerProgress(index)
+                  const isRevealed = timelineProgress >= markerProgress
+
+                  return (
+                    <article key={item.id} className={styles.timelineRow}>
+                      <motion.div
+                        className={`${styles.timelineCardWrap} ${isLeft ? styles.timelineCardLeft : styles.timelineCardRight}`}
+                        initial={false}
+                        animate={{
+                          opacity: isRevealed ? 1 : 0,
+                          x: isRevealed ? 0 : isLeft ? -72 : 72,
+                          y: isRevealed ? 0 : 16,
+                        }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <BackgroundCard as="div" size="md" className={styles.timelineCard}>
+                          <div
+                            className={styles.timelineCardTop}
+                            style={{ background: item.accentColor }}
+                            aria-hidden="true"
+                          >
+                            <span>{item.emoji}</span>
+                          </div>
+                          <p className={styles.timelineCardText}>{item.text}</p>
+                        </BackgroundCard>
+                      </motion.div>
+
+                      <div className={styles.timelineMarkerColumn}>
+                        <div
+                          ref={(element) => {
+                            markerRefs.current[index] = element
+                          }}
+                          className={`${styles.timelineYearDot} ${isRevealed ? styles.timelineYearDotActive : ''}`}
+                        >
+                          {item.year}
+                        </div>
+                      </div>
+
+                      <div className={`${styles.timelineRoleLabel} ${isLeft ? styles.timelineRoleLabelRight : styles.timelineRoleLabelLeft}`}>
+                        {item.title}
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+            </section>
+          )}
         </motion.div>
       </PageSectionLayout>
     </main>

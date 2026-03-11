@@ -1,0 +1,278 @@
+.gridContainer {
+  width: 100%;
+}
+
+.gridHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.gridTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.addButton {
+  padding: 10px 20px;
+  background-color: #4a9eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addButton:hover {
+  background-color: #2b7dd9;
+}
+
+.addButton:disabled {
+  background-color: #1a4d7a;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.emptyStateIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.emptyStateText {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: #d0d0d0;
+}
+
+.inactive {
+  opacity: 0.7;
+  background-color: #f5f5f5;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.primaryBlock {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.button {
+  flex: 1;
+  min-width: 80px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.buttonEdit {
+  background-color: #1976d2;
+  color: white;
+}
+
+.buttonEdit:hover {
+  background-color: #1565c0;
+}
+
+.buttonDelete {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.buttonDelete:hover {
+  background-color: #c62828;
+}
+
+.buttonToggle {
+  background-color: #ff9800;
+  color: white;
+}
+
+.buttonToggle:hover {
+  background-color: #f57c00;
+}
+
+.loadingState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.spinner {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #333;
+  border-top-color: #4a9eff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cardContent {
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.metaItem {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.metaLabel {
+  font-weight: 600;
+  color: #555;
+  min-width: 70px;
+}
+
+.metaValue {
+  color: #777;
+  word-break: break-word;
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.statusActive {
+  background-color: rgba(81, 207, 102, 0.2);
+  color: #51cf66;
+}
+
+.statusInactive {
+  background-color: rgba(102, 102, 102, 0.2);
+  color: #999;
+}
+
+.activeBadge {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.inactiveBadge {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.metaValue :global(a) {
+  color: #1976d2;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.metaValue :global(a:hover) {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .cardTitle {
+    font-size: 16px;
+  }
+
+  .cardActions {
+    flex-direction: column;
+  }
+
+  .button {
+    min-width: unset;
+  }
+}

@@ -1,0 +1,13 @@
+.page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.currentFilePreview {
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.currentFilePreview a {
+  color: #4a9eff;
+}

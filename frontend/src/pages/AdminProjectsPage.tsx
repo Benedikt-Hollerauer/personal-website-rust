@@ -1,24 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { AdminLayout } from '../components/AdminLayout'
 import styles from './AdminPage.module.css'
 import { ProjectCard } from '../components/ProjectCard'
 import { ProjectFormModal } from '../components/ProjectFormModal'
 import type { Project } from '../types/project'
 
 export function AdminProjectsPage() {
-  const { logout } = useAuth()
   const navigate = useNavigate()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
-
-  const handleLogout = () => {
-    logout()
-    navigate('/login')
-  }
 
   const fetchProjects = async () => {
     try {
@@ -100,67 +95,34 @@ export function AdminProjectsPage() {
   }
 
   return (
-    <div className={styles.adminPage}>
-      <aside className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <h2 className={styles.sidebarTitle}>Admin Panel</h2>
-        </div>
+    <AdminLayout pageTitle="Projects Management" onAddClick={handleCreateClick} addButtonLabel="+ New Project">
+      <div className={styles.adminPageContent}>
+        {error && (
+          <div className={styles.errorMessage}>
+            Error: {error}
+          </div>
+        )}
 
-        <nav className={styles.sidebarNav}>
-          <button
-            className={`${styles.menuItem} ${styles.menuItemActive}`}
-            onClick={() => navigate('/admin/projects')}
-          >
-            Projects
-          </button>
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <button onClick={handleLogout} className={styles.logoutButton}>
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className={styles.mainContent}>
-        <div className={styles.contentHeader}>
-          <h1 className={styles.pageTitle}>Projects Management</h1>
-          <button
-            onClick={handleCreateClick}
-            className={styles.createButton}
-          >
-            + New Project
-          </button>
-        </div>
-
-        <div className={styles.contentBody}>
-          {error && (
-            <div className={styles.errorMessage}>
-              Error: {error}
-            </div>
-          )}
-
-          {loading ? (
-            <div className={styles.loadingMessage}>Loading projects...</div>
-          ) : projects.length === 0 ? (
-            <div className={styles.emptyMessage}>
-              No projects yet. Create your first project!
-            </div>
-          ) : (
-            <div className={styles.projectsGrid}>
-              {projects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeleteProject}
-                  onToggleActive={handleToggleActive}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
+        {loading ? (
+          <div className={styles.loadingMessage}>Loading projects...</div>
+        ) : projects.length === 0 ? (
+          <div className={styles.emptyMessage}>
+            No projects yet. Create your first project!
+          </div>
+        ) : (
+          <div className={styles.projectsGrid}>
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onEdit={handleEditClick}
+                onDelete={handleDeleteProject}
+                onToggleActive={handleToggleActive}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {isModalOpen && (
         <ProjectFormModal
@@ -169,6 +131,6 @@ export function AdminProjectsPage() {
           onSave={handleSaveProject}
         />
       )}
-    </div>
+    </AdminLayout>
   )
 }

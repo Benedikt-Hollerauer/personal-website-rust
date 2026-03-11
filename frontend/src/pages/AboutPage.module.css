@@ -482,3 +482,10 @@
     font-size: 0.86rem;
   }
 }
+
+.databaseDrivenContent {
+  width: 100%;
+  background: var(--color-light);
+  border-top: 1px solid rgba(8, 22, 29, 0.1);
+}
+

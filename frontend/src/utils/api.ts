@@ -24,7 +24,12 @@ export async function fetchAuthenticated(
 
   const headers = new Headers(options.headers)
   headers.set('Authorization', `Bearer ${token}`)
-  headers.set('Content-Type', 'application/json')
+
+  // do not override Content-Type when sending FormData so the browser
+  // can set the correct boundary
+  if (!(options.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json')
+  }
 
   return fetch(url, {
     ...options,
@@ -105,5 +110,51 @@ export async function verifyEmail(token: string): Promise<void> {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
     throw new Error(errorData.error || 'Email verification failed')
+  }
+}
+
+/**
+ * Upload a file to the backend storage service. The `category` is used to
+ * partition files on disk (e.g. "skills" or "resources"). The returned
+ * object contains a `url` which can be stored in the database and later used
+ * by clients to fetch the file.
+ */
+export async function uploadFile(
+  category: string,
+  file: File
+): Promise<{ url: string }> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await fetchAuthenticated(`/api/upload?category=${encodeURIComponent(
+    category
+  )}`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  if (!response.ok) {
+    throw new Error('File upload failed')
+  }
+
+  return response.json()
+}
+
+/**
+ * Delete a previously uploaded file. The `category` and `filename` correspond
+ * to the path returned by `uploadFile` (i.e. the parts after `/api/files/`).
+ */
+export async function deleteFile(
+  category: string,
+  filename: string
+): Promise<void> {
+  const response = await fetchAuthenticated(`/api/files/${encodeURIComponent(
+    category
+  )}/${encodeURIComponent(filename)}`, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to delete file')
   }
 }

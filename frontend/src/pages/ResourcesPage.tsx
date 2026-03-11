@@ -4,6 +4,7 @@ import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
 import { Direction } from '../types'
+import { ResourcesGrid } from '../components/ResourcesGrid'
 import styles from './ResourcesPage.module.css'
 
 const RESOURCES_HOME_ARROW = (
@@ -20,6 +21,7 @@ type ApiResource = {
   url?: string
   downloadUrl?: string
   isCv?: boolean
+  resource_url?: string
 }
 
 type ResourceCard = {
@@ -82,7 +84,12 @@ function normalizeResource(item: ApiResource, index: number): ResourceCard {
   const title = item.title?.trim() || `Resource ${index + 1}`
   const description =
     item.description?.trim() || 'A downloadable resource from my portfolio collection.'
-  const href = item.downloadUrl || item.resource || item.url || '#'
+  const href =
+    item.downloadUrl ||
+    item.resource ||
+    item.url ||
+    (item as any).resource_url ||
+    '#'
   const isCv = Boolean(item.isCv) || /\bcv\b/i.test(title)
 
   return {
@@ -100,7 +107,7 @@ export function ResourcesPage() {
   useEffect(() => {
     const abortController = new AbortController()
 
-    fetch('/api/resources', { signal: abortController.signal })
+    fetch('/api/resources-public', { signal: abortController.signal })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load resources')
@@ -110,12 +117,13 @@ export function ResourcesPage() {
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.resources
         if (!Array.isArray(list) || list.length === 0) {
+          setResources([])
           return
         }
         setResources(list.map(normalizeResource))
       })
       .catch(() => {
-        // Keep fallback resources when the backend route is unavailable.
+        setResources([])
       })
 
     return () => {
@@ -140,33 +148,50 @@ export function ResourcesPage() {
       />
 
       <PageSectionLayout title="Resources" titlePosition="left" navRail="bottom" className={styles.resourcesLayout}>
-        <motion.section
-          className={styles.resourcesGrid}
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {sortedResources.map((item, index) => (
-            <article
-              key={item.id}
-              className={`${styles.resourceCard} ${item.isCv ? styles.resourceCardCv : ''}`}
-            >
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-              <a
-                className={styles.downloadButton}
-                href={item.href}
-                download
-                target="_blank"
-                rel="noreferrer"
+        {sortedResources.length > 0 ? (
+          <motion.section
+            className={styles.resourcesGrid}
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {sortedResources.map((item, index) => (
+              <article
+                key={item.id}
+                className={`${styles.resourceCard} ${item.isCv ? styles.resourceCardCv : ''}`}
               >
-                Download
-              </a>
-              {item.isCv && index === 0 && <span className={styles.cvBadge}>Highlighted</span>}
-            </article>
-          ))}
-        </motion.section>
+                <h2>{item.title}</h2>
+                <p>{item.description}</p>
+                <a
+                  className={styles.downloadButton}
+                  href={item.href}
+                  download
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Download
+                </a>
+                {item.isCv && index === 0 && <span className={styles.cvBadge}>Highlighted</span>}
+              </article>
+            ))}
+          </motion.section>
+        ) : (
+          <motion.section
+            className={styles.resourcesGrid}
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div style={{ padding: '2rem', textAlign: 'center', color: '#aaa', gridColumn: '1 / -1' }}>
+              <p>No resources available.</p>
+            </div>
+          </motion.section>
+        )}
       </PageSectionLayout>
+
+      <section className={styles.databaseDrivenResources}>
+        <ResourcesGrid />
+      </section>
     </main>
   )
 }

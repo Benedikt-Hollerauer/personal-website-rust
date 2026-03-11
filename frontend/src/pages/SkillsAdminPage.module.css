@@ -1,0 +1,21 @@
+.skillsPage {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.skillsGrid {
+  display: grid;
+  gap: 16px;
+}
+
+.currentIconPreview {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.currentIconPreview img {
+  border: 1px solid #333;
+  border-radius: 4px;
+}

@@ -11,6 +11,11 @@ import { ResourcesPage } from './pages/ResourcesPage'
 import { LoginPage } from './pages/LoginPage'
 import { AdminPage } from './pages/AdminPage'
 import { AdminProjectsPage } from './pages/AdminProjectsPage'
+import { AboutTextsAdminPage } from './pages/AboutTextsAdminPage'
+import { SkillsAdminPage } from './pages/SkillsAdminPage'
+import { TimelineAdminPage } from './pages/TimelineAdminPage'
+import { ResourcesAdminPage } from './pages/ResourcesAdminPage'
+import { TestimonialsAdminPage } from './pages/TestimonialsAdminPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 type CanvasPoint = {
@@ -114,6 +119,46 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminProjectsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/about-texts"
+          element={
+            <ProtectedRoute>
+              <AboutTextsAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/skills"
+          element={
+            <ProtectedRoute>
+              <SkillsAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/timeline"
+          element={
+            <ProtectedRoute>
+              <TimelineAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/resources"
+          element={
+            <ProtectedRoute>
+              <ResourcesAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/testimonials"
+          element={
+            <ProtectedRoute>
+              <TestimonialsAdminPage />
             </ProtectedRoute>
           }
         />

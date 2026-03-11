@@ -104,3 +104,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+.databaseDrivenResources {
+  width: 100%;
+  background: var(--color-light);
+  border-top: 1px solid rgba(8, 22, 29, 0.1);
+}
+

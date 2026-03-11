@@ -23,6 +23,7 @@ interface User {
 interface AuthContextType {
   isAuthenticated: boolean
   user: User | null
+  isAuthReady: boolean
   login: (email: string, password: string, remember: boolean) => Promise<void>
   logout: () => void
   getToken: () => string | null
@@ -33,6 +34,7 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [user, setUser] = useState<User | null>(null)
+  const [isAuthReady, setIsAuthReady] = useState<boolean>(false)
 
   useEffect(() => {
     // Check if user has a saved token
@@ -62,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (data) {
             setUser(data)
           }
+          setIsAuthReady(true)
         })
         .catch((err) => {
           // Only clear auth if explicitly unauthorized
@@ -71,7 +74,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setIsAuthenticated(false)
             setUser(null)
           }
+          setIsAuthReady(true)
         })
+    } else {
+      setIsAuthReady(true)
     }
   }, [])
 
@@ -102,9 +108,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         is_verified: data.is_verified,
       })
       setIsAuthenticated(true)
+      setIsAuthReady(true)
     } else {
-      // Generic error message for all authentication failures
-      throw new Error('Invalid input. Please check your email and password.')
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+      const errorMessage = errorData.description || errorData.error || 'Invalid email or password'
+      throw new Error(errorMessage)
     }
   }
 
@@ -120,7 +128,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, getToken }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, isAuthReady, login, logout, getToken }}>
       {children}
     </AuthContext.Provider>
   )
