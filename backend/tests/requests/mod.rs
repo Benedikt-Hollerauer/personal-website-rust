@@ -8,3 +8,4 @@ mod testimonials;
 mod prepare_data;
 
 pub mod projects;
+pub mod contact;

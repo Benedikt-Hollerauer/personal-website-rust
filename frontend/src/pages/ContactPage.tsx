@@ -117,7 +117,8 @@ export function ContactPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Unable to send your message right now.')
+        const err = await response.json().catch(() => null)
+        throw new Error(err?.description || err?.error || 'Unable to send your message right now.')
       }
 
       setSubmitState('success')

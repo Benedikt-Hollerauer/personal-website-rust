@@ -6,3 +6,4 @@ pub mod skills;
 pub mod testimonials;
 pub mod timeline;
 pub mod files;
+pub mod contact;
