@@ -6,10 +6,6 @@ import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
 import { Direction } from '../types'
-import { AboutSection } from '../components/AboutSection'
-import { SkillsGallery } from '../components/SkillsGallery'
-import { TimelineDisplay } from '../components/TimelineDisplay'
-import { TestimonialsCarousel } from '../components/TestimonialsCarousel'
 import styles from './AboutPage.module.css'
 
 const ABOUT_HOME_ARROW = (

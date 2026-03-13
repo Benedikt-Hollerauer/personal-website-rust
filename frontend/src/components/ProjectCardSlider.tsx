@@ -175,7 +175,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
                 <div className={styles.keyPoints}>
                   <h3>Key Points</h3>
                   <ul>
-                    {activeProject.keyPoints.map((point, idx) => (
+                    {activeProject.keyPoints.map((point: string, idx: number) => (
                       <li key={idx}>{point}</li>
                     ))}
                   </ul>
@@ -184,7 +184,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
 
               {activeProject.tags && activeProject.tags.length > 0 && (
                 <ul className={styles.projectTags} aria-label="Project tags">
-                  {activeProject.tags.map((tag) => (
+                  {activeProject.tags.map((tag: string) => (
                     <li key={`${activeProject.id}-${tag}`}>{tag}</li>
                   ))}
                 </ul>

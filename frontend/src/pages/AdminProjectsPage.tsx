@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import { AdminLayout } from '../components/AdminLayout'
 import styles from './AdminPage.module.css'
 import { ProjectCard } from '../components/ProjectCard'
@@ -8,7 +6,6 @@ import { ProjectFormModal } from '../components/ProjectFormModal'
 import type { Project } from '../types/project'
 
 export function AdminProjectsPage() {
-  const navigate = useNavigate()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

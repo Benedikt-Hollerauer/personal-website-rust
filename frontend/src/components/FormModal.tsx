@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './FormModal.module.css'
 
-export type FormFieldType = 'text' | 'textarea' | 'checkbox' | 'select' | 'date' | 'url' | 'email' | 'file'
+export type FormFieldType = 'text' | 'textarea' | 'checkbox' | 'select' | 'date' | 'url' | 'email' | 'file' | 'number'
 
 export interface FormField {
   name: string
