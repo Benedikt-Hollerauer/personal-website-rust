@@ -2,7 +2,7 @@
   border-radius: 1.45rem;
   border: 1px solid rgba(8, 22, 29, 0.12);
   background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 10px 24px rgba(8, 22, 29, 0.08);
+  box-shadow: 0 4px 10px rgba(8, 22, 29, 0.04);
 }
 
 .cardSm {

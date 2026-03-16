@@ -144,6 +144,7 @@ export function ResourcesPage() {
         arrow={RESOURCES_HOME_ARROW}
         icon={HOME_ICON}
         direction={Direction.Bottom}
+        asReturnButton
         className={styles.resourcesPageReturn}
       />
 

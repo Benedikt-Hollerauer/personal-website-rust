@@ -472,6 +472,7 @@ export function AboutPage() {
         arrow={ABOUT_HOME_ARROW}
         icon={HOME_ICON}
         direction={Direction.Right}
+        asReturnButton
         className={styles.aboutPageReturn}
       />
 

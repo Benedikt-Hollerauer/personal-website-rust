@@ -36,6 +36,19 @@ const DIRECTION_ARROWS: Record<Direction, React.ReactNode> = {
 
 const EDGE_ARROWS: EdgeArrowConfig[] = [
   { 
+    direction: Direction.Left, 
+    to: '/about', 
+    ariaLabel: 'Go to about page', 
+    label: 'About',
+    arrow: DIRECTION_ARROWS[Direction.Left],
+    icon: (
+      <svg viewBox="0 0 24 24" width="2.4rem" height="2.4rem" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <circle cx="12" cy="8" r="3" />
+        <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" />
+      </svg>
+    )
+  },
+  { 
     direction: Direction.Top, 
     to: '/resources', 
     ariaLabel: 'Go to resources page', 
@@ -46,21 +59,6 @@ const EDGE_ARROWS: EdgeArrowConfig[] = [
         <line x1="4" y1="6" x2="20" y2="6" />
         <line x1="4" y1="12" x2="20" y2="12" />
         <line x1="4" y1="18" x2="20" y2="18" />
-      </svg>
-    )
-  },
-  { 
-    direction: Direction.Right, 
-    to: '/projects', 
-    ariaLabel: 'Go to projects page', 
-    label: 'Projects',
-    arrow: DIRECTION_ARROWS[Direction.Right],
-    icon: (
-      <svg viewBox="0 0 24 24" width="2.4rem" height="2.4rem" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="4" y="4" width="7" height="7" />
-        <rect x="13" y="4" width="7" height="7" />
-        <rect x="4" y="13" width="7" height="7" />
-        <rect x="13" y="13" width="7" height="7" />
       </svg>
     )
   },
@@ -78,15 +76,17 @@ const EDGE_ARROWS: EdgeArrowConfig[] = [
     )
   },
   { 
-    direction: Direction.Left, 
-    to: '/about', 
-    ariaLabel: 'Go to about page', 
-    label: 'About',
-    arrow: DIRECTION_ARROWS[Direction.Left],
+    direction: Direction.Right, 
+    to: '/projects', 
+    ariaLabel: 'Go to projects page', 
+    label: 'Projects',
+    arrow: DIRECTION_ARROWS[Direction.Right],
     icon: (
       <svg viewBox="0 0 24 24" width="2.4rem" height="2.4rem" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="12" cy="8" r="3" />
-        <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" />
+        <rect x="4" y="4" width="7" height="7" />
+        <rect x="13" y="4" width="7" height="7" />
+        <rect x="4" y="13" width="7" height="7" />
+        <rect x="13" y="13" width="7" height="7" />
       </svg>
     )
   },
@@ -110,6 +110,7 @@ export function EdgeArrowNav() {
           arrow={arrow.arrow}
           icon={arrow.icon}
           direction={arrow.direction}
+          className={styles.edgeNavItem}
         />
       ))}
     </nav>

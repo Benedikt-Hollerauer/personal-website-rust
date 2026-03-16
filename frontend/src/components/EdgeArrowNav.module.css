@@ -2,4 +2,61 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 6;
+}
+
+@media (max-width: 1100px) {
+  .edgeNav {
+    position: fixed;
+    inset: auto 1rem max(0.85rem, env(safe-area-inset-bottom)) 1rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.2rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 1.4rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(8, 22, 29, 0.12);
+    box-shadow: 0 6px 20px rgba(8, 22, 29, 0.1);
+    pointer-events: auto;
+    z-index: 8;
+  }
+
+  .edgeNavItem {
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
+    min-height: 4.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    color: var(--color-dark);
+    transform: none !important;
+  }
+
+  .edgeNavItem:hover,
+  .edgeNavItem:active {
+    transform: none !important;
+  }
+
+  /* Always show the icon (not the arrow) in the mobile bottom bar */
+  .edgeNavItem [data-edge-arrow] {
+    display: none;
+  }
+
+  .edgeNavItem [data-edge-icon] {
+    opacity: 1 !important;
+  }
+
+  /* Always show and re-flow the label below the icon */
+  .edgeNavItem [data-edge-label] {
+    position: static;
+    transform: none !important;
+    opacity: 1 !important;
+    font-size: 0.6rem;
+    text-align: center;
+  }
 }

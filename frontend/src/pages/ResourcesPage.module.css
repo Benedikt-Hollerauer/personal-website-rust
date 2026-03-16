@@ -8,6 +8,8 @@
 
 .resourcesLayout {
   min-height: 100vh;
+  --section-title-column-size: minmax(15rem, 25vw);
+  --section-title-inline-size: 22ch;
 }
 
 .resourcesGrid {

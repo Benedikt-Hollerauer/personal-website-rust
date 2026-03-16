@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { Direction } from '../types'
 import styles from './EdgeArrowButton.module.css'
 
@@ -11,6 +10,7 @@ type EdgeArrowButtonProps = {
   icon: React.ReactNode
   direction: Direction
   className?: string
+  asReturnButton?: boolean
 }
 
 const DIRECTION_CLASS: Record<Direction, string> = {
@@ -35,9 +35,14 @@ export function EdgeArrowButton({
   icon,
   direction,
   className,
+  asReturnButton,
 }: EdgeArrowButtonProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const composedClassName = [styles.edgeArrow, DIRECTION_CLASS[direction], className]
+  const composedClassName = [
+    styles.edgeArrow,
+    DIRECTION_CLASS[direction],
+    asReturnButton && styles.returnBtn,
+    className,
+  ]
     .filter(Boolean)
     .join(' ')
 
@@ -46,19 +51,15 @@ export function EdgeArrowButton({
       to={to}
       className={composedClassName}
       aria-label={ariaLabel}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      <span className={styles.edgeArrowContent} aria-hidden="true">
-        {isHovered ? (
-          <span className={styles.edgeArrowIcon}>{icon}</span>
-        ) : (
-          <span className={styles.edgeArrowArrow}>{arrow}</span>
-        )}
+      <span className={styles.edgeArrowContent} aria-hidden="true" data-edge-content>
+        <span className={styles.edgeArrowArrow} data-edge-arrow>{arrow}</span>
+        <span className={styles.edgeArrowIcon} data-edge-icon>{icon}</span>
       </span>
       <span 
         className={`${styles.edgeArrowLabel} ${DIRECTION_LABEL_CLASS[direction]}`}
         aria-hidden="true"
+        data-edge-label
       >
         {label}
       </span>

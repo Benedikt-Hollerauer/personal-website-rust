@@ -5,8 +5,12 @@
   overflow: hidden;
 }
 
-.homePageContent {
+.homeLayout {
   min-height: 100vh;
+}
+
+.homePageContent {
+  min-height: 100%;
   display: grid;
   place-content: center;
   text-align: center;
@@ -14,9 +18,9 @@
   color: var(--color-text);
 }
 
-.homePageContent h1 {
+.homePageContent h2 {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;

@@ -113,6 +113,7 @@ export function ProjectsPage() {
         arrow={HOME_ARROW}
         icon={HOME_ICON}
         direction={Direction.Left}
+        asReturnButton
         className={styles.projectsPageReturn}
       />
 

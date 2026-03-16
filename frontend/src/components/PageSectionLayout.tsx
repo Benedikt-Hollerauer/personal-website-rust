@@ -5,11 +5,12 @@ type TitlePosition = 'top' | 'left' | 'right'
 type NavRailPosition = 'none' | 'top' | 'right' | 'bottom' | 'left'
 
 type PageSectionLayoutProps = {
-  title: string
+  title?: string
   titlePosition: TitlePosition
   children: ReactNode
   className?: string
   navRail?: NavRailPosition
+  ariaLabel?: string
 }
 
 const POSITION_CLASS: Record<TitlePosition, string> = {
@@ -32,9 +33,11 @@ export function PageSectionLayout({
   children,
   className,
   navRail = 'none',
+  ariaLabel,
 }: PageSectionLayoutProps) {
   const composedClassName = [
     styles.layout,
+    !title && styles.layoutNoTitle,
     POSITION_CLASS[titlePosition],
     RAIL_CLASS[navRail],
     className,
@@ -43,8 +46,8 @@ export function PageSectionLayout({
     .join(' ')
 
   return (
-    <section className={composedClassName} aria-label={`${title} section`}>
-      <h1 className={styles.title}>{title}</h1>
+    <section className={composedClassName} aria-label={ariaLabel ?? (title ? `${title} section` : undefined)}>
+      {title && <h1 className={styles.title}>{title}</h1>}
       <div className={styles.content} data-page-content-scroll="true">
         {children}
       </div>

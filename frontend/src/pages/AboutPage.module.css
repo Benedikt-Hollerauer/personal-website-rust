@@ -365,7 +365,7 @@
   text-align: right;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1100px) {
   .skillsHeadingCard h2 {
     font-size: 1.25rem;
     letter-spacing: 0.06em;
