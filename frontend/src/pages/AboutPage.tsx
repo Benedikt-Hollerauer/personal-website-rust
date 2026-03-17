@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { BackgroundCard } from '../components/BackgroundCard'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
+import { APP_LINKS } from '../config/links'
 import { Direction } from '../types'
 import styles from './AboutPage.module.css'
 
@@ -28,6 +28,8 @@ type ApiSkill = {
   icon?: string
   emoji?: string
   iconUrl?: string
+  link?: string
+  url?: string
   // backend stores path in snake_case
   icon_path?: string
 }
@@ -37,6 +39,7 @@ type SkillItem = {
   label: string
   iconText?: string
   iconUrl?: string
+  link?: string
 }
 
 type ApiTestimonial = {
@@ -46,6 +49,8 @@ type ApiTestimonial = {
   order?: number
   role?: string
   link?: string
+  url?: string
+  href?: string
   title?: string
   position?: string
   text?: string
@@ -173,7 +178,21 @@ const FALLBACK_WORK_HISTORY: WorkHistoryItem[] = [
   },
 ]
 
-const MORE_SKILLS_LINK = '/resources'
+const MORE_SKILLS_LINK = APP_LINKS.linkedinSkills
+
+function normalizeExternalLink(value?: string): string | undefined {
+  const raw = value?.trim()
+  if (!raw) {
+    return undefined
+  }
+
+  if (/^https?:\/\//i.test(raw) || /^mailto:/i.test(raw)) {
+    return raw
+  }
+
+  // Accept plain domains from the API and make them valid absolute links.
+  return `https://${raw.replace(/^\/+/, '')}`
+}
 
 function normalizeSkill(skill: ApiSkill, index: number): SkillItem {
   const label = skill.name?.trim() || skill.title?.trim() || `Skill ${index + 1}`
@@ -184,12 +203,18 @@ function normalizeSkill(skill: ApiSkill, index: number): SkillItem {
     skill.icon?.trim() ||
     skill.emoji?.trim()
   const iconText = skill.icon?.trim() || skill.emoji?.trim() || label.slice(0, 2).toUpperCase()
+  const link =
+    normalizeExternalLink(skill.link) ||
+    normalizeExternalLink((skill as any).url) ||
+    normalizeExternalLink((skill as any).href) ||
+    normalizeExternalLink((skill as any).website)
 
   return {
     id: String(skill.id ?? `skill-${index}`),
     label,
     iconUrl: iconUrl || undefined,
     iconText,
+    link,
   }
 }
 
@@ -212,7 +237,7 @@ function normalizeAboutParagraphs(payload: ApiAbout): string[] {
 function normalizeTestimonial(item: ApiTestimonial, index: number): TestimonialItem {
   const name = item.name?.trim() || item.author?.trim() || `Reference ${index + 1}`
   const role = item.role?.trim() || item.title?.trim() || item.position?.trim() || 'Professional Reference'
-  const link = item.link?.trim() || undefined
+  const link = normalizeExternalLink(item.link) || normalizeExternalLink(item.url) || normalizeExternalLink(item.href)
   const text = item.text?.trim() || item.message?.trim() || item.content?.trim() || item.quote?.trim() || 'Recommendation unavailable.'
 
   return {
@@ -246,22 +271,12 @@ export function AboutPage() {
   const [skills, setSkills] = useState<SkillItem[]>(FALLBACK_SKILLS)
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(FALLBACK_TESTIMONIALS)
   const [workHistory, setWorkHistory] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY)
-  const [timelineProgress, setTimelineProgress] = useState(0)
-  const timelineRef = useRef<HTMLElement | null>(null)
+  const [timelineTrackTop, setTimelineTrackTop] = useState(0)
+  const [timelineTrackHeight, setTimelineTrackHeight] = useState(0)
+  const [activeTimelineIndices, setActiveTimelineIndices] = useState<Set<number>>(new Set())
+  const timelineRef = useRef<HTMLDivElement | null>(null)
+  const fillRef = useRef<HTMLDivElement | null>(null)
   const markerRefs = useRef<Array<HTMLDivElement | null>>([])
-
-  const getMarkerProgress = (index: number): number => {
-    const timelineElement = timelineRef.current
-    const markerElement = markerRefs.current[index]
-
-    if (!timelineElement || !markerElement) {
-      return workHistory.length <= 1 ? 0 : index / (workHistory.length - 1)
-    }
-
-    const sectionHeight = timelineElement.scrollHeight || timelineElement.getBoundingClientRect().height || 1
-    const markerCenter = markerElement.offsetTop + markerElement.offsetHeight / 2
-    return Math.max(0, Math.min(1, markerCenter / sectionHeight))
-  }
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -326,79 +341,96 @@ export function AboutPage() {
     }
   }, [])
 
+  // Timeline scroll-fill effect
   useEffect(() => {
-    const updateTimelineProgress = () => {
-      const timelineElement = timelineRef.current
-      if (!timelineElement) {
-        return
+    const timeline = timelineRef.current
+    if (!timeline || workHistory.length === 0) return
+
+    // Dynamically set bottom padding so last item can reach trigger point (mobile)
+    const scrollContainer = timeline.closest<HTMLElement>('[data-page-content-scroll="true"]')
+    const containerHeight = scrollContainer ? scrollContainer.clientHeight : window.innerHeight
+    const minPadding = Math.max(0, containerHeight * (window.innerWidth <= 1100 ? 0.6 : 0.4))
+    timeline.style.paddingBottom = `${minPadding}px`
+
+    let rafId = 0
+
+    const update = () => {
+      rafId = 0
+      const markers = markerRefs.current
+      if (markers.length === 0) return
+
+      const timelineRect = timeline.getBoundingClientRect()
+
+      // Marker center positions relative to the timeline section top
+      const centers: number[] = []
+      for (const m of markers) {
+        if (!m) continue
+        const r = m.getBoundingClientRect()
+        centers.push(r.top + r.height / 2 - timelineRect.top)
       }
+      if (centers.length === 0) return
 
-      const scrollContainer = timelineElement.closest<HTMLElement>('[data-page-content-scroll="true"]')
+      const firstCenter = centers[0]
+      const lastCenter = centers[centers.length - 1]
 
-      const rect = timelineElement.getBoundingClientRect()
-      const sectionHeight = timelineElement.scrollHeight || rect.height || 1
+      // Position the track line from first marker to last marker
+      setTimelineTrackTop(firstCenter)
+      setTimelineTrackHeight(Math.max(0, lastCenter - firstCenter))
 
-      let sectionTop = 0
-      let triggerPoint = 0
-
+      // Trigger point: 60% down the visible area (slightly below center)
+      let triggerY: number
       if (scrollContainer) {
-        const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight
-        if (scrollContainer.scrollTop >= maxScrollTop - 2) {
-          setTimelineProgress(1)
-          return
-        }
-
         const containerRect = scrollContainer.getBoundingClientRect()
-        sectionTop = rect.top - containerRect.top + scrollContainer.scrollTop
-        // Use the container bottom edge as the trigger so the final item is always reachable.
-        triggerPoint = scrollContainer.scrollTop + scrollContainer.clientHeight
-
-        const sectionBottom = sectionTop + sectionHeight
-        if (triggerPoint >= sectionBottom - 2) {
-          setTimelineProgress(1)
-          return
-        }
+        triggerY = containerRect.top + containerRect.height * 0.6 - timelineRect.top
       } else {
-        sectionTop = rect.top + window.scrollY
-        // Fallback for non-container scrolling contexts.
-        triggerPoint = window.scrollY + window.innerHeight
+        triggerY = window.innerHeight * 0.6 - timelineRect.top
+      }
 
-        const sectionBottom = sectionTop + sectionHeight
-        if (triggerPoint >= sectionBottom - 2) {
-          setTimelineProgress(1)
-          return
+      // Fill from first marker downward, clamped to track length
+      const fillHeight = Math.max(0, Math.min(lastCenter - firstCenter, triggerY - firstCenter))
+      if (fillRef.current) {
+        fillRef.current.style.height = `${fillHeight}px`
+      }
+
+      // Activate items whose marker center is at or above the fill point
+      const nextActive = new Set<number>()
+      for (let i = 0; i < centers.length; i++) {
+        if (triggerY >= centers[i]) {
+          nextActive.add(i)
         }
       }
 
-      const rawProgress = (triggerPoint - sectionTop) / sectionHeight
-      const clampedProgress = Math.max(0, Math.min(1, rawProgress))
-
-      setTimelineProgress(clampedProgress)
+      setActiveTimelineIndices((prev) => {
+        if (prev.size === nextActive.size) {
+          let same = true
+          for (const idx of nextActive) {
+            if (!prev.has(idx)) { same = false; break }
+          }
+          if (same) return prev
+        }
+        return nextActive
+      })
     }
 
-    const timelineElement = timelineRef.current
-    const scrollContainer = timelineElement?.closest<HTMLElement>('[data-page-content-scroll="true"]') ?? null
-
-    updateTimelineProgress()
-
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', updateTimelineProgress, { passive: true })
-    } else {
-      window.addEventListener('scroll', updateTimelineProgress, { passive: true })
+    const schedule = () => {
+      if (rafId === 0) {
+        rafId = requestAnimationFrame(update)
+      }
     }
 
-    window.addEventListener('resize', updateTimelineProgress)
+    // Initial calculation
+    schedule()
+
+    const target = scrollContainer ?? window
+    target.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
 
     return () => {
-      if (scrollContainer) {
-        scrollContainer.removeEventListener('scroll', updateTimelineProgress)
-      } else {
-        window.removeEventListener('scroll', updateTimelineProgress)
-      }
-
-      window.removeEventListener('resize', updateTimelineProgress)
+      target.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (rafId !== 0) cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [workHistory])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -496,64 +528,85 @@ export function AboutPage() {
 
           {/* Skills Section: Only render if there are active skills */}
           {visibleSkills.length > 0 && (
-            <BackgroundCard className={styles.skillsHeadingCard}>
-              <h2>THESE ARE MY CURRENT SKILLS</h2>
-            </BackgroundCard>
+            <h2 className={styles.sectionHeading}>THESE ARE MY CURRENT SKILLS</h2>
           )}
 
           {visibleSkills.length > 0 && (
-            <BackgroundCard className={styles.skillsContainer} size="lg">
-              <section className={styles.skillsRow} aria-label="Current skills">
-                {visibleSkills.map((skill) => (
-                  <BackgroundCard
-                    key={skill.id}
-                    as="article"
-                    size="sm"
-                    className={styles.skillTile}
-                  >
-                    {skill.iconUrl ? (
-                      <img className={styles.skillIconImage} src={skill.iconUrl} alt={skill.label} />
-                    ) : (
-                      <span className={styles.skillFallbackIcon} aria-hidden="true">
-                        {skill.iconText}
-                      </span>
-                    )}
-                    <span className={styles.skillLabel}>{skill.label}</span>
-                  </BackgroundCard>
-                ))}
+            <section className={styles.skillsRow} aria-label="Current skills">
+                {visibleSkills.map((skill) => {
+                  const skillContent = (
+                    <>
+                      {skill.iconUrl ? (
+                        <img className={styles.skillIconImage} src={skill.iconUrl} alt={skill.label} />
+                      ) : (
+                        <span className={styles.skillFallbackIcon} aria-hidden="true">
+                          {skill.iconText}
+                        </span>
+                      )}
+                      <span className={styles.skillLabel}>{skill.label}</span>
+                    </>
+                  )
 
-                <Link
-                  to={MORE_SKILLS_LINK}
+                  return (
+                    <div key={skill.id}>
+                      {skill.link ? (
+                        <a
+                          href={skill.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${styles.skillTile} ${styles.skillTileClickable}`}
+                          title={`Learn more about ${skill.label}`}
+                          onClick={(event) => {
+                            event.preventDefault()
+                            window.open(skill.link, '_blank', 'noopener,noreferrer')
+                          }}
+                        >
+                          {skillContent}
+                        </a>
+                      ) : (
+                        <BackgroundCard
+                          as="article"
+                          size="sm"
+                          className={styles.skillTile}
+                        >
+                          {skillContent}
+                        </BackgroundCard>
+                      )}
+                    </div>
+                  )
+                })}
+
+                <a
+                  href={MORE_SKILLS_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.moreSkillsBubble}
                   aria-label={
                     extraSkills > 0
-                      ? `${extraSkills} more skills available`
-                      : 'See more skills and resources'
+                      ? `${extraSkills} more skills available on LinkedIn`
+                      : 'See more skills on LinkedIn'
                   }
                 >
                   <span>+</span>
                   <small>{extraSkills > 0 ? `${extraSkills} more` : 'more skills'}</small>
-                </Link>
+                </a>
               </section>
-            </BackgroundCard>
           )}
 
           {/* Testimonials Section: Only render if there are active testimonials */}
           {testimonials.length > 0 && (
-            <BackgroundCard className={styles.testimonialsHeadingCard}>
-              <h2>MY TESTIMONIALS</h2>
-            </BackgroundCard>
+            <h2 className={styles.sectionHeading}>MY TESTIMONIALS</h2>
           )}
 
           {testimonials.length > 0 && (
-            <BackgroundCard className={styles.testimonialsContainer} size="lg">
-              <section className={styles.testimonialsGrid} aria-label="Testimonials">
-                {testimonials.map((testimonial, index) => (
+            <section className={styles.testimonialsContainer} aria-label="Testimonials section">
+              <div className={styles.testimonialsGrid} aria-label="Testimonials">
+                {testimonials.map((testimonial) => (
                   <BackgroundCard
                     key={testimonial.id}
                     as="article"
                     size="md"
-                    className={`${styles.testimonialCard} ${index % 3 === 0 ? styles.testimonialCardWide : ''}`.trim()}
+                    className={styles.testimonialCard}
                   >
                     <div className={styles.testimonialHead}>
                       <span className={styles.quoteMark} aria-hidden="true">
@@ -562,7 +615,16 @@ export function AboutPage() {
                       <div className={styles.testimonialIdentity}>
                         <h3>
                           {testimonial.link ? (
-                            <a href={testimonial.link} target="_blank" rel="noopener noreferrer">
+                            <a
+                              href={testimonial.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.testimonialLink}
+                              onClick={(event) => {
+                                event.preventDefault()
+                                window.open(testimonial.link, '_blank', 'noopener,noreferrer')
+                              }}
+                            >
                               {testimonial.name}
                             </a>
                           ) : (
@@ -575,74 +637,90 @@ export function AboutPage() {
                     <p className={styles.testimonialText}>{testimonial.text}</p>
                   </BackgroundCard>
                 ))}
-              </section>
-            </BackgroundCard>
+              </div>
+            </section>
           )}
 
           {/* Timeline Section: Only render if there are active work history items */}
           {workHistory.length > 0 && (
-            <BackgroundCard className={styles.timelineHeadingCard}>
-              <h2>MY WORK HISTORY</h2>
-            </BackgroundCard>
+            <h2 className={styles.sectionHeading}>MY WORK HISTORY</h2>
           )}
 
           {workHistory.length > 0 && (
-            <section ref={timelineRef} className={styles.timelineSection} aria-label="Work history timeline">
-              <div className={styles.timelineLineBase} aria-hidden="true" />
+            <section
+              ref={timelineRef}
+              className={styles.timelineSection}
+              aria-label="Work history timeline"
+            >
+              {/* Vertical line track & fill */}
               <div
-                className={styles.timelineLineFill}
+                className={styles.timelineTrack}
                 aria-hidden="true"
-                style={{ height: `${timelineProgress * 100}%` }}
-              />
-
-              <div className={styles.timelineRows}>
-                {workHistory.map((item, index) => {
-                  const isLeft = index % 2 === 0
-                  const markerProgress = getMarkerProgress(index)
-                  const isRevealed = timelineProgress >= markerProgress
-
-                  return (
-                    <article key={item.id} className={styles.timelineRow}>
-                      <motion.div
-                        className={`${styles.timelineCardWrap} ${isLeft ? styles.timelineCardLeft : styles.timelineCardRight}`}
-                        initial={false}
-                        animate={{
-                          opacity: isRevealed ? 1 : 0,
-                          x: isRevealed ? 0 : isLeft ? -72 : 72,
-                          y: isRevealed ? 0 : 16,
-                        }}
-                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      >
-                        <BackgroundCard as="div" size="md" className={styles.timelineCard}>
-                          <div
-                            className={styles.timelineCardTop}
-                            style={{ background: item.accentColor }}
-                            aria-hidden="true"
-                          >
-                            <span>{item.emoji}</span>
-                          </div>
-                          <p className={styles.timelineCardText}>{item.text}</p>
-                        </BackgroundCard>
-                      </motion.div>
-
-                      <div className={styles.timelineMarkerColumn}>
-                        <div
-                          ref={(element) => {
-                            markerRefs.current[index] = element
-                          }}
-                          className={`${styles.timelineYearDot} ${isRevealed ? styles.timelineYearDotActive : ''}`}
-                        >
-                          {item.year}
-                        </div>
-                      </div>
-
-                      <div className={`${styles.timelineRoleLabel} ${isLeft ? styles.timelineRoleLabelRight : styles.timelineRoleLabelLeft}`}>
-                        {item.title}
-                      </div>
-                    </article>
-                  )
-                })}
+                style={{ top: `${timelineTrackTop}px`, height: `${timelineTrackHeight}px` }}
+              >
+                <div className={styles.timelineTrackBase} />
+                <div
+                  ref={fillRef}
+                  className={styles.timelineTrackFill}
+                />
               </div>
+
+              {/* Timeline items */}
+              {workHistory.map((item, index) => {
+                const isLeft = index % 2 === 0
+                const isRevealed = activeTimelineIndices.has(index)
+
+                return (
+                  <div key={item.id} className={styles.timelineItem}>
+                    {/* Marker (year dot) */}
+                    <div className={styles.timelineMarker}>
+                      <div
+                        ref={(el) => { markerRefs.current[index] = el }}
+                        className={`${styles.timelineYearDot} ${isRevealed ? styles.timelineYearDotActive : ''}`}
+                      >
+                        {item.year}
+                      </div>
+                    </div>
+
+                    {/* Card */}
+                    <motion.div
+                      className={`${styles.timelineCardWrap} ${isLeft ? styles.timelineCardLeft : styles.timelineCardRight}`}
+                      initial={false}
+                      animate={{
+                        opacity: isRevealed ? 1 : 0,
+                        x: isRevealed ? 0 : isLeft ? -44 : 44,
+                        y: isRevealed ? 0 : 14,
+                        scale: isRevealed ? 1 : 0.96,
+                      }}
+                      transition={{ type: 'spring', stiffness: 190, damping: 22, mass: 0.8 }}
+                    >
+                      <BackgroundCard as="div" size="md" className={styles.timelineCard}>
+                        <div
+                          className={styles.timelineCardTop}
+                          style={{ background: item.accentColor }}
+                          aria-hidden="true"
+                        >
+                          <span>{item.emoji}</span>
+                        </div>
+                        <p className={styles.timelineCardText}>{item.text}</p>
+                      </BackgroundCard>
+                    </motion.div>
+
+                    {/* Role label (animated) */}
+                    <motion.div
+                      className={`${styles.timelineRoleLabel} ${isLeft ? styles.timelineRoleLabelRight : styles.timelineRoleLabelLeft}`}
+                      initial={false}
+                      animate={{
+                        opacity: isRevealed ? 1 : 0,
+                        y: isRevealed ? 0 : 24,
+                      }}
+                      transition={{ type: 'spring', stiffness: 180, damping: 20, mass: 0.7 }}
+                    >
+                      {item.title}
+                    </motion.div>
+                  </div>
+                )
+              })}
             </section>
           )}
         </motion.div>

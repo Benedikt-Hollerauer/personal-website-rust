@@ -1,5 +1,5 @@
 .sliderShell {
-  width: min(100%, 56rem);
+  width: min(100%, 68rem);
   display: grid;
   gap: 1.5rem;
   justify-items: center;
@@ -17,14 +17,14 @@
 
 .sliderViewport {
   width: 100%;
-  min-height: 28rem;
+  min-height: 20rem;
   display: grid;
   align-items: center;
 }
 
 .projectCard {
   width: 100%;
-  min-height: 28rem;
+  min-height: 20rem;
   border: 1px solid rgba(8, 22, 29, 0.1);
   border-radius: 1.2rem;
   padding: 2rem;
@@ -194,15 +194,16 @@
 
 .githubCard {
   width: 100%;
-  min-height: 28rem;
-  border: 2px dashed rgba(25, 118, 210, 0.3);
+  min-height: 20rem;
+  border: 1px solid rgba(8, 22, 29, 0.1);
   border-radius: 1.2rem;
   padding: 2rem;
-  background: linear-gradient(135deg, rgba(25, 118, 210, 0.03) 0%, rgba(25, 118, 210, 0.06) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(242, 244, 247, 0.97) 100%);
+  box-shadow: 0 12px 32px rgba(8, 22, 29, 0.06), 0 4px 12px rgba(8, 22, 29, 0.03);
+  display: grid;
+  gap: 1.6rem;
+  align-content: start;
+  backdrop-filter: blur(8px);
 }
 
 .githubCardContent {
@@ -240,6 +241,45 @@
 .githubLink:hover {
   border-bottom-color: #1976d2;
   color: #1565c0;
+}
+
+.sliderControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.sliderButton {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(8, 22, 29, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  color: #0a1620;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.sliderButton:hover:not(:disabled) {
+  border-color: #1976d2;
+  background: #1976d2;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.sliderButton:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.sliderButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .sliderCounter {

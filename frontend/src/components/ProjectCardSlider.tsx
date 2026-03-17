@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { APP_LINKS } from '../config/links'
 import styles from './ProjectCardSlider.module.css'
 
 export type ProjectCard = {
@@ -22,7 +23,7 @@ type ProjectCardSliderProps = {
 
 type SlideDirection = 1 | -1
 
-const GITHUB_PROFILE_URL = 'https://github.com/benedikt-hollerauer'
+const GITHUB_PROFILE_URL = APP_LINKS.githubProfile
 
 const slideVariants = {
   enter: (direction: SlideDirection) => ({
@@ -47,6 +48,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(1)
   const isLockedRef = useRef(false)
   const sliderRef = useRef<HTMLElement>(null)
+  const touchStartXRef = useRef(0)
 
   // Include a special "github" card at the end
   const allItems = [...projects, { id: 'github-card', isGithubCard: true } as any]
@@ -82,13 +84,43 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
     moveBy(event.deltaY > 0 ? 1 : -1)
   }
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault()
+      moveBy(-1)
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault()
+      moveBy(1)
+    }
+  }
+
+  const handleTouchStart = (event: TouchEvent) => {
+    touchStartXRef.current = event.touches[0].clientX
+  }
+
+  const handleTouchEnd = (event: TouchEvent) => {
+    const touchEndX = event.changedTouches[0].clientX
+    const diffX = touchStartXRef.current - touchEndX
+    const minSwipeDistance = 40
+
+    if (Math.abs(diffX) > minSwipeDistance) {
+      moveBy(diffX > 0 ? 1 : -1)
+    }
+  }
+
   useEffect(() => {
     const slider = sliderRef.current
     if (!slider) return
 
     slider.addEventListener('wheel', handleWheel, { passive: false })
+    slider.addEventListener('touchstart', handleTouchStart, { passive: true })
+    slider.addEventListener('touchend', handleTouchEnd, { passive: true })
+    window.addEventListener('keydown', handleKeyDown)
     return () => {
       slider.removeEventListener('wheel', handleWheel)
+      slider.removeEventListener('touchstart', handleTouchStart)
+      slider.removeEventListener('touchend', handleTouchEnd)
+      window.removeEventListener('keydown', handleKeyDown)
     }
   }, [totalItems, isLockedRef])
 
@@ -102,8 +134,6 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
 
   return (
     <section className={styles.sliderShell} ref={sliderRef} aria-label="Project slider">
-      <p className={styles.sliderHint}>Scroll to explore projects</p>
-
       <div className={styles.sliderViewport}>
         <AnimatePresence mode="wait" custom={slideDirection} initial={false}>
           {isGithubCard ? (
@@ -194,9 +224,29 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
         </AnimatePresence>
       </div>
 
-      <p className={styles.sliderCounter}>
-        {activeIndex + 1} / {totalItems}
-      </p>
+      <div className={styles.sliderControls}>
+        <button
+          className={styles.sliderButton}
+          onClick={() => moveBy(-1)}
+          aria-label="Previous project"
+          title="Previous (← Key)"
+          disabled={totalItems <= 1}
+        >
+          ←
+        </button>
+        <p className={styles.sliderCounter}>
+          {activeIndex + 1} / {totalItems}
+        </p>
+        <button
+          className={styles.sliderButton}
+          onClick={() => moveBy(1)}
+          aria-label="Next project"
+          title="Next (→ Key)"
+          disabled={totalItems <= 1}
+        >
+          →
+        </button>
+      </div>
     </section>
   )
 }

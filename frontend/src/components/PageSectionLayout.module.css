@@ -6,6 +6,8 @@
   --nav-rail-button-size: 4.2rem;
   --nav-rail-label-inline-size: 5rem;
   --nav-rail-label-block-size: 2.25rem;
+  --nav-rail-bottom-extra: 3.75rem;
+  --nav-rail-bottom-extra-mobile: 3.2rem;
   height: 100vh;
   display: grid;
   align-items: stretch;
@@ -31,7 +33,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   min-width: 0;
   min-height: 0;
   z-index: 1;
@@ -54,7 +56,7 @@
 }
 
 .railBottom {
-  padding-bottom: calc(var(--section-block-space) + var(--nav-rail-button-size) + var(--nav-rail-label-block-size) + 3.75rem);
+  padding-bottom: calc(var(--section-block-space) + var(--nav-rail-button-size) + var(--nav-rail-label-block-size) + var(--nav-rail-bottom-extra));
 }
 
 .railLeft {
@@ -152,7 +154,7 @@
   }
 
   .railBottom {
-    padding-bottom: calc(var(--section-block-space) + var(--nav-rail-button-size) + var(--nav-rail-label-block-size) + 3.2rem);
+    padding-bottom: calc(var(--section-block-space) + var(--nav-rail-button-size) + var(--nav-rail-label-block-size) + var(--nav-rail-bottom-extra-mobile));
   }
 
   .layoutLeft,

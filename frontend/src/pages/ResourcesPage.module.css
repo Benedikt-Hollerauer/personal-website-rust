@@ -8,8 +8,13 @@
 
 .resourcesLayout {
   min-height: 100vh;
+  --section-space: clamp(1rem, 2vw, 2rem);
+  --section-block-space: clamp(1.25rem, 2.8vh, 2.25rem);
+  --section-content-padding: clamp(0.75rem, 1.8vw, 1.5rem);
   --section-title-column-size: minmax(15rem, 25vw);
   --section-title-inline-size: 22ch;
+  --nav-rail-bottom-extra: 0rem;
+  --nav-rail-bottom-extra-mobile: 0rem;
 }
 
 .resourcesGrid {
@@ -17,6 +22,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.35rem;
   align-items: stretch;
+  align-content: start;
 }
 
 .resourceCard {
@@ -29,13 +35,24 @@
   background: rgba(255, 255, 255, 0.8);
   padding: 1.25rem 1.3rem 1.15rem;
   box-shadow: 0 10px 20px rgba(8, 22, 29, 0.07);
-  min-height: 17.5rem;
+  min-width: 0;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.resourceCard:hover {
+  transform: translateY(-6px) scale(1.05) rotate(1deg);
+  box-shadow: 0 18px 36px rgba(8, 22, 29, 0.13), 0 8px 16px rgba(99, 120, 210, 0.1);
+  border-color: rgba(99, 120, 210, 0.25);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .resourceCard h2 {
   margin: 0;
   font-size: 1.2rem;
   line-height: 1.25;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .resourceCard p {
@@ -43,6 +60,9 @@
   line-height: 1.55;
   opacity: 0.82;
   font-size: 0.98rem;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .downloadButton {

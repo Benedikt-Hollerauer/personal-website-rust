@@ -11,15 +11,19 @@ const TEXTS = [
 const DELAY_MS = 2500
 const CHARS = '!<>-_\\/[]{}—=+*^?#________'
 
+let animationDone = false      // true only after last text finishes
+
 type QueueItem = { from: string; to: string; start: number; end: number; char?: string }
 
 class TextScramble {
+  private el: HTMLElement
   private queue: QueueItem[] = []
   private frame = 0
   private frameRequest = 0
   private resolve!: () => void
 
-  constructor(private el: HTMLElement) {
+  constructor(el: HTMLElement) {
+    this.el = el
     this.update = this.update.bind(this)
   }
 
@@ -59,7 +63,6 @@ class TextScramble {
         output += from
       }
     }
-    // TEXTS and CHARS are developer-controlled constants — innerHTML is safe here
     this.el.innerHTML = output
     if (complete === this.queue.length) {
       this.resolve()
@@ -85,6 +88,12 @@ export function RotatingText() {
     const el = elRef.current
     if (!el) return
 
+    // Animation fully completed in a previous visit — just show final text
+    if (animationDone) {
+      el.innerText = TEXTS[TEXTS.length - 1]
+      return
+    }
+
     const fx = new TextScramble(el)
     let index = 0
     let cancelled = false
@@ -96,8 +105,9 @@ export function RotatingText() {
         index++
         if (index < TEXTS.length) {
           setTimeout(next, DELAY_MS)
+        } else {
+          animationDone = true
         }
-        // last text reached — stays on screen until reload
       })
     }
 

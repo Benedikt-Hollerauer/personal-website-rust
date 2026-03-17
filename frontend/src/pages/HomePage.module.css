@@ -1,7 +1,10 @@
 .homePage {
   position: relative;
   min-height: 100vh;
-  background: var(--color-light);
+  background:
+    radial-gradient(circle at 20% 18%, rgba(8, 22, 29, 0.08), transparent 45%),
+    radial-gradient(circle at 85% 82%, rgba(8, 22, 29, 0.06), transparent 40%),
+    var(--color-light);
   overflow: hidden;
 }
 
@@ -11,31 +14,74 @@
 
 .homePageContent {
   min-height: 100%;
-  display: grid;
-  place-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  gap: 1rem;
+  gap: 2rem;
   color: var(--color-text);
+  padding: clamp(1.5rem, 3vw, 3rem);
 }
 
-.homePageContent h2 {
+.nameBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.name {
   margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-size: clamp(2.8rem, 9vw, 7.2rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  color: var(--color-dark);
+  text-transform: uppercase;
+  text-shadow: 0 14px 32px rgba(8, 22, 29, 0.15);
+}
+
+.role {
+  margin: 0.8rem 0 0;
+  font-size: clamp(0.98rem, 2vw, 1.34rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0f2b3b;
+  line-height: 1.15;
+  display: inline-flex;
+  align-items: center;
 }
 
-.homePageContent p {
+.scramblePanel {
+  width: min(100%, 44rem);
+  padding: clamp(1.2rem, 2.7vw, 1.9rem) clamp(1rem, 2.8vw, 1.9rem);
+  display: grid;
+  gap: 0.2rem;
+  position: relative;
+}
+
+.scramblePanel::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 32rem);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 0%, rgba(8, 22, 29, 0.62) 48%, transparent 100%);
+}
+
+.scramblePanel::before {
+  top: 0;
+}
+
+.scrambleLine {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 400;
-  opacity: 0.8;
-}
-
-.rotatingLine {
-  min-height: 2rem; /* prevents layout shift when text changes */
+  min-height: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 700;
 }

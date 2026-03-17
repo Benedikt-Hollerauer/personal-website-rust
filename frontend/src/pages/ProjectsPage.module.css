@@ -8,6 +8,11 @@
 
 .projectsLayout {
   min-height: 100vh;
+  padding-top: 3.5rem;
+  --section-block-space: clamp(1rem, 2vh, 1.5rem);
+  --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
+  --nav-rail-bottom-extra: 0rem;
+  --nav-rail-bottom-extra-mobile: 0rem;
 }
 
 .projectsContent {
@@ -17,6 +22,7 @@
   gap: 1rem;
   text-align: center;
   padding: 0;
+  margin-top: 3.5rem;
 }
 
 .projectsContent p {

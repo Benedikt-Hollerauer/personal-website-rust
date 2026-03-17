@@ -6,6 +6,7 @@ import { BackgroundCard } from '../components/BackgroundCard'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
+import { APP_LINKS } from '../config/links'
 import { Direction } from '../types'
 import styles from './ContactPage.module.css'
 
@@ -129,9 +130,9 @@ const INITIAL_VALUES: ContactFormValues = {
 }
 
 const SOCIAL_LINKS: Array<{ label: string; href: string; icon: ReactNode }> = [
-  { label: 'GitHub', href: 'https://github.com/benedikt-hollerauer', icon: GITHUB_ICON },
-  { label: 'Instagram', href: 'https://instagram.com/bene.hl', icon: INSTAGRAM_ICON },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benedikt-hollerauer', icon: LINKEDIN_ICON },
+  { label: 'GitHub', href: APP_LINKS.githubProfile, icon: GITHUB_ICON },
+  { label: 'Instagram', href: APP_LINKS.instagramProfile, icon: INSTAGRAM_ICON },
+  { label: 'LinkedIn', href: APP_LINKS.linkedinProfile, icon: LINKEDIN_ICON },
 ]
 
 function isValidEmail(value: string): boolean {

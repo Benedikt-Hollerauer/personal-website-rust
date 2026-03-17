@@ -1,38 +1,56 @@
 .aboutPage {
   position: relative;
   min-height: 100vh;
-  background: var(--color-light);
+  background:
+    radial-gradient(circle at 15% 22%, rgba(99, 120, 210, 0.08), transparent 50%),
+    radial-gradient(circle at 88% 75%, rgba(8, 22, 29, 0.06), transparent 45%),
+    var(--color-light);
   color: var(--color-text);
   overflow: hidden;
 }
 
 .aboutLayout {
   min-height: 100vh;
+  --section-block-space: clamp(1rem, 2vh, 1.5rem);
+  --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
+  --nav-rail-bottom-extra: 0rem;
+  --nav-rail-bottom-extra-mobile: 0rem;
 }
 
 .aboutStack {
   display: grid;
-  gap: 1.65rem;
+  width: min(100%, 68rem);
+  margin-inline: auto;
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  align-content: start;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .aboutCard {
   width: 100%;
+  display: grid;
+  gap: 1.2rem;
 }
 
 .aboutTextBlock {
   display: grid;
-  gap: 0.95rem;
+  gap: 1.1rem;
 }
 
 .aboutTextBlock p {
   margin: 0;
-  line-height: 1.65;
-  font-size: 1.03rem;
+  line-height: 1.7;
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  color: rgba(16, 32, 39, 0.88);
 }
 
-.skillsHeadingCard {
-  width: 100%;
+.sectionHeading {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
   text-align: center;
+  width: 100%;
 }
 
 .skillsHeadingCard h2 {
@@ -42,32 +60,43 @@
   line-height: 1.2;
 }
 
-.skillsContainer {
-  width: 100%;
-}
-
 .skillsRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
   align-items: center;
   justify-content: center;
 }
 
 .skillTile {
-  width: 6.5rem;
-  height: 6.5rem;
+  width: clamp(6rem, 8vw, 7.5rem);
+  height: clamp(6rem, 8vw, 7.5rem);
   display: grid;
   place-items: center;
   text-align: center;
   position: relative;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
 }
 
 .skillTile:hover {
-  transform: translateY(-5px) scale(1.04);
-  box-shadow: 0 14px 26px rgba(8, 22, 29, 0.12);
-  border-color: rgba(8, 22, 29, 0.22);
+  transform: translateY(-8px) scale(1.08) rotate(2deg);
+  box-shadow: 0 18px 36px rgba(8, 22, 29, 0.14), 0 8px 12px rgba(99, 120, 210, 0.15);
+  border-color: rgba(99, 120, 210, 0.28);
+}
+
+.skillTileClickable {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  position: relative;
+  border-radius: 1.3rem;
+  border: 1px solid rgba(8, 22, 29, 0.18);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.25rem 1.3rem 1.15rem;
+  box-shadow: 0 10px 20px rgba(8, 22, 29, 0.07);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 
 .skillIconImage {
@@ -99,24 +128,34 @@
 }
 
 .moreSkillsBubble {
-  width: 6.5rem;
-  height: 6.5rem;
-  border: 1px solid rgba(43, 111, 204, 0.35);
+  width: clamp(6rem, 8vw, 7.5rem);
+  height: clamp(6rem, 8vw, 7.5rem);
+  border: 2px solid rgba(99, 120, 210, 0.4);
   border-radius: 999px;
-  background: linear-gradient(180deg, #5f9be8, #3678d2);
+  background: linear-gradient(135deg, #5f9be8 0%, #3678d2 50%, #2a5fa8 100%);
   color: #f8fbff;
   display: grid;
   place-items: center;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(54, 120, 210, 0.32);
+  box-shadow: 0 16px 32px rgba(54, 120, 210, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   text-decoration: none;
-  transition: transform 170ms ease, filter 170ms ease, box-shadow 170ms ease;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 180ms ease, box-shadow 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.moreSkillsBubble::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent 60%);
+  pointer-events: none;
 }
 
 .moreSkillsBubble:hover {
-  transform: translateY(-4px) scale(1.03);
-  filter: brightness(1.03);
-  box-shadow: 0 16px 28px rgba(54, 120, 210, 0.4);
+  transform: translateY(-6px) scale(1.05) rotate(-2deg);
+  filter: brightness(1.05);
+  box-shadow: 0 22px 44px rgba(54, 120, 210, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .moreSkillsBubble span {
@@ -136,24 +175,31 @@
   z-index: 12;
 }
 
-.testimonialsHeadingCard {
-  width: 100%;
+.sectionHeading {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  letter-spacing: 0.1em;
+  line-height: 1.25;
   text-align: center;
+  width: 100%;
+  font-weight: 700;
+  color: #0f2b3b;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.sectionHeading::before,
+.sectionHeading::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(8, 22, 29, 0.2) 50%, transparent);
 }
 
 .testimonialsHeadingCard h2 {
-  margin: 0;
-  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-}
-
-.timelineHeadingCard {
-  width: 100%;
-  text-align: center;
-}
-
-.timelineHeadingCard h2 {
   margin: 0;
   font-size: clamp(1.5rem, 2.8vw, 2.15rem);
   letter-spacing: 0.08em;
@@ -165,28 +211,30 @@
 }
 
 .testimonialsGrid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1rem;
+  column-count: 2;
+  column-gap: clamp(1.2rem, 2.5vw, 1.8rem);
+  column-fill: balance;
 }
 
 .testimonialCard {
-  grid-column: span 6;
   display: grid;
-  gap: 0.9rem;
-  min-height: 10.5rem;
+  gap: 1rem;
+  min-height: 11rem;
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
   border-color: rgba(8, 22, 29, 0.14);
-  transition: transform 170ms ease, box-shadow 170ms ease, border-color 170ms ease;
-}
-
-.testimonialCardWide {
-  grid-column: span 8;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+  padding: clamp(1.2rem, 2vw, 1.6rem);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(239, 246, 255, 0.5) 100%);
 }
 
 .testimonialCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 24px rgba(8, 22, 29, 0.11);
-  border-color: rgba(8, 22, 29, 0.22);
+  transform: translateY(-6px) rotate(1deg);
+  box-shadow: 0 18px 36px rgba(8, 22, 29, 0.13), 0 8px 16px rgba(99, 120, 210, 0.1);
+  border-color: rgba(99, 120, 210, 0.25);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(239, 246, 255, 0.7) 100%);
 }
 
 .testimonialHead {
@@ -196,10 +244,10 @@
 }
 
 .quoteMark {
-  font-size: 1.5rem;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
   font-weight: 700;
   line-height: 1;
-  color: #111827;
+  color: rgba(99, 120, 210, 0.4);
   margin-top: 0.05rem;
 }
 
@@ -210,15 +258,21 @@
 
 .testimonialIdentity h3 {
   margin: 0;
-  font-size: 1.5rem;
-  color: #4c1d95;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  color: #3d2d6b;
   line-height: 1.1;
   letter-spacing: 0.01em;
+  font-weight: 700;
 }
 
 .testimonialIdentity h3 a {
   color: inherit;
   text-decoration: none;
+}
+
+.testimonialLink {
+  cursor: pointer;
+  text-underline-offset: 0.18em;
 }
 
 .testimonialIdentity h3 a:hover {
@@ -239,48 +293,108 @@
   color: rgba(16, 32, 39, 0.95);
 }
 
+/* ── Timeline ── */
+
 .timelineSection {
   position: relative;
-  min-height: 34rem;
-  padding: 1.5rem 0.25rem clamp(5rem, 16vh, 8.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1.5rem 0 2.5rem;
+  padding-bottom: 30vh;
 }
 
-.timelineLineBase,
-.timelineLineFill {
+/* Track container: sits behind everything, centered on the marker column */
+.timelineTrack {
   position: absolute;
-  top: 0;
   left: 50%;
-  width: 2px;
+  width: 3px;
   transform: translateX(-50%);
   pointer-events: none;
+  z-index: 0;
 }
 
-.timelineLineBase {
-  height: 100%;
-  background: rgba(8, 22, 29, 0.2);
+.timelineTrackBase {
+  position: absolute;
+  inset: 0;
+  background: #222;
+  border-radius: 999px;
 }
 
-.timelineLineFill {
-  background: linear-gradient(180deg, #111827, #0b1720);
-  transition: height 120ms linear;
+.timelineTrackFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: #222;
+  border-radius: 999px;
+  will-change: height;
 }
 
-.timelineRows {
-  display: grid;
-  gap: 2.2rem;
+.timelineTrackFill::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #0284c7;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18), 0 0 8px rgba(2, 132, 199, 0.3);
 }
 
-.timelineRow {
+/* Each timeline item: 3-column grid [card | marker | label] */
+.timelineItem {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  column-gap: 1.35rem;
-  min-height: 11rem;
+  column-gap: 1.5rem;
   position: relative;
+  min-height: 11rem;
 }
 
+/* Marker column */
+.timelineMarker {
+  grid-column: 2;
+  grid-row: 1;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+.timelineYearDot {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 2px solid #0f172a;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #fff, #e6eef7);
+  color: #0f172a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transform: scale(0.92);
+  box-shadow: 0 10px 18px rgba(8, 22, 29, 0.15);
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.timelineYearDotActive {
+  background: #0f172a;
+  color: #f8fafc;
+  transform: scale(1);
+  box-shadow: 0 0 0 9px rgba(15, 23, 42, 0.13), 0 14px 24px rgba(8, 22, 29, 0.22);
+}
+
+/* Card wrapper */
 .timelineCardWrap {
-  max-width: 21rem;
+  width: min(100%, 22rem);
+  will-change: transform, opacity;
+  display: flex;
+  grid-row: 1;
 }
 
 .timelineCardLeft {
@@ -293,65 +407,64 @@
   justify-self: start;
 }
 
+/* Card */
 .timelineCard {
   overflow: hidden;
   padding: 0;
+  border-radius: 1.35rem;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.95), rgba(237, 247, 255, 0.82));
+  border: 1px solid rgba(8, 22, 29, 0.16);
+  box-shadow: 0 18px 34px rgba(8, 22, 29, 0.11);
+  transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 220ms ease, filter 240ms ease;
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.timelineCard:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 22px 44px rgba(8, 22, 29, 0.16), 0 10px 20px rgba(8, 22, 29, 0.12);
+  filter: brightness(1.02);
 }
 
 .timelineCardTop {
-  min-height: 5.5rem;
+  min-height: 5.8rem;
   display: grid;
   place-items: center;
   color: #f8fafc;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
 }
 
-.timelineCardTop span {
-  font-size: 2.35rem;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.18));
+.timelineCardTop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent 60%);
+  pointer-events: none;
 }
 
 .timelineCardText {
   margin: 0;
-  padding: 0.95rem 1rem 1rem;
-  font-size: 0.89rem;
-  line-height: 1.5;
-}
-
-.timelineMarkerColumn {
-  grid-column: 2;
-  position: relative;
-  z-index: 1;
-}
-
-.timelineYearDot {
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 999px;
-  border: 2px solid #111827;
-  display: grid;
-  place-items: center;
-  background: #f2f4f7;
-  color: #111827;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  transform: scale(0.92);
-  transition: transform 170ms ease, background 170ms ease, color 170ms ease;
-}
-
-.timelineYearDotActive {
-  background: #111827;
-  color: #f8fafc;
-  transform: scale(1);
-}
-
-.timelineRoleLabel {
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1.25;
-  text-transform: uppercase;
+  padding: 0.95rem 1.1rem 1.15rem;
+  font-size: clamp(0.86rem, 1.2vw, 0.95rem);
+  line-height: 1.55;
   color: rgba(16, 32, 39, 0.92);
+}
+
+/* Role label */
+.timelineRoleLabel {
+  display: flex;
+  align-items: center;
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: rgba(15, 30, 36, 0.9);
+  min-height: 3.25rem;
+  grid-row: 1;
 }
 
 .timelineRoleLabelRight {
@@ -365,6 +478,7 @@
   text-align: right;
 }
 
+/* ── Mobile: line on left, all cards on right ── */
 @media (max-width: 1100px) {
   .skillsHeadingCard h2 {
     font-size: 1.25rem;
@@ -372,6 +486,7 @@
   }
 
   .skillTile,
+  .skillTileClickable,
   .moreSkillsBubble {
     width: 5.3rem;
     height: 5.3rem;
@@ -392,59 +507,80 @@
   }
 
   .timelineSection {
-    padding: 1rem 0 0.25rem;
+    padding: 1rem 0 0.5rem;
+    padding-bottom: 0;
+    position: relative;
   }
 
-  .timelineLineBase,
-  .timelineLineFill {
-    left: 1.15rem;
-    transform: none;
+  .timelineItem {
+    display: flex;
+    align-items: center;
+    min-height: 8rem;
+    padding: 1.2rem 0;
+    flex-direction: row;
+    position: relative;
   }
 
-  .timelineRows {
-    gap: 1.35rem;
-  }
-
-  .timelineRow {
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 0.95rem;
-    min-height: auto;
-    padding-left: 0;
-  }
-
-  .timelineCardWrap,
-  .timelineCardLeft,
-  .timelineCardRight {
-    grid-column: 2;
-    justify-self: stretch;
-    max-width: none;
-    order: 3;
-  }
-
-  .timelineMarkerColumn {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    align-self: start;
-    margin-top: 0.1rem;
-  }
-
-  .timelineRoleLabel,
-  .timelineRoleLabelRight,
-  .timelineRoleLabelLeft {
-    grid-column: 2;
-    justify-self: start;
+  .timelineRoleLabel {
+    min-width: 5.5rem;
+    margin-right: 0.4rem;
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
+    order: 1;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 2;
+  }
+
+  .timelineMarker {
     order: 2;
-    margin-bottom: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.4rem;
+    margin-left: 0.4rem;
+    position: relative;
+    z-index: 2;
   }
 
-  .timelineCardTop {
-    min-height: 4.6rem;
+  .timelineYearDot {
+    margin: 0;
+    align-self: center;
+    z-index: 2;
   }
 
-  .timelineCardTop span {
-    font-size: 2rem;
+  .timelineTrack {
+    left: calc(5.5rem + 1.625rem);
+    transform: none;
+    margin-left: 0;
+    width: 3px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .timelineCardWrap {
+    flex: 1 1 0;
+    margin-left: 0;
+    order: 3;
+    max-width: 22rem;
+    z-index: 2;
+  }
+
+  .timelineCardLeft {
+    grid-column: 1;
+    justify-self: end;
+  }
+
+  .timelineCardRight {
+    grid-column: 3;
+    justify-self: start;
   }
 
   .timelineCardText {
@@ -453,12 +589,7 @@
   }
 
   .testimonialsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .testimonialCard,
-  .testimonialCardWide {
-    grid-column: auto;
+    column-count: 1;
   }
 
   .testimonialIdentity h3 {
@@ -472,15 +603,7 @@
 
 @media (min-width: 721px) and (max-width: 1080px) {
   .testimonialsGrid {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-  }
-
-  .testimonialCard {
-    grid-column: span 4;
-  }
-
-  .testimonialCardWide {
-    grid-column: span 8;
+    column-count: 2;
   }
 
   .timelineCardWrap {
