@@ -1,0 +1,11 @@
+.rotatingText {
+  display: inline-block;
+  color: var(--color-accent);
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 600;
+}
+
+.dud {
+  color: var(--color-text);
+  opacity: 0.4;
+}

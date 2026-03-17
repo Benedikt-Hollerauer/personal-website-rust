@@ -32,3 +32,10 @@
   font-weight: 400;
   opacity: 0.8;
 }
+
+.rotatingLine {
+  min-height: 2rem; /* prevents layout shift when text changes */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
