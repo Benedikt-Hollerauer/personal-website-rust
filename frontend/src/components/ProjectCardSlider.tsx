@@ -79,10 +79,43 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
     if (Math.abs(event.deltaY) < 8) {
       return
     }
-
     event.preventDefault()
     moveBy(event.deltaY > 0 ? 1 : -1)
   }
+
+  // Custom wheel handler for scrollable card content (native event)
+  const cardContentRef = useRef<HTMLDivElement>(null);
+  // Track if user has scrolled to bottom and needs an extra scroll to switch
+  const scrolledToBottomRef = useRef(false);
+  const handleCardContentWheel = (event: WheelEvent) => {
+    const el = event.currentTarget as HTMLDivElement;
+    const scrollingDown = event.deltaY > 0;
+    const scrollingUp = event.deltaY < 0;
+
+    if (scrollingDown) {
+      const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+      if (remaining > 0) {
+        // Let default scroll happen
+        return;
+      }
+    } else if (scrollingUp) {
+      if (el.scrollTop > 0) {
+        // Let default scroll happen
+        return;
+      }
+    }
+    event.preventDefault();
+    moveBy(scrollingDown ? 1 : -1);
+  };
+
+  useEffect(() => {
+    const el = cardContentRef.current;
+    if (!el) return;
+    el.addEventListener('wheel', handleCardContentWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', handleCardContentWheel);
+    };
+  }, [activeIndex]);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'ArrowLeft') {
@@ -168,57 +201,77 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
               exit="exit"
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              <header className={styles.projectHeader}>
-                <div className={styles.projectTitleSection}>
-                  <h2>{activeProject.title}</h2>
-                  {activeProject.year ? <span className={styles.year}>{activeProject.year}</span> : null}
-                </div>
-                {activeProject.location && (
-                  <p className={styles.location}>📍 {activeProject.location}</p>
+              <div
+                className={styles.projectCardContent}
+                ref={cardContentRef}
+                tabIndex={0}
+              >
+                {/* Redesigned Header */}
+                <header className={styles.projectHeaderBetter}>
+                  <div className={styles.projectHeaderTopRowNoEmoji}>
+                    <h2 className={styles.projectTitleBetter}>{activeProject.title}</h2>
+                    <div className={styles.projectHeaderTopRightDecor}>
+                      <span>🌐</span>
+                    </div>
+                  </div>
+                  <div className={styles.projectDescBetterLeft}>
+                    {activeProject.location && (
+                      <span className={styles.locationBetter}>📍 {activeProject.location}</span>
+                    )}
+                    {(activeProject.startDate || activeProject.endDate) && (
+                      <span className={styles.projectDatesBetter}>
+                        <span className={styles.projectDatesEmoji}>🗓️</span>
+                        {activeProject.startDate ? new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
+                        {activeProject.startDate && activeProject.endDate ? ' - ' : ''}
+                        {activeProject.endDate ? new Date(activeProject.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
+                      </span>
+                    )}
+                  </div>
+                </header>
+
+                {/* Description & Link */}
+                {activeProject.summary && (
+                  <>
+                    <div className={styles.projectSummaryBetter}>
+                      {activeProject.summary}
+                    </div>
+                    {activeProject.link && (
+                      <div className={styles.projectLinkButtonWrapperImprovedBetter}>
+                        <a
+                          href={activeProject.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.githubLinkImproved}
+                          title="Check it out here"
+                        >
+                          🔗 Check it out here
+                        </a>
+                      </div>
+                    )}
+                  </>
                 )}
-              </header>
 
-              <p className={styles.projectSummary}>{activeProject.summary}</p>
+                {/* Key Points section */}
+                {activeProject.keyPoints && activeProject.keyPoints.length > 0 && (
+                  <div className={styles.keyPointsBetterImproved}>
+                    <h3>Key Points</h3>
+                    <ul>
+                      {activeProject.keyPoints.map((point: string, idx: number) => (
+                        <li key={idx}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {activeProject.link && (
-                <a href={activeProject.link} target="_blank" rel="noopener noreferrer" className={styles.projectLink}>
-                  → Visit Project
-                </a>
-              )}
-
-              {(activeProject.startDate || activeProject.endDate) && (
-                <div className={styles.projectDates}>
-                  {activeProject.startDate && (
-                    <span>
-                      Start: {new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-                    </span>
-                  )}
-                  {activeProject.endDate && (
-                    <span>
-                      End: {new Date(activeProject.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-                    </span>
-                  )}
-                </div>
-              )}
-
-              {activeProject.keyPoints && activeProject.keyPoints.length > 0 && (
-                <div className={styles.keyPoints}>
-                  <h3>Key Points</h3>
-                  <ul>
-                    {activeProject.keyPoints.map((point: string, idx: number) => (
-                      <li key={idx}>{point}</li>
+                {/* Tags section */}
+                {activeProject.tags && activeProject.tags.length > 0 && (
+                  <ul className={styles.projectTagsBetter} aria-label="Project tags">
+                    {activeProject.tags.map((tag: string) => (
+                      <li key={`${activeProject.id}-${tag}`}>{tag}</li>
                     ))}
                   </ul>
-                </div>
-              )}
-
-              {activeProject.tags && activeProject.tags.length > 0 && (
-                <ul className={styles.projectTags} aria-label="Project tags">
-                  {activeProject.tags.map((tag: string) => (
-                    <li key={`${activeProject.id}-${tag}`}>{tag}</li>
-                  ))}
-                </ul>
-              )}
+                )}
+              </div>
             </motion.article>
           )}
         </AnimatePresence>

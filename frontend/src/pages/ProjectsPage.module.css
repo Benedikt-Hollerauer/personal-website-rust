@@ -8,25 +8,32 @@
 
 .projectsLayout {
   min-height: 100vh;
-  padding-top: 3.5rem;
   --section-block-space: clamp(1rem, 2vh, 1.5rem);
-  --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
-  --nav-rail-bottom-extra: 0rem;
-  --nav-rail-bottom-extra-mobile: 0rem;
+  --section-title-gap: var(--section-block-space);
+  --nav-rail-bottom-extra: 3.75rem;
+  --nav-rail-bottom-extra-mobile: 3.2rem;
+  display: grid;
+  align-items: stretch;
+  padding-bottom: 0;
 }
 
 .projectsContent {
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: min(100%, 68rem);
+  margin-inline: auto;
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
   text-align: center;
-  padding: 0;
-  margin-top: 3.5rem;
+  min-height: 60vh;
+  margin-top: 0;
+  height: 100%;
 }
 
 .projectsContent p {
-  margin: 0;
+  /*margin: 0;*/
   max-width: 42rem;
   font-size: 1rem;
   opacity: 0.8;
