@@ -86,7 +86,6 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
   // Custom wheel handler for scrollable card content (native event)
   const cardContentRef = useRef<HTMLDivElement>(null);
   // Track if user has scrolled to bottom and needs an extra scroll to switch
-  const scrolledToBottomRef = useRef(false);
   const handleCardContentWheel = (event: WheelEvent) => {
     const el = event.currentTarget as HTMLDivElement;
     const scrollingDown = event.deltaY > 0;
@@ -210,9 +209,6 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
                 <header className={styles.projectHeaderBetter}>
                   <div className={styles.projectHeaderTopRowNoEmoji}>
                     <h2 className={styles.projectTitleBetter}>{activeProject.title}</h2>
-                    <div className={styles.projectHeaderTopRightDecor}>
-                      <span>🌐</span>
-                    </div>
                   </div>
                   <div className={styles.projectDescBetterLeft}>
                     {activeProject.location && (

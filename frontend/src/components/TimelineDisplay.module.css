@@ -1,3 +1,101 @@
+.timelineTrack {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  background: transparent;
+  z-index: 1;
+}
+.timelineTrackBase {
+  width: 100%;
+  height: 100%;
+  background: #e5e7eb;
+  border-radius: 2px;
+}
+.timelineTrackFill {
+  width: 100%;
+  background: #3b82f6;
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+.timelineYearDot {
+  width: 36px;
+  height: 36px;
+  background: #e5e7eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.12);
+  transition: background 0.2s, color 0.2s;
+}
+.timelineYearDotActive {
+  background: #3b82f6;
+  color: #fff;
+}
+.timelineCardWrap {
+  position: relative;
+  max-width: 340px;
+  margin-bottom: 0.5rem;
+}
+.timelineCardLeft {
+  left: -60px;
+}
+.timelineCardRight {
+  left: 60px;
+}
+.timelineCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(59,130,246,0.08);
+  padding: 1.2rem 1.4rem;
+  min-width: 220px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.timelineCardTop {
+  width: 100%;
+  height: 24px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.3rem;
+  padding-right: 0.5rem;
+}
+.timelineCardText {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.6;
+}
+.timelineRoleLabel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #3b82f6;
+  background: #f3f4f6;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.08);
+  pointer-events: none;
+  z-index: 3;
+}
+.timelineRoleLabelLeft {
+  left: calc(100% + 16px);
+}
+.timelineRoleLabelRight {
+  right: calc(100% + 16px);
+}
 .timelineSection {
   padding: 3rem 2rem;
   max-width: 900px;

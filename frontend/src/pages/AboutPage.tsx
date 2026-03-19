@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { BackgroundCard } from '../components/BackgroundCard'
+import { SkillsGallery } from '../components/SkillsGallery'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
@@ -268,7 +269,7 @@ function normalizeWorkHistory(item: ApiWorkHistory, index: number): WorkHistoryI
 
 export function AboutPage() {
   const [aboutParagraphs, setAboutParagraphs] = useState<string[]>(FALLBACK_ABOUT_PARAGRAPHS)
-  const [skills, setSkills] = useState<SkillItem[]>(FALLBACK_SKILLS)
+  // Remove AboutPage's own skills state, SkillsGallery will handle skills
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>(FALLBACK_TESTIMONIALS)
   const [workHistory, setWorkHistory] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY)
   const [timelineTrackTop, setTimelineTrackTop] = useState(0)
@@ -476,12 +477,12 @@ export function AboutPage() {
       .then((payload) => {
         const list = Array.isArray(payload) ? payload : payload.skills
         if (!Array.isArray(list) || list.length === 0) {
-          setSkills([])
+          // setSkills removed, SkillsGallery manages skills
           return
         }
 
         const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
-        setSkills(sorted.map(normalizeSkill))
+        // setSkills removed, SkillsGallery manages skills
       })
       .catch(() => {
         setSkills([])
@@ -492,8 +493,7 @@ export function AboutPage() {
     }
   }, [])
 
-  const visibleSkills = useMemo(() => skills.slice(0, 10), [skills])
-  const extraSkills = Math.max(0, skills.length - visibleSkills.length)
+  // Remove AboutPage's own skills calculations
 
   return (
     <main className={styles.aboutPage}>
@@ -526,72 +526,9 @@ export function AboutPage() {
             </BackgroundCard>
           )}
 
-          {/* Skills Section: Only render if there are active skills */}
-          {visibleSkills.length > 0 && (
-            <h2 className={styles.sectionHeading}>THESE ARE MY CURRENT SKILLS</h2>
-          )}
-
-          {visibleSkills.length > 0 && (
-            <section className={styles.skillsRow} aria-label="Current skills">
-                {visibleSkills.map((skill) => {
-                  const skillContent = (
-                    <>
-                      {skill.iconUrl ? (
-                        <img className={styles.skillIconImage} src={skill.iconUrl} alt={skill.label} />
-                      ) : (
-                        <span className={styles.skillFallbackIcon} aria-hidden="true">
-                          {skill.iconText}
-                        </span>
-                      )}
-                      <span className={styles.skillLabel}>{skill.label}</span>
-                    </>
-                  )
-
-                  return (
-                    <div key={skill.id}>
-                      {skill.link ? (
-                        <a
-                          href={skill.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`${styles.skillTile} ${styles.skillTileClickable}`}
-                          title={`Learn more about ${skill.label}`}
-                          onClick={(event) => {
-                            event.preventDefault()
-                            window.open(skill.link, '_blank', 'noopener,noreferrer')
-                          }}
-                        >
-                          {skillContent}
-                        </a>
-                      ) : (
-                        <BackgroundCard
-                          as="article"
-                          size="sm"
-                          className={styles.skillTile}
-                        >
-                          {skillContent}
-                        </BackgroundCard>
-                      )}
-                    </div>
-                  )
-                })}
-
-                <a
-                  href={MORE_SKILLS_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.moreSkillsBubble}
-                  aria-label={
-                    extraSkills > 0
-                      ? `${extraSkills} more skills available on LinkedIn`
-                      : 'See more skills on LinkedIn'
-                  }
-                >
-                  <span>+</span>
-                  <small>{extraSkills > 0 ? `${extraSkills} more` : 'more skills'}</small>
-                </a>
-              </section>
-          )}
+          {/* Skills Section: Use SkillsGallery component */}
+          <h2 className={styles.sectionHeading}>THESE ARE MY CURRENT SKILLS</h2>
+          <SkillsGallery />
 
           {/* Testimonials Section: Only render if there are active testimonials */}
           {testimonials.length > 0 && (
