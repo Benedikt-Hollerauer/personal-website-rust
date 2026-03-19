@@ -7,7 +7,6 @@ export type ProjectCard = {
   id: string
   title: string
   summary: string
-  tags: string[]
   year?: string
   keyPoints?: string[]
   location?: string
@@ -207,29 +206,41 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
               >
                 {/* Redesigned Header */}
                 <header className={styles.projectHeaderBetter}>
-                  <div className={styles.projectHeaderTopRowNoEmoji}>
-                    <h2 className={styles.projectTitleBetter}>{activeProject.title}</h2>
-                  </div>
-                  <div className={styles.projectDescBetterLeft}>
-                    {activeProject.location && (
-                      <span className={styles.locationBetter}>📍 {activeProject.location}</span>
-                    )}
-                    {(activeProject.startDate || activeProject.endDate) && (
-                      <span className={styles.projectDatesBetter}>
-                        <span className={styles.projectDatesEmoji}>🗓️</span>
-                        {activeProject.startDate ? new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
-                        {activeProject.startDate && activeProject.endDate ? ' - ' : ''}
-                        {activeProject.endDate ? new Date(activeProject.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
-                      </span>
-                    )}
+                  <div className={styles.projectHeaderTopRowNoEmoji} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
+                    <h2 className={styles.projectTitleBetter} style={{ margin: 0, flex: '1 1 auto', textAlign: 'left' }}>{activeProject.title}</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', flexShrink: 0 }}>
+                      {activeProject.location && (
+                        <span className={styles.locationBetter} style={{ whiteSpace: 'nowrap' }}>📍 {activeProject.location}</span>
+                      )}
+                      {(activeProject.startDate || activeProject.endDate) && (
+                        <span className={styles.projectDatesBetter} style={{ whiteSpace: 'nowrap' }}>
+                          <span className={styles.projectDatesEmoji}>🗓️</span>
+                          {activeProject.startDate ? new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
+                          {activeProject.startDate && activeProject.endDate ? ' - ' : ''}
+                          {activeProject.endDate ? new Date(activeProject.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </header>
 
                 {/* Description & Link */}
                 {activeProject.summary && (
+                  <div className={styles.projectSummaryBetter}>
+                    {activeProject.summary}
+                  </div>
+                )}
+
+                {/* Key Points section */}
+                {activeProject.keyPoints && activeProject.keyPoints.length > 0 && (
                   <>
-                    <div className={styles.projectSummaryBetter}>
-                      {activeProject.summary}
+                    <div className={styles.keyPointsBetterImproved}>
+                      <h3>Key Points</h3>
+                      <ul>
+                        {activeProject.keyPoints.map((point: string, idx: number) => (
+                          <li key={idx}>{point}</li>
+                        ))}
+                      </ul>
                     </div>
                     {activeProject.link && (
                       <div className={styles.projectLinkButtonWrapperImprovedBetter}>
@@ -237,7 +248,7 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
                           href={activeProject.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={styles.githubLinkImproved}
+                          className={styles.githubLink}
                           title="Check it out here"
                         >
                           🔗 Check it out here
@@ -245,27 +256,6 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
                       </div>
                     )}
                   </>
-                )}
-
-                {/* Key Points section */}
-                {activeProject.keyPoints && activeProject.keyPoints.length > 0 && (
-                  <div className={styles.keyPointsBetterImproved}>
-                    <h3>Key Points</h3>
-                    <ul>
-                      {activeProject.keyPoints.map((point: string, idx: number) => (
-                        <li key={idx}>{point}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Tags section */}
-                {activeProject.tags && activeProject.tags.length > 0 && (
-                  <ul className={styles.projectTagsBetter} aria-label="Project tags">
-                    {activeProject.tags.map((tag: string) => (
-                      <li key={`${activeProject.id}-${tag}`}>{tag}</li>
-                    ))}
-                  </ul>
                 )}
               </div>
             </motion.article>
