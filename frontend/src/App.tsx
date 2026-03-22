@@ -17,6 +17,7 @@ import { TimelineAdminPage } from './pages/TimelineAdminPage'
 import { ResourcesAdminPage } from './pages/ResourcesAdminPage'
 import { TestimonialsAdminPage } from './pages/TestimonialsAdminPage'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { WorkHistoryAdminPage } from './pages/WorkHistoryAdminPage'
 
 type CanvasPoint = {
   x: number
@@ -159,6 +160,14 @@ function App() {
           element={
             <ProtectedRoute>
               <TestimonialsAdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/work-history"
+          element={
+            <ProtectedRoute>
+              <WorkHistoryAdminPage />
             </ProtectedRoute>
           }
         />

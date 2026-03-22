@@ -16,6 +16,20 @@ interface Timeline {
   updated_at: string
 }
 
+// Helper functions for localStorage overrides
+function getWorkHistoryOverrides() {
+  try {
+    return JSON.parse(localStorage.getItem('workHistoryOverrides') || '{}');
+  } catch {
+    return {};
+  }
+}
+function setWorkHistoryOverride(id, data) {
+  const overrides = getWorkHistoryOverrides();
+  overrides[id] = { ...overrides[id], ...data };
+  localStorage.setItem('workHistoryOverrides', JSON.stringify(overrides));
+}
+
 export function TimelineAdminPage() {
   const [timelines, setTimelines] = useState<Timeline[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -78,6 +92,16 @@ export function TimelineAdminPage() {
         order: Number(data.order),
       }
 
+      // Save frontend-only accent color and emoji to localStorage
+      if (data.emoji || data.accentColor) {
+        // Use the backend id if editing, otherwise use the title as a fallback key
+        const overrideId = editingTimeline ? String(editingTimeline.id) : data.title;
+        setWorkHistoryOverride(overrideId, {
+          emoji: data.emoji,
+          accentColor: data.accentColor,
+        });
+      }
+
       const response = await fetchAuthenticated(url, {
         method,
         body: JSON.stringify(normalizedData),
@@ -100,6 +124,9 @@ export function TimelineAdminPage() {
     { name: 'start_date', label: 'Start Date', type: 'date', required: true },
     { name: 'end_date', label: 'End Date', type: 'date', required: false },
     { name: 'order', label: 'Order', type: 'number', required: true },
+    // New fields for frontend accent color and emoji
+    { name: 'emoji', label: 'Emoji', type: 'text', required: false, placeholder: 'e.g. 🚀' },
+    { name: 'accentColor', label: 'Accent Color', type: 'text', required: false, placeholder: '#ef4444' },
   ]
 
   const columns: GridColumn[] = [
@@ -139,9 +166,12 @@ export function TimelineAdminPage() {
           fields={formFields}
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleSubmitForm}
-          initialData={editingTimeline || {}}
           isSubmitting={isSubmitting}
-          submitLabel={editingTimeline ? 'Update' : 'Create'}
+          initialData={editingTimeline ? {
+            ...editingTimeline,
+            emoji: getWorkHistoryOverrides()[String(editingTimeline.id)]?.emoji || '',
+            accentColor: getWorkHistoryOverrides()[String(editingTimeline.id)]?.accentColor || '',
+          } : {}}
         />
       </div>
     </AdminLayout>

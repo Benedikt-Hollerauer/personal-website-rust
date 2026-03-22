@@ -267,6 +267,15 @@ function normalizeWorkHistory(item: ApiWorkHistory, index: number): WorkHistoryI
   }
 }
 
+// Helper to get and merge localStorage overrides for work history
+function getWorkHistoryOverrides(): Record<string, { emoji?: string; accentColor?: string }> {
+  try {
+    return JSON.parse(localStorage.getItem('workHistoryOverrides') || '{}');
+  } catch {
+    return {};
+  }
+}
+
 export function AboutPage() {
   const [aboutParagraphs, setAboutParagraphs] = useState<string[]>(FALLBACK_ABOUT_PARAGRAPHS)
   // Remove AboutPage's own skills state, SkillsGallery will handle skills
@@ -331,10 +340,31 @@ export function AboutPage() {
         }
 
         const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
-        setWorkHistory(sorted.map(normalizeWorkHistory))
+        // Merge localStorage overrides
+        const overrides = getWorkHistoryOverrides();
+        setWorkHistory(sorted.map((item, idx) => {
+          const normalized = normalizeWorkHistory(item, idx);
+          const override = overrides[normalized.id] || {};
+          return {
+            ...normalized,
+            ...override,
+            emoji: override.emoji || normalized.emoji,
+            accentColor: override.accentColor || normalized.accentColor,
+          };
+        }));
       })
       .catch(() => {
-        setWorkHistory([])
+        // If API fails, use fallback and merge overrides
+        const overrides = getWorkHistoryOverrides();
+        setWorkHistory(FALLBACK_WORK_HISTORY.map((item) => {
+          const override = overrides[item.id] || {};
+          return {
+            ...item,
+            ...override,
+            emoji: override.emoji || item.emoji,
+            accentColor: override.accentColor || item.accentColor,
+          };
+        }));
       })
 
     return () => {
@@ -639,6 +669,7 @@ export function AboutPage() {
                         >
                           <span>{item.emoji}</span>
                         </div>
+                        <div className={styles.timelineCardTitle}>{item.title}</div>
                         <p className={styles.timelineCardText}>{item.text}</p>
                       </BackgroundCard>
                     </motion.div>

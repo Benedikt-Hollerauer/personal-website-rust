@@ -433,7 +433,8 @@
   .githubCard { min-height: 24rem; padding: 2rem 1.5rem; }
   .githubCard h2 { font-size: 1.7rem; }
   .githubCardText { font-size: 1rem; }
-  .projectsContent { justify-content: unset; }
+  .projectsContent { justify-content: flex; };
+  .sliderShell { display: flex; }
 }
 
 @media (max-width: 480px) {
@@ -441,5 +442,5 @@
   .projectTitleBetter { font-size: 1.4rem; }
   .githubLinkImproved { font-size: 0.88rem; padding: 0.5rem 1.1rem; }
   .projectTagsBetter li { font-size: 0.72rem; padding: 0.3rem 0.65rem; }
-  .projectsContent { justify-content: unset; }
+  .projectsContent { justify-content: flex; }
 }
