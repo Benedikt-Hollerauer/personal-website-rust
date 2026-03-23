@@ -206,14 +206,14 @@ export function ProjectCardSlider({ projects }: ProjectCardSliderProps) {
               >
                 {/* Redesigned Header */}
                 <header className={styles.projectHeaderBetter}>
-                  <div className={styles.projectHeaderTopRowNoEmoji} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem' }}>
-                    <h2 className={styles.projectTitleBetter} style={{ margin: 0, flex: '1 1 auto', textAlign: 'left' }}>{activeProject.title}</h2>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', flexShrink: 0 }}>
+                  <div className={styles.projectHeaderTopRowNoEmoji}>
+                    <h2 className={styles.projectTitleBetter}>{activeProject.title}</h2>
+                    <div className={styles.projectHeaderMeta}>
                       {activeProject.location && (
-                        <span className={styles.locationBetter} style={{ whiteSpace: 'nowrap' }}>📍 {activeProject.location}</span>
+                        <span className={styles.locationBetter}>📍 {activeProject.location}</span>
                       )}
                       {(activeProject.startDate || activeProject.endDate) && (
-                        <span className={styles.projectDatesBetter} style={{ whiteSpace: 'nowrap' }}>
+                        <span className={styles.projectDatesBetter}>
                           <span className={styles.projectDatesEmoji}>🗓️</span>
                           {activeProject.startDate ? new Date(activeProject.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''}
                           {activeProject.startDate && activeProject.endDate ? ' - ' : ''}
