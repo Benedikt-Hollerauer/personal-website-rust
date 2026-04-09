@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BackgroundCard } from '../components/BackgroundCard'
 import { SkillsGallery } from '../components/SkillsGallery'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
-import { APP_LINKS } from '../config/links'
 import { Direction } from '../types'
 import styles from './AboutPage.module.css'
 
@@ -33,14 +32,6 @@ type ApiSkill = {
   url?: string
   // backend stores path in snake_case
   icon_path?: string
-}
-
-type SkillItem = {
-  id: string
-  label: string
-  iconText?: string
-  iconUrl?: string
-  link?: string
 }
 
 type ApiTestimonial = {
@@ -98,19 +89,6 @@ const FALLBACK_ABOUT_PARAGRAPHS = [
   'I am a software engineer based in Bavaria, Germany.',
   'I love turning ideas into solid, well-tested software that actually works. I specialize in functional programming and software architecture.',
   'My mission is to build reliable, professional software while continuously learning and improving.',
-]
-
-const FALLBACK_SKILLS: SkillItem[] = [
-  { id: 'web', label: 'Web Development', iconText: '<>' },
-  { id: 'python', label: 'Python', iconText: 'Py' },
-  { id: 'math', label: 'Mathematics', iconText: 'f(x)' },
-  { id: 'ai', label: 'AI', iconText: 'AI' },
-  { id: 'docker', label: 'Docker', iconText: 'DK' },
-  { id: 'rust', label: 'Rust', iconText: 'RS' },
-  { id: 'scala', label: 'Scala', iconText: 'SC' },
-  { id: 'linux', label: 'Linux', iconText: 'LX' },
-  { id: 'sql', label: 'SQL', iconText: 'SQL' },
-  { id: 'cloud', label: 'Cloud', iconText: 'CL' },
 ]
 
 const FALLBACK_TESTIMONIALS: TestimonialItem[] = [
@@ -179,8 +157,6 @@ const FALLBACK_WORK_HISTORY: WorkHistoryItem[] = [
   },
 ]
 
-const MORE_SKILLS_LINK = APP_LINKS.linkedinSkills
-
 function normalizeExternalLink(value?: string): string | undefined {
   const raw = value?.trim()
   if (!raw) {
@@ -193,30 +169,6 @@ function normalizeExternalLink(value?: string): string | undefined {
 
   // Accept plain domains from the API and make them valid absolute links.
   return `https://${raw.replace(/^\/+/, '')}`
-}
-
-function normalizeSkill(skill: ApiSkill, index: number): SkillItem {
-  const label = skill.name?.trim() || skill.title?.trim() || `Skill ${index + 1}`
-  // backend may return icon_path or iconUrl or other fields depending on API
-  const iconUrl =
-    skill.iconUrl?.trim() ||
-    (skill as any).icon_path?.trim() ||
-    skill.icon?.trim() ||
-    skill.emoji?.trim()
-  const iconText = skill.icon?.trim() || skill.emoji?.trim() || label.slice(0, 2).toUpperCase()
-  const link =
-    normalizeExternalLink(skill.link) ||
-    normalizeExternalLink((skill as any).url) ||
-    normalizeExternalLink((skill as any).href) ||
-    normalizeExternalLink((skill as any).website)
-
-  return {
-    id: String(skill.id ?? `skill-${index}`),
-    label,
-    iconUrl: iconUrl || undefined,
-    iconText,
-    link,
-  }
 }
 
 function normalizeAboutParagraphs(payload: ApiAbout): string[] {
@@ -511,11 +463,7 @@ export function AboutPage() {
           return
         }
 
-        const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
         // setSkills removed, SkillsGallery manages skills
-      })
-      .catch(() => {
-        setSkills([])
       })
 
     return () => {

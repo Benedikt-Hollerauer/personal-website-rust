@@ -24,7 +24,7 @@ function getWorkHistoryOverrides() {
     return {};
   }
 }
-function setWorkHistoryOverride(id, data) {
+function setWorkHistoryOverride(id: string, data: Record<string, unknown>) {
   const overrides = getWorkHistoryOverrides();
   overrides[id] = { ...overrides[id], ...data };
   localStorage.setItem('workHistoryOverrides', JSON.stringify(overrides));

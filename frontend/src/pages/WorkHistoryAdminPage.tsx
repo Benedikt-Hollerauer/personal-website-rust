@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '../components/AdminLayout';
-import styles from './AdminPage.module.css';
 
 // This should match the WorkHistoryItem type in AboutPage
 interface WorkHistoryItem {
@@ -63,7 +62,7 @@ const FALLBACK_WORK_HISTORY: WorkHistoryItem[] = [
 ];
 
 export function WorkHistoryAdminPage() {
-  const [items, setItems] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY);
+  const [items] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY);
   const [overrides, setOverrides] = useState(getWorkHistoryOverrides());
 
   useEffect(() => {

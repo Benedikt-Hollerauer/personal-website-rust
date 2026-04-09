@@ -55,7 +55,6 @@ function normalizeProject(project: ApiProject, index: number): ProjectCard {
     id: String(project.id ?? `project-${index}`),
     title,
     summary,
-    tags: Array.isArray(project.tags) && project.tags.length > 0 ? project.tags : [],
     year,
     keyPoints: keyPoints.length > 0 ? keyPoints : undefined,
     location: project.location,
