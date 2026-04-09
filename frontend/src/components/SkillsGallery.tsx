@@ -43,7 +43,7 @@ export function SkillsGallery() {
             iconText,
             link,
           }
-        }))
+        }) as Skill[])
       } catch (error) {
         console.error('Failed to load skills:', error)
       } finally {
