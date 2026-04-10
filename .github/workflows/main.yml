@@ -24,14 +24,18 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-      
-      - name: Deploy to Server
-        run: |
-          ssh -i ~/.ssh/deploy_key \
-              -p ${{ secrets.SSH_PORT }} \
-              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-              'cd /srv/personal-website-rust && \
-              git fetch origin main && \
-              git checkout main && \
-              git pull --ff-only origin main && \
-              docker compose up -d --build'
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}  # Uncomment if needed
+          script: |
+            set -e
+            cd /srv/personal-website-rust
+            git fetch origin main
+            git checkout main
+            git pull --ff-only origin main
+            docker compose up -d --build
