@@ -12,7 +12,7 @@ export function HomePage() {
           <div className={styles.nameBlock}>
             <h1 className={styles.name}>BENEDIKT</h1>
             <h1 className={styles.name}>HOLLERAUER</h1>
-            <p className={styles.role}>Software Engineer</p>
+            <p className={styles.role}>Software Engineering DADDY</p>
           </div>
 
           <section className={styles.scramblePanel} aria-label="Introduction highlights">
