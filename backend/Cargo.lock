@@ -367,6 +367,7 @@ dependencies = [
  "async-trait",
  "axum",
  "chrono",
+ "dotenvy",
  "include_dir",
  "insta",
  "loco-rs",

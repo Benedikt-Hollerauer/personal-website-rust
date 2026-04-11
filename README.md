@@ -68,6 +68,16 @@ docker compose logs frontend --tail==100
 docker compose exec backend ./backend-cli db seed
 ```
 
+```bash
+$ curl --location 'localhost:5150/api/auth/register' \
+     --header 'Content-Type: application/json' \
+     --data-raw '{
+         "name": "Loco user",
+         "email": "user@loco.rs",
+         "password": "12341234"
+     }'
+```
+
 ## License
 
 This project is licensed under the MIT license.

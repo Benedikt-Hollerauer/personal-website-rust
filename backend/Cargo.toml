@@ -13,6 +13,7 @@ default-run = "backend-cli"
 loco-rs = { version = "0.16" }
 
 [dependencies]
+dotenvy = "0.15"
 loco-rs = { workspace = true  }
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
