@@ -1,30 +1,14 @@
 .loginPage {
   position: relative;
   min-height: 100vh;
-  background: var(--color-light);
-  color: var(--color-text);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.loginPage::before {
-  content: '';
-  position: absolute;
-  inset: 15% 50% auto;
-  transform: translateX(-50%);
-  height: 20rem;
-  width: 20rem;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle at center,
-    rgba(8, 22, 29, 0.08),
-    transparent 70%
-  );
-  filter: blur(12px);
-  pointer-events: none;
-}
 
 .loginContainer {
   width: 100%;
@@ -33,10 +17,10 @@
 }
 
 .loginCard {
-  border: 1px solid rgba(8, 22, 29, 0.12);
+  border: 1px solid var(--border-subtle);
   border-radius: 2.2rem;
-  background: rgba(255, 255, 255, 0.62);
-  box-shadow: 0 14px 30px rgba(8, 22, 29, 0.08);
+  background: var(--bg-surface);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
   padding: 3rem 2.5rem;
 }
 
@@ -46,7 +30,7 @@
   font-weight: 300;
   letter-spacing: -0.01em;
   text-align: center;
-  color: var(--color-text);
+  color: var(--text-primary);
 }
 
 .loginForm {
@@ -74,9 +58,9 @@
 .textField {
   width: 100%;
   border-radius: 0.35rem;
-  border: 1px solid rgba(8, 22, 29, 0.2);
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--color-text);
+  border: 1px solid var(--border-medium);
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
   padding: 0.72rem 0.8rem;
   font: inherit;
   font-size: 1rem;
@@ -86,13 +70,13 @@
 .textField::placeholder {
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: rgba(16, 32, 39, 0.52);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .textField:focus {
   outline: none;
-  border-color: rgba(8, 22, 29, 0.5);
-  box-shadow: 0 0 0 3px rgba(8, 22, 29, 0.1);
+  border-color: var(--accent-neon);
+  box-shadow: 0 0 0 3px var(--accent-neon-dim);
 }
 
 .textField:disabled {
@@ -111,7 +95,7 @@
   width: 1.1rem;
   height: 1.1rem;
   cursor: pointer;
-  accent-color: var(--color-dark);
+  accent-color: var(--accent-neon);
 }
 
 .checkbox:disabled {
@@ -120,17 +104,17 @@
 
 .checkboxLabel {
   font-size: 0.95rem;
-  color: var(--color-text);
+  color: var(--text-primary);
   cursor: pointer;
   user-select: none;
 }
 
 .errorMessage {
   padding: 0.8rem 1rem;
-  background: rgba(220, 38, 38, 0.1);
-  border: 1px solid rgba(220, 38, 38, 0.3);
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
   border-radius: 0.35rem;
-  color: #991b1b;
+  color: var(--color-error);
   font-size: 0.9rem;
   text-align: left;
   line-height: 1.5;
@@ -151,8 +135,8 @@
   padding: 0.85rem 1.5rem;
   border: none;
   border-radius: 0.35rem;
-  background: var(--color-dark);
-  color: var(--color-light);
+  background: var(--accent-primary);
+  color: var(--text-primary);
   font: inherit;
   font-size: 1rem;
   font-weight: 500;
@@ -163,9 +147,9 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background: rgba(8, 22, 29, 0.88);
+  background: #388BFD;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(8, 22, 29, 0.2);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.35);
 }
 
 .submitButton:active:not(:disabled) {

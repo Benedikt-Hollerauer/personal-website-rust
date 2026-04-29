@@ -14,9 +14,9 @@
     gap: 0.2rem;
     padding: 0.35rem 0.5rem;
     border-radius: 1.4rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(8, 22, 29, 0.12);
-    box-shadow: 0 6px 20px rgba(8, 22, 29, 0.1);
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     pointer-events: auto;
     z-index: 8;
   }
@@ -33,7 +33,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    color: var(--color-dark);
+    color: var(--text-primary);
     transform: none !important;
   }
 

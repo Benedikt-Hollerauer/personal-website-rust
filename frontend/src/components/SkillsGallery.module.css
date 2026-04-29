@@ -19,12 +19,14 @@
   transition: transform 0.3s, box-shadow 0.3s;
   padding: 1.5rem;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
 }
 
 .skillCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-primary);
 }
 
 .skillIcon {
@@ -32,22 +34,24 @@
   height: 80px;
   margin-bottom: 1rem;
   object-fit: contain;
+  filter: brightness(0.9);
 }
 
 .skillName {
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: var(--text-primary);
 }
 
 .skillLink {
   font-size: 0.9rem;
-  color: #4285f4;
+  color: var(--accent-neon);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .skillLink:hover {
-  color: #1a73e8;
+  color: var(--accent-primary);
   text-decoration: underline;
 }
 
@@ -56,12 +60,12 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 .spinner {
-  border: 3px solid #f0f0f0;
-  border-top: 3px solid #333;
+  border: 3px solid var(--bg-surface-hover);
+  border-top: 3px solid var(--accent-neon);
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -77,6 +81,6 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  color: #999;
+  color: var(--text-secondary);
   font-style: italic;
 }

@@ -16,6 +16,6 @@
   gap: 12px;
 }
 .currentIconPreview img {
-  border: 1px solid #333;
+  border: 1px solid var(--border-medium);
   border-radius: 4px;
 }

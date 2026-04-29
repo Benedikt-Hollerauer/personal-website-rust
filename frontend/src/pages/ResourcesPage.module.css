@@ -1,8 +1,8 @@
 .resourcesPage {
   position: relative;
   min-height: 100vh;
-  background: var(--color-light);
-  color: var(--color-text);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   overflow: hidden;
 }
 
@@ -31,19 +31,19 @@
   align-content: start;
   gap: 0.9rem;
   border-radius: 1.3rem;
-  border: 1px solid rgba(8, 22, 29, 0.18);
-  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
   padding: 1.25rem 1.3rem 1.15rem;
-  box-shadow: 0 10px 20px rgba(8, 22, 29, 0.07);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   min-width: 0;
   transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
 }
 
 .resourceCard:hover {
   transform: translateY(-6px) scale(1.05) rotate(1deg);
-  box-shadow: 0 18px 36px rgba(8, 22, 29, 0.13), 0 8px 16px rgba(99, 120, 210, 0.1);
-  border-color: rgba(99, 120, 210, 0.25);
-  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45), 0 8px 16px rgba(88, 166, 255, 0.15);
+  border-color: var(--accent-primary);
+  background: var(--bg-surface-hover);
 }
 
 .resourceCard h2 {
@@ -53,6 +53,7 @@
   min-width: 0;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  color: var(--text-primary);
 }
 
 .resourceCard p {
@@ -63,6 +64,7 @@
   min-width: 0;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  color: var(--text-secondary);
 }
 
 .downloadButton {
@@ -70,28 +72,29 @@
   justify-self: start;
   border-radius: 0.45rem;
   padding: 0.42rem 0.78rem;
-  background: #d1c6dd;
-  color: #1d1625;
+  background: var(--accent-primary);
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 1.03rem;
   font-weight: 500;
-  transition: transform 130ms ease, filter 130ms ease;
+  transition: transform 130ms ease, filter 130ms ease, box-shadow 130ms ease;
 }
 
 .downloadButton:hover {
   transform: translateY(-1px);
-  filter: brightness(0.97);
+  filter: brightness(1.15);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
 }
 
 .resourceCardCv {
-  border-color: rgba(49, 93, 176, 0.68);
+  border-color: rgba(88, 166, 255, 0.7);
   box-shadow:
-    0 0 0 3px rgba(85, 120, 188, 0.22),
-    0 18px 34px rgba(46, 88, 167, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 0 0 3px rgba(88, 166, 255, 0.22),
+    0 18px 34px rgba(88, 166, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   background:
-    radial-gradient(circle at 85% 12%, rgba(121, 158, 229, 0.28), transparent 50%),
-    linear-gradient(180deg, rgba(239, 246, 255, 0.98), rgba(255, 255, 255, 0.9));
+    radial-gradient(circle at 85% 12%, rgba(129, 140, 248, 0.1), transparent 50%),
+    linear-gradient(180deg, rgba(22, 27, 34, 0.98), rgba(13, 17, 23, 0.9));
   transform: translateY(-4px) scale(1.01);
 }
 
@@ -105,9 +108,9 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
-  color: #1c4b9a;
-  background: rgba(107, 143, 210, 0.24);
-  border: 1px solid rgba(49, 93, 176, 0.22);
+  color: var(--accent-neon);
+  background: rgba(129, 140, 248, 0.12);
+  border: 1px solid rgba(88, 166, 255, 0.35);
 }
 
 .resourcesPageReturn {
@@ -129,7 +132,6 @@
 
 .databaseDrivenResources {
   width: 100%;
-  background: var(--color-light);
-  border-top: 1px solid rgba(8, 22, 29, 0.1);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-subtle);
 }
-

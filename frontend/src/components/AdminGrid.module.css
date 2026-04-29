@@ -12,14 +12,14 @@
 .gridTitle {
   font-size: 24px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .addButton {
   padding: 10px 20px;
-  background-color: #4a9eff;
-  color: #fff;
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -29,11 +29,12 @@
 }
 
 .addButton:hover {
-  background-color: #2b7dd9;
+  background-color: #388BFD;
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
 }
 
 .addButton:disabled {
-  background-color: #1a4d7a;
+  background-color: rgba(88, 166, 255, 0.4);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -41,11 +42,11 @@
 .emptyState {
   text-align: center;
   padding: 60px 20px;
-  color: #6b7280;
-  background: white;
-  border: 1px solid #e5e7eb;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .emptyStateIcon {
@@ -55,7 +56,7 @@
 
 .emptyStateText {
   font-size: 16px;
-  color: #6b7280;
+  color: var(--text-secondary);
   margin-bottom: 24px;
 }
 
@@ -66,25 +67,25 @@
 }
 
 .card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border-color: #d0d0d0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-primary);
 }
 
 .inactive {
   opacity: 0.7;
-  background-color: #f5f5f5;
+  background-color: rgba(33, 38, 45, 0.6);
 }
 
 .cardHeader {
@@ -104,7 +105,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   word-break: break-word;
   white-space: pre-wrap;
 }
@@ -124,44 +125,44 @@
 }
 
 .buttonEdit {
-  background-color: #1976d2;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
 }
 
 .buttonEdit:hover {
-  background-color: #1565c0;
+  background-color: #388BFD;
 }
 
 .buttonDelete {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #b71c1c;
+  color: var(--text-primary);
 }
 
 .buttonDelete:hover {
-  background-color: #c62828;
+  background-color: #8d1414;
 }
 
 .buttonToggle {
-  background-color: #ff9800;
-  color: white;
+  background-color: #e65100;
+  color: var(--text-primary);
 }
 
 .buttonToggle:hover {
-  background-color: #f57c00;
+  background-color: #bf360c;
 }
 
 .loadingState {
   text-align: center;
   padding: 40px 20px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .spinner {
   display: inline-block;
   width: 30px;
   height: 30px;
-  border: 3px solid #333;
-  border-top-color: #4a9eff;
+  border: 3px solid var(--bg-surface-hover);
+  border-top-color: var(--accent-neon);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
@@ -200,12 +201,12 @@
 
 .metaLabel {
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   min-width: 70px;
 }
 
 .metaValue {
-  color: #777;
+  color: var(--text-muted);
   word-break: break-word;
 }
 
@@ -231,21 +232,21 @@
 
 .statusInactive {
   background-color: rgba(102, 102, 102, 0.2);
-  color: #999;
+  color: var(--text-muted);
 }
 
 .activeBadge {
-  background-color: #e8f5e9;
-  color: #2e7d32;
+  background-color: rgba(81, 207, 102, 0.15);
+  color: #51cf66;
 }
 
 .inactiveBadge {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: rgba(255, 167, 38, 0.15);
+  color: #ffa726;
 }
 
 .metaValue :global(a) {
-  color: #1976d2;
+  color: var(--accent-neon);
   text-decoration: none;
   word-break: break-all;
 }

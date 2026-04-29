@@ -5,8 +5,8 @@
   place-content: center;
   justify-items: center;
   gap: 1.5rem;
-  background: var(--color-light);
-  color: var(--color-text);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   text-align: center;
   padding: 2rem;
 }

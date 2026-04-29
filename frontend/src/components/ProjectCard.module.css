@@ -1,23 +1,23 @@
 .card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   height: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border-color: #d0d0d0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-primary);
 }
 
 .card.inactive {
   opacity: 0.7;
-  background-color: #f5f5f5;
+  background-color: rgba(33, 38, 45, 0.6);
 }
 
 .cardHeader {
@@ -32,7 +32,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   flex: 1;
   word-break: break-word;
 }
@@ -47,13 +47,13 @@
 }
 
 .activeBadge {
-  background-color: #e8f5e9;
-  color: #2e7d32;
+  background-color: rgba(81, 207, 102, 0.15);
+  color: #51cf66;
 }
 
 .inactiveBadge {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: rgba(255, 167, 38, 0.15);
+  color: #ffa726;
 }
 
 .cardContent {
@@ -63,7 +63,7 @@
 
 .description {
   margin: 0 0 12px 0;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -83,17 +83,17 @@
 
 .metaLabel {
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   min-width: 70px;
 }
 
 .metaValue {
-  color: #777;
+  color: var(--text-muted);
   word-break: break-word;
 }
 
 .link {
-  color: #1976d2;
+  color: var(--accent-neon);
   text-decoration: none;
   word-break: break-all;
 }
@@ -122,30 +122,30 @@
 }
 
 .editBtn {
-  background-color: #1976d2;
-  color: white;
+  background-color: var(--accent-primary);
+  color: var(--text-primary);
 }
 
 .editBtn:hover {
-  background-color: #1565c0;
+  background-color: #388BFD;
 }
 
 .toggleBtn {
-  background-color: #ff9800;
-  color: white;
+  background-color: #e65100;
+  color: var(--text-primary);
 }
 
 .toggleBtn:hover {
-  background-color: #f57c00;
+  background-color: #bf360c;
 }
 
 .deleteBtn {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #b71c1c;
+  color: var(--text-primary);
 }
 
 .deleteBtn:hover {
-  background-color: #c62828;
+  background-color: #8d1414;
 }
 
 .actionBtn:active {

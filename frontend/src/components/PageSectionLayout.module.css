@@ -24,7 +24,7 @@
   letter-spacing: -0.03em;
   line-height: 0.95;
   font-weight: 600;
-  color: var(--color-dark);
+  color: var(--text-primary);
   white-space: nowrap;
   inline-size: var(--section-title-inline-size, 13ch);
   z-index: 2;
@@ -33,7 +33,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: var(--content-justify, flex-start);
   min-width: 0;
   min-height: 0;
   z-index: 1;

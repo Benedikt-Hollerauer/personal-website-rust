@@ -3,7 +3,7 @@
   display: grid;
   place-items: center;
   background: transparent;
-  color: var(--color-dark);
+  color: var(--text-primary);
   text-decoration: none;
   pointer-events: auto;
   overflow: visible;
@@ -12,7 +12,7 @@
 }
 
 .edgeArrow:hover {
-  color: var(--color-dark);
+  color: var(--accent-neon);
   transform: scale(1.05);
 }
 
@@ -21,7 +21,7 @@
 }
 
 .edgeArrow:focus-visible {
-  outline: 2px solid var(--color-dark);
+  outline: 2px solid var(--accent-neon);
   outline-offset: 2px;
 }
 
@@ -184,10 +184,10 @@
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(8, 22, 29, 0.12);
-    box-shadow: 0 6px 20px rgba(8, 22, 29, 0.1);
-    color: var(--color-dark);
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    color: var(--text-primary);
     padding: 0.4rem 1.5rem;
     z-index: 8;
     display: flex !important;

@@ -1,10 +1,7 @@
 .homePage {
   position: relative;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 20% 18%, rgba(8, 22, 29, 0.08), transparent 45%),
-    radial-gradient(circle at 85% 82%, rgba(8, 22, 29, 0.06), transparent 40%),
-    var(--color-light);
+  background: var(--bg-primary);
   overflow: hidden;
 }
 
@@ -20,7 +17,7 @@
   align-items: center;
   text-align: center;
   gap: 2rem;
-  color: var(--color-text);
+  color: var(--text-primary);
   padding: clamp(1.5rem, 3vw, 3rem);
 }
 
@@ -37,9 +34,9 @@
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 0.9;
-  color: var(--color-dark);
+  color: var(--text-primary);
   text-transform: uppercase;
-  text-shadow: 0 14px 32px rgba(8, 22, 29, 0.15);
+  text-shadow: 0 14px 32px rgba(129, 140, 248, 0.08);
 }
 
 .role {
@@ -48,7 +45,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #0f2b3b;
+  color: var(--text-secondary);
   line-height: 1.15;
   display: inline-flex;
   align-items: center;
@@ -65,16 +62,13 @@
 .scramblePanel::before {
   content: '';
   position: absolute;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: min(100%, 32rem);
-  height: 2px;
+  height: 1px;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent 0%, rgba(8, 22, 29, 0.62) 48%, transparent 100%);
-}
-
-.scramblePanel::before {
-  top: 0;
+  background: var(--border-subtle);
 }
 
 .scrambleLine {
