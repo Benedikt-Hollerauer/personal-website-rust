@@ -27,7 +27,7 @@
 .loginTitle {
   margin: 0 0 2rem;
   font-size: 2rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.01em;
   text-align: center;
   color: var(--text-primary);
@@ -147,9 +147,9 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background: #388BFD;
+  background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
 }
 
 .submitButton:active:not(:disabled) {

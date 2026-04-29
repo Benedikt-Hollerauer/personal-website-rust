@@ -94,7 +94,7 @@
   border-radius: 0.35rem;
   padding: 0.82rem 1rem;
   font: inherit;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--text-primary);
   background: var(--accent-primary);
@@ -108,7 +108,7 @@
 
 .submitButton:hover:enabled {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
 .submitButton:active:enabled {

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import styles from './AdminLayout.module.css'
 
@@ -10,9 +10,20 @@ interface AdminLayoutProps {
   addButtonLabel?: string
 }
 
+const NAV_ITEMS = [
+  { label: 'Dashboard', path: '/admin', exact: true },
+  { label: 'Projects', path: '/admin/projects' },
+  { label: 'About Texts', path: '/admin/about-texts' },
+  { label: 'Skills', path: '/admin/skills' },
+  { label: 'Timeline', path: '/admin/timeline' },
+  { label: 'Resources', path: '/admin/resources' },
+  { label: 'Testimonials', path: '/admin/testimonials' },
+]
+
 export function AdminLayout({ children, pageTitle, onAddClick, addButtonLabel = '+ Add New' }: AdminLayoutProps) {
   const { logout, user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleLogout = () => {
     logout()
@@ -27,48 +38,18 @@ export function AdminLayout({ children, pageTitle, onAddClick, addButtonLabel = 
         </div>
 
         <nav className={styles.sidebarNav}>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin')}
-          >
-            Dashboard
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/projects')}
-          >
-            Projects
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/about-texts')}
-          >
-            About Texts
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/skills')}
-          >
-            Skills
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/timeline')}
-          >
-            Timeline
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/resources')}
-          >
-            Resources
-          </button>
-          <button
-            className={styles.menuItem}
-            onClick={() => navigate('/admin/testimonials')}
-          >
-            Testimonials
-          </button>
+          {NAV_ITEMS.map(({ label, path, exact }) => {
+            const isActive = exact ? location.pathname === path : location.pathname.startsWith(path)
+            return (
+              <button
+                key={path}
+                className={`${styles.menuItem}${isActive ? ` ${styles.menuItemActive}` : ''}`}
+                onClick={() => navigate(path)}
+              >
+                {label}
+              </button>
+            )
+          })}
         </nav>
 
         <div className={styles.sidebarFooter}>

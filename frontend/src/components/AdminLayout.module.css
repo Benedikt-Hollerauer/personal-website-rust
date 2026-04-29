@@ -49,12 +49,12 @@
 }
 
 .menuItem:hover {
-  background: rgba(129, 140, 248, 0.08);
+  background: rgba(139, 92, 246, 0.08);
   color: var(--text-primary);
 }
 
 .menuItemActive {
-  background: rgba(129, 140, 248, 0.12);
+  background: rgba(139, 92, 246, 0.12);
   color: var(--accent-neon);
   border-left: 3px solid var(--accent-neon);
   padding-left: calc(1.5rem - 3px);
@@ -96,12 +96,12 @@
 }
 
 .logoutButton:hover {
-  background: rgba(129, 140, 248, 0.08);
-  border-color: rgba(129, 140, 248, 0.35);
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.35);
 }
 
 .logoutButton:active {
-  background: rgba(129, 140, 248, 0.12);
+  background: rgba(139, 92, 246, 0.12);
 }
 
 .mainContent {
@@ -147,8 +147,9 @@
 }
 
 .addButton:hover {
-  background: #388BFD;
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.35);
+  background: var(--accent-hover);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+  transform: translateY(-1px);
 }
 
 .addButton:active {
