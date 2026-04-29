@@ -3,52 +3,80 @@
   min-height: 100vh;
   background: var(--bg-primary);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.homeLayout {
-  min-height: 100vh;
+.bgGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 75% 35%, rgba(139, 92, 246, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 20% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
 }
 
-.homePageContent {
-  min-height: 100%;
+.hero {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 72rem;
+  padding: 5rem clamp(5.5rem, 10vw, 8rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 2rem;
-  color: var(--text-primary);
-  padding: clamp(1.5rem, 3vw, 3rem);
+  gap: 1.75rem;
+}
+
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.availabilityDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+  animation: pulse 2.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
 }
 
 .nameBlock {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  align-items: center;
+  gap: 0;
 }
 
 .name {
   margin: 0;
-  font-size: clamp(2.8rem, 9vw, 7.2rem);
+  font-size: clamp(3.8rem, 10.5vw, 9.5rem);
   font-weight: 900;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   line-height: 0.9;
   color: var(--text-primary);
-  text-transform: uppercase;
-  text-shadow: 0 14px 32px rgba(129, 140, 248, 0.08);
 }
 
 .role {
-  margin: 0.8rem 0 0;
-  font-size: clamp(0.98rem, 2vw, 1.34rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  margin: 0;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  font-weight: 500;
   color: var(--text-secondary);
-  line-height: 1.15;
-  display: inline-flex;
-  align-items: center;
+  letter-spacing: 0.02em;
 }
 
 .scramblePanel {
@@ -75,7 +103,90 @@
   margin: 0;
   min-height: 3rem;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.625rem;
+  background: var(--accent-primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.btnPrimary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(139, 92, 246, 0.35);
+}
+
+.btnPrimary:active {
+  transform: translateY(0);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.625rem;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-medium);
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.btnSecondary:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-neon);
+  transform: translateY(-2px);
+}
+
+.btnSecondary:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    padding: 3.5rem 1.5rem;
+    padding-bottom: calc(3.5rem + 7.5rem);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .name {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    justify-content: center;
+  }
 }

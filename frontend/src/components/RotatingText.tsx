@@ -11,7 +11,7 @@ const TEXTS = [
 const DELAY_MS = 2500
 const CHARS = '!<>-_\\/[]{}—=+*^?#________'
 
-let animationDone = false      // true only after last text finishes
+let animationDone = false
 
 type QueueItem = { from: string; to: string; start: number; end: number; char?: string }
 
@@ -88,7 +88,6 @@ export function RotatingText() {
     const el = elRef.current
     if (!el) return
 
-    // Animation fully completed in a previous visit — just show final text
     if (animationDone) {
       el.innerText = TEXTS[TEXTS.length - 1]
       return

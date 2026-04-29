@@ -8,10 +8,10 @@
 
 .projectsLayout {
   min-height: 100vh;
-  --section-block-space: clamp(1rem, 2vh, 1.5rem);
-  --section-title-gap: var(--section-block-space);
+  --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
   --nav-rail-bottom-extra: 3.75rem;
   --nav-rail-bottom-extra-mobile: 3.2rem;
+  --content-justify: center;
   display: grid;
   align-items: stretch;
   padding-bottom: 0;
@@ -24,11 +24,9 @@
   align-items: center;
   width: min(100%, 68rem);
   margin-inline: auto;
-  gap: clamp(2.5rem, 6vw, 4.5rem);
-  padding: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.5rem, 3vw, 2rem);
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2.5rem);
   text-align: center;
-  min-height: 60vh;
-  margin-top: 0;
   height: 100%;
 }
 
