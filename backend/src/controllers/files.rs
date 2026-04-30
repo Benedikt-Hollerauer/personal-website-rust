@@ -5,6 +5,11 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use uuid::Uuid;
 
+#[derive(Debug, Deserialize)]
+pub struct ServeQuery {
+    pub name: Option<String>,
+}
+
 const UPLOAD_BASE: &str = "uploads";
 
 // Simple query parameter struct for upload endpoint
@@ -97,6 +102,7 @@ pub async fn upload(
 pub async fn serve_file(
     State(_ctx): State<AppContext>,
     Path((category, filename)): Path<(String, String)>,
+    Query(query): Query<ServeQuery>,
 ) -> Result<Response> {
     // ensure category and filename do not contain path separators
     if category.contains(['/', '\\']) || filename.contains(['/', '\\']) {
@@ -114,13 +120,24 @@ pub async fn serve_file(
     let body = tokio::fs::read(&path).await?;
     let mime = MimeGuess::from_path(&filename).first_or_octet_stream();
 
+    // Use the ?name= query param as the download filename if provided and safe,
+    // otherwise fall back to the on-disk filename (which is a UUID).
+    let download_name = query
+        .name
+        .filter(|n| !n.is_empty() && !n.contains(['/', '\\', '\0']))
+        .unwrap_or_else(|| filename.clone())
+        .replace('"', "");
+
+    let disposition = format!("attachment; filename=\"{}\"", download_name);
+    let disposition_header = disposition
+        .parse()
+        .unwrap_or_else(|_| "attachment".parse().unwrap());
+
     let mut resp = Response::new(body.into());
     resp.headers_mut()
         .insert(axum::http::header::CONTENT_TYPE, mime.as_ref().parse().unwrap());
-    resp.headers_mut().insert(
-        axum::http::header::CONTENT_DISPOSITION,
-        "attachment".parse().unwrap(),
-    );
+    resp.headers_mut()
+        .insert(axum::http::header::CONTENT_DISPOSITION, disposition_header);
     Ok(resp)
 }
 

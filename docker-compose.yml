@@ -26,7 +26,7 @@ services:
       LOCO_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       JWT_SECRET: ${JWT_SECRET}
-      SMTP_HOST: ${SMTP_HOST}
+      SMTP_HOST: mailserver
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
@@ -56,8 +56,39 @@ services:
     depends_on:
       - frontend
 
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    hostname: mail.benedikt-hollerauer.com
+    restart: unless-stopped
+    stop_grace_period: 1m
+    ports:
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "993:993"
+    volumes:
+      - mail_data:/var/mail
+      - mail_state:/var/mail-state
+      - mail_log:/var/log/mail
+      - mail_config:/tmp/docker-mailserver
+      - caddy_data:/caddy-data:ro
+    environment:
+      ENABLE_RSPAMD: "1"
+      ENABLE_CLAMAV: "0"
+      ENABLE_FAIL2BAN: "0"
+      PERMIT_DOCKER: network
+      SSL_TYPE: manual
+      SSL_CERT_PATH: /caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mail.benedikt-hollerauer.com/mail.benedikt-hollerauer.com.crt
+      SSL_KEY_PATH: /caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mail.benedikt-hollerauer.com/mail.benedikt-hollerauer.com.key
+    depends_on:
+      - caddy
+
 volumes:
   postgres_data:
   uploads:
   caddy_data:
   caddy_config:
+  mail_data:
+  mail_state:
+  mail_log:
+  mail_config:

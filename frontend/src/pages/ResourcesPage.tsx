@@ -168,13 +168,16 @@ export function ResourcesPage() {
                 <p>{item.description}</p>
                 <a
                   className={styles.downloadButton}
-                  href={item.href}
-                  download={(() => {
-                    const lastSegment = item.href.split('/').pop() || ''
+                  href={(() => {
+                    const url = item.href
+                    if (!url.startsWith('/api/files/')) return url
+                    const lastSegment = url.split('/').pop() || ''
                     const dot = lastSegment.lastIndexOf('.')
                     const ext = dot !== -1 ? lastSegment.substring(dot + 1) : ''
-                    return ext ? `${item.title}.${ext}` : item.title
+                    const downloadName = ext ? `${item.title}.${ext}` : item.title
+                    return `${url}?name=${encodeURIComponent(downloadName)}`
                   })()}
+                  download
                   rel="noreferrer"
                 >
                   Download
