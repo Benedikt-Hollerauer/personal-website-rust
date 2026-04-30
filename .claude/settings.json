@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Read(//usr/local/bin/**)",
-      "Bash(node_modules/.bin/tsc --noEmit)"
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(cargo check *)",
+      "Bash(xargs cat *)"
     ]
   }
 }

@@ -169,8 +169,7 @@ export function ResourcesPage() {
                 <a
                   className={styles.downloadButton}
                   href={item.href}
-                  download
-                  target="_blank"
+                  download={item.title}
                   rel="noreferrer"
                 >
                   Download

@@ -114,9 +114,15 @@ pub async fn serve_file(
     let body = tokio::fs::read(&path).await?;
     let mime = MimeGuess::from_path(&filename).first_or_octet_stream();
 
+    let content_disposition = format!("attachment; filename=\"{}\"", filename);
+
     let mut resp = Response::new(body.into());
     resp.headers_mut()
         .insert(axum::http::header::CONTENT_TYPE, mime.as_ref().parse().unwrap());
+    resp.headers_mut().insert(
+        axum::http::header::CONTENT_DISPOSITION,
+        content_disposition.parse().unwrap(),
+    );
     Ok(resp)
 }
 
