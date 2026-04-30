@@ -16,7 +16,7 @@ export function HomePage() {
         </div>
 
         <div className={styles.nameBlock}>
-          <h1 className={styles.name}>Benedikt</h1>
+          <h1 className={styles.name}>Benediktt</h1>
           <h1 className={styles.name}>Hollerauer</h1>
         </div>
 
