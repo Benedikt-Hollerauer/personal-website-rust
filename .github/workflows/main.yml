@@ -31,6 +31,7 @@ jobs:
             cd /srv/personal-website-rust
             git fetch origin main
             git checkout main
+            git clean -f -- mailserver-config/
             git pull --ff-only origin main
             bash scripts/init-env.sh
             docker compose up -d --build
