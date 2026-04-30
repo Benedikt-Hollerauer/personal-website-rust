@@ -32,7 +32,7 @@ jobs:
             git fetch origin main
             git checkout main
             git clean -f -- mailserver-config/
-            chmod -R u+w mailserver-config/ 2>/dev/null || true
+            git diff --name-only HEAD origin/main | xargs -r rm -f 2>/dev/null || true
             git pull --ff-only origin main
             bash scripts/init-env.sh
             docker compose up -d --build
