@@ -10,15 +10,17 @@ for sieve_file in "${SIEVE_DIR}"/*.sieve; do
   filename=$(basename "${sieve_file}" .sieve)
   user="${filename%@*}"
   domain="${filename#*@}"
-  mail_home="${MAIL_DIR}/${domain}/${user}"
+  # Dovecot home is /var/mail/<domain>/<user>/home (mail_home = /var/mail/%d/%n/home/)
+  user_home="${MAIL_DIR}/${domain}/${user}/home"
 
-  if [[ -d "${mail_home}" ]]; then
-    dest="${mail_home}/.dovecot.sieve"
+  if [[ -d "${MAIL_DIR}/${domain}/${user}" ]]; then
+    mkdir -p "${user_home}"
+    dest="${user_home}/.dovecot.sieve"
     cp "${sieve_file}" "${dest}"
     chown docker:docker "${dest}"
     chmod 644 "${dest}"
     # Remove stale compiled binary so Dovecot recompiles with correct permissions
-    rm -f "${mail_home}/.dovecot.svbin"
+    rm -f "${user_home}/.dovecot.svbin"
     echo "Installed sieve script for ${filename}"
   fi
 done
