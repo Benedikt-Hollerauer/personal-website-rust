@@ -8,6 +8,8 @@ interface TimelineEntry {
   start_date: string
   end_date?: string
   order: number
+  emoji?: string | null
+  accent_color?: string | null
 }
 
 export function TimelineDisplay() {
@@ -61,22 +63,31 @@ export function TimelineDisplay() {
   return (
     <section className={styles.timelineSection}>
       <div className={styles.timeline}>
-        {entries.map((entry) => (
-          <div key={entry.id} className={styles.timelineItem}>
-            <div className={styles.timelineMarker}>
-              <div className={styles.dot} />
-              <div className={styles.line} />
-            </div>
-            <div className={styles.timelineContent}>
-              <div className={styles.period}>
-                {formatDate(entry.start_date)} -{' '}
-                {entry.end_date ? formatDate(entry.end_date) : 'Present'}
+        {entries.map((entry) => {
+          const dotColor = entry.accent_color || 'var(--accent-primary)'
+          return (
+            <div key={entry.id} className={styles.timelineItem}>
+              <div className={styles.timelineMarker}>
+                {entry.emoji ? (
+                  <div className={styles.emojiDot}>{entry.emoji}</div>
+                ) : (
+                  <div className={styles.dot} style={{ background: dotColor, boxShadow: `0 0 0 2px ${dotColor}` }} />
+                )}
+                <div className={styles.line} style={{ background: dotColor + '55' }} />
               </div>
-              <div className={styles.title}>{entry.title}</div>
-              <div className={styles.description}>{entry.description}</div>
+              <div className={styles.timelineContent}>
+                <div className={styles.period}>
+                  {formatDate(entry.start_date)} -{' '}
+                  {entry.end_date ? formatDate(entry.end_date) : 'Present'}
+                </div>
+                <div className={styles.title} style={{ color: dotColor }}>
+                  {entry.title}
+                </div>
+                <div className={styles.description}>{entry.description}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

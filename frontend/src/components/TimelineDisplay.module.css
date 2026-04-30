@@ -134,6 +134,18 @@
   z-index: 10;
 }
 
+.emojiDot {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  position: relative;
+  z-index: 10;
+  line-height: 1;
+}
+
 .line {
   position: absolute;
   left: 9px;

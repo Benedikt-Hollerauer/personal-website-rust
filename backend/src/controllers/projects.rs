@@ -2,8 +2,8 @@
 #![allow(clippy::unnecessary_struct_initialization)]
 #![allow(clippy::unused_async)]
 use loco_rs::prelude::*;
-use crate::models::_entities::projects::{Entity as Projects, ActiveModel};
-use sea_orm::{ActiveModelTrait, Set};
+use crate::models::_entities::projects::{Entity as Projects, ActiveModel, Column};
+use sea_orm::{ActiveModelTrait, Set, QueryOrder};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -15,6 +15,7 @@ pub struct CreateProjectParams {
     pub key_points: Option<serde_json::Value>,
     pub start_date: Option<String>,
     pub end_date: Option<String>,
+    pub order: Option<i32>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -27,11 +28,15 @@ pub struct UpdateProjectParams {
     pub start_date: Option<String>,
     pub end_date: Option<String>,
     pub active: Option<bool>,
+    pub order: Option<i32>,
 }
 
 #[debug_handler]
 pub async fn list(State(ctx): State<AppContext>) -> Result<Response> {
-    let items = Projects::find().all(&ctx.db).await?;
+    let items = Projects::find()
+        .order_by_asc(Column::Order)
+        .all(&ctx.db)
+        .await?;
     format::json(items)
 }
 
@@ -39,7 +44,8 @@ pub async fn list(State(ctx): State<AppContext>) -> Result<Response> {
 pub async fn get_active(State(ctx): State<AppContext>) -> Result<Response> {
     use sea_orm::ColumnTrait;
     let items = Projects::find()
-        .filter(crate::models::_entities::projects::Column::Active.eq(true))
+        .filter(Column::Active.eq(true))
+        .order_by_asc(Column::Order)
         .all(&ctx.db)
         .await?;
     format::json(items)
@@ -59,6 +65,7 @@ pub async fn create(
         start_date: Set(params.start_date.and_then(|d| chrono::NaiveDate::parse_from_str(&d, "%Y-%m-%d").ok())),
         end_date: Set(params.end_date.and_then(|d| chrono::NaiveDate::parse_from_str(&d, "%Y-%m-%d").ok())),
         active: Set(true),
+        order: Set(params.order.unwrap_or(0)),
         ..Default::default()
     };
 
@@ -114,6 +121,9 @@ pub async fn update_project(
     }
     if let Some(active) = params.active {
         active_model.active = Set(active);
+    }
+    if let Some(order) = params.order {
+        active_model.order = Set(order);
     }
 
     let updated_project = active_model.update(&ctx.db).await?;

@@ -67,6 +67,23 @@ export function SkillsAdminPage() {
     }
   }
 
+  const handleReorder = async (reorderedItems: Skill[]) => {
+    setSkills(reorderedItems)
+    try {
+      await Promise.all(
+        reorderedItems.map((item, index) =>
+          fetchAuthenticated(`/api/skills/${item.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ order: index + 1 }),
+          })
+        )
+      )
+    } catch (error) {
+      console.error('Failed to save order:', error)
+      await loadSkills()
+    }
+  }
+
   const handleToggleActive = async (skill: Skill) => {
     try {
       const response = await fetchAuthenticated(`/api/skills/${skill.id}`, {
@@ -160,6 +177,7 @@ export function SkillsAdminPage() {
           onAdd={handleAddSkill}
           isLoading={isLoading}
           emptyMessage="No skills yet. Create your first skill!"
+          onReorder={handleReorder}
         />
 
         <FormModal

@@ -1,0 +1,40 @@
+.draggableWrapper {
+  position: relative;
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+
+.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.dragOver {
+  outline: 2px solid var(--accent-neon);
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--accent-primary);
+}
+
+.dragHandle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  letter-spacing: -2px;
+  user-select: none;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  transition: color 0.15s;
+}
+
+.dragHandle:hover {
+  color: var(--text-primary);
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}

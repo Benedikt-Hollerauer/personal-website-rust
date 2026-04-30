@@ -11,6 +11,9 @@ mod m20260310_120000_create_timeline;
 mod m20260310_130000_create_resources;
 mod m20260310_140000_create_testimonials;
 mod m20260311_120000_add_link_to_testimonials;
+mod m20260501_000001_add_original_filename_to_resources;
+mod m20260501_000002_add_emoji_color_to_timelines;
+mod m20260501_000003_add_order_to_projects;
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -26,6 +29,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20260310_130000_create_resources::Migration),
             Box::new(m20260310_140000_create_testimonials::Migration),
             Box::new(m20260311_120000_add_link_to_testimonials::Migration),
+            Box::new(m20260501_000001_add_original_filename_to_resources::Migration),
+            Box::new(m20260501_000002_add_emoji_color_to_timelines::Migration),
+            Box::new(m20260501_000003_add_order_to_projects::Migration),
             // inject-above (do not remove this comment)
         ]
     }

@@ -19,6 +19,7 @@ pub struct Model {
     pub start_date: Option<Date>,
     pub end_date: Option<Date>,
     pub active: bool,
+    pub order: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

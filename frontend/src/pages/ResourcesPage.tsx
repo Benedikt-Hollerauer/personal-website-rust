@@ -22,6 +22,7 @@ type ApiResource = {
   downloadUrl?: string
   isCv?: boolean
   resource_url?: string
+  original_filename?: string
 }
 
 type ResourceCard = {
@@ -30,6 +31,7 @@ type ResourceCard = {
   description: string
   href: string
   isCv: boolean
+  originalFilename?: string
 }
 
 function normalizeResource(item: ApiResource, index: number): ResourceCard {
@@ -44,6 +46,7 @@ function normalizeResource(item: ApiResource, index: number): ResourceCard {
     description,
     href,
     isCv,
+    originalFilename: item.original_filename,
   }
 }
 
@@ -110,6 +113,10 @@ export function ResourcesPage() {
                   href={(() => {
                     const url = item.href
                     if (!url.startsWith('/api/files/')) return url
+                    // Use original upload filename if stored, otherwise fall back to title + extension
+                    if (item.originalFilename) {
+                      return `${url}?name=${encodeURIComponent(item.originalFilename)}`
+                    }
                     const lastSegment = url.split('/').pop() || ''
                     const dot = lastSegment.lastIndexOf('.')
                     const ext = dot !== -1 ? lastSegment.substring(dot + 1) : ''

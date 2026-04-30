@@ -88,6 +88,30 @@
   background-color: rgba(33, 38, 45, 0.6);
 }
 
+.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.dragOver {
+  border-color: var(--accent-neon);
+  box-shadow: 0 0 0 2px var(--accent-primary), 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.dragHandle {
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  letter-spacing: -2px;
+  padding: 0 4px 0 0;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
 .cardHeader {
   display: flex;
   justify-content: space-between;

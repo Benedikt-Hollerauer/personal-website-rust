@@ -49,6 +49,7 @@ type TestimonialItem = {
 type ApiWorkHistory = {
   id?: string | number
   year?: string | number
+  start_date?: string
   order?: number
   title?: string
   role?: string
@@ -58,6 +59,7 @@ type ApiWorkHistory = {
   summary?: string
   emoji?: string
   icon?: string
+  accent_color?: string
   accentColor?: string
   color?: string
 }
@@ -118,11 +120,12 @@ function normalizeTestimonial(item: ApiTestimonial, index: number): TestimonialI
 }
 
 function normalizeWorkHistory(item: ApiWorkHistory, index: number): WorkHistoryItem {
-  const yearRaw = item.year ?? `20${20 + index}`
+  const yearRaw = item.year
+    ?? (item.start_date ? new Date(item.start_date).getFullYear() : `20${20 + index}`)
   const title = item.title?.trim() || item.role?.trim() || item.position?.trim() || `Career Milestone ${index + 1}`
   const text = item.text?.trim() || item.description?.trim() || item.summary?.trim() || 'More details coming soon.'
   const emoji = item.emoji?.trim() || item.icon?.trim() || '💼'
-  const accentColor = item.accentColor?.trim() || item.color?.trim() || '#3b82f6'
+  const accentColor = item.accent_color?.trim() || item.accentColor?.trim() || item.color?.trim() || '#3b82f6'
 
   return {
     id: String(item.id ?? `history-${index}`),

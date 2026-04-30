@@ -12,6 +12,9 @@ pub struct CreateTimelineParams {
     pub description: String,
     pub start_date: String,
     pub end_date: Option<String>,
+    pub order: Option<i32>,
+    pub emoji: Option<String>,
+    pub accent_color: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -21,6 +24,8 @@ pub struct UpdateTimelineParams {
     pub start_date: Option<String>,
     pub end_date: Option<String>,
     pub order: Option<i32>,
+    pub emoji: Option<String>,
+    pub accent_color: Option<String>,
 }
 
 #[debug_handler]
@@ -45,7 +50,9 @@ pub async fn create(
         description: Set(params.description),
         start_date: Set(start_date),
         end_date: Set(end_date),
-        order: Set(0),
+        order: Set(params.order.unwrap_or(0)),
+        emoji: Set(params.emoji),
+        accent_color: Set(params.accent_color),
         ..Default::default()
     };
 
@@ -94,6 +101,12 @@ pub async fn update_item(
     }
     if let Some(order) = params.order {
         active_model.order = Set(order);
+    }
+    if let Some(emoji) = params.emoji {
+        active_model.emoji = Set(Some(emoji));
+    }
+    if let Some(accent_color) = params.accent_color {
+        active_model.accent_color = Set(Some(accent_color));
     }
 
     let updated_item = active_model.update(&ctx.db).await?;

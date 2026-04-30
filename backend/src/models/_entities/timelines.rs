@@ -14,6 +14,8 @@ pub struct Model {
     pub start_date: Date,
     pub end_date: Option<Date>,
     pub order: i32,
+    pub emoji: Option<String>,
+    pub accent_color: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

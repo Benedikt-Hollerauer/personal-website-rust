@@ -68,6 +68,23 @@ export function TestimonialsAdminPage() {
     }
   }
 
+  const handleReorder = async (reorderedItems: Testimonial[]) => {
+    setTestimonials(reorderedItems)
+    try {
+      await Promise.all(
+        reorderedItems.map((item, index) =>
+          fetchAuthenticated(`/api/testimonials/${item.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ order: index + 1 }),
+          })
+        )
+      )
+    } catch (error) {
+      console.error('Failed to save order:', error)
+      await loadTestimonials()
+    }
+  }
+
   const handleToggleActive = async (testimonial: Testimonial) => {
     try {
       const response = await fetchAuthenticated(`/api/testimonials/${testimonial.id}`, {
@@ -155,6 +172,7 @@ export function TestimonialsAdminPage() {
           onAdd={handleAddTestimonial}
           isLoading={isLoading}
           emptyMessage="No testimonials yet. Create your first one!"
+          onReorder={handleReorder}
         />
 
         <FormModal

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './AdminGrid.module.css'
 
 export interface GridColumn {
@@ -22,6 +22,7 @@ export interface AdminGridProps {
   onAdd: () => void
   isLoading?: boolean
   emptyMessage?: string
+  onReorder?: (items: any[]) => void
 }
 
 export function AdminGrid({
@@ -32,7 +33,42 @@ export function AdminGrid({
   onAdd,
   isLoading = false,
   emptyMessage = 'No items found',
+  onReorder,
 }: AdminGridProps) {
+  const [dragIndex, setDragIndex] = useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDragIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (dragOverIndex !== index) setDragOverIndex(index)
+  }
+
+  const handleDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (dragIndex === null || dragIndex === index) {
+      setDragIndex(null)
+      setDragOverIndex(null)
+      return
+    }
+    const newItems = [...data]
+    const [removed] = newItems.splice(dragIndex, 1)
+    newItems.splice(index, 0, removed)
+    onReorder?.(newItems)
+    setDragIndex(null)
+    setDragOverIndex(null)
+  }
+
+  const handleDragEnd = () => {
+    setDragIndex(null)
+    setDragOverIndex(null)
+  }
+
   if (isLoading) {
     return (
       <div className={styles.gridContainer}>
@@ -83,12 +119,28 @@ export function AdminGrid({
             ? primaryColumn.render(item[primaryColumn.key], item)
             : item[primaryColumn.key]
 
+          const isDragging = dragIndex === index
+          const isDragOver = dragOverIndex === index && dragIndex !== index
+
           return (
             <article
               key={item.id || index}
-              className={`${styles.card} ${item.active === false ? styles.inactive : ''}`}
+              draggable={!!onReorder}
+              onDragStart={onReorder ? (e) => handleDragStart(e, index) : undefined}
+              onDragOver={onReorder ? (e) => handleDragOver(e, index) : undefined}
+              onDrop={onReorder ? (e) => handleDrop(e, index) : undefined}
+              onDragEnd={onReorder ? handleDragEnd : undefined}
+              className={[
+                styles.card,
+                item.active === false ? styles.inactive : '',
+                isDragging ? styles.dragging : '',
+                isDragOver ? styles.dragOver : '',
+              ].filter(Boolean).join(' ')}
             >
               <div className={styles.cardHeader}>
+                {onReorder && (
+                  <span className={styles.dragHandle} title="Drag to reorder">⋮⋮</span>
+                )}
                 <div className={styles.primaryBlock}>
                   <h3 className={styles.cardTitle}>{primaryValue || 'Untitled'}</h3>
                 </div>

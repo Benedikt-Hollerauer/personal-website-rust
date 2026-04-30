@@ -12,6 +12,8 @@ pub struct CreateResourceParams {
     pub description: String,
     pub resource_url: String,
     pub active: Option<bool>,
+    pub order: Option<i32>,
+    pub original_filename: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -21,6 +23,7 @@ pub struct UpdateResourceParams {
     pub resource_url: Option<String>,
     pub active: Option<bool>,
     pub order: Option<i32>,
+    pub original_filename: Option<String>,
 }
 
 #[debug_handler]
@@ -48,7 +51,8 @@ pub async fn create(
         description: Set(params.description),
         resource_url: Set(params.resource_url),
         active: Set(params.active.unwrap_or(true)),
-        order: Set(0),
+        order: Set(params.order.unwrap_or(0)),
+        original_filename: Set(params.original_filename),
         ..Default::default()
     };
 
@@ -95,6 +99,9 @@ pub async fn update_item(
     }
     if let Some(order) = params.order {
         active_model.order = Set(order);
+    }
+    if let Some(original_filename) = params.original_filename {
+        active_model.original_filename = Set(Some(original_filename));
     }
 
     let updated_item = active_model.update(&ctx.db).await?;

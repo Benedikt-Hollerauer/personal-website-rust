@@ -14,6 +14,7 @@ pub struct Model {
     pub resource_url: String,
     pub active: bool,
     pub order: i32,
+    pub original_filename: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

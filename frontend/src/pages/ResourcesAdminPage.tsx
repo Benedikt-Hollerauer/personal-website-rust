@@ -67,6 +67,23 @@ export function ResourcesAdminPage() {
     }
   }
 
+  const handleReorder = async (reorderedItems: Resource[]) => {
+    setResources(reorderedItems)
+    try {
+      await Promise.all(
+        reorderedItems.map((item, index) =>
+          fetchAuthenticated(`/api/resources/${item.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ order: index + 1 }),
+          })
+        )
+      )
+    } catch (error) {
+      console.error('Failed to save order:', error)
+      await loadResources()
+    }
+  }
+
   const handleToggleActive = async (resource: Resource) => {
     try {
       const response = await fetchAuthenticated(`/api/resources/${resource.id}`, {
@@ -85,8 +102,10 @@ export function ResourcesAdminPage() {
     setIsSubmitting(true)
     try {
       if (data.resource_file instanceof File) {
+        const originalName = (data.resource_file as File).name
         const result = await uploadFile('resources', data.resource_file)
         data.resource_url = result.url
+        data.original_filename = originalName
       }
 
       delete data.resource_file
@@ -168,6 +187,7 @@ export function ResourcesAdminPage() {
           onAdd={handleAddResource}
           isLoading={isLoading}
           emptyMessage="No resources yet. Create your first one!"
+          onReorder={handleReorder}
         />
 
         <FormModal

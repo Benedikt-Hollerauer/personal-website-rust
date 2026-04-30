@@ -12,22 +12,10 @@ interface Timeline {
   start_date: string
   end_date: string | null
   order: number
+  emoji: string | null
+  accent_color: string | null
   created_at: string
   updated_at: string
-}
-
-// Helper functions for localStorage overrides
-function getWorkHistoryOverrides() {
-  try {
-    return JSON.parse(localStorage.getItem('workHistoryOverrides') || '{}');
-  } catch {
-    return {};
-  }
-}
-function setWorkHistoryOverride(id: string, data: Record<string, unknown>) {
-  const overrides = getWorkHistoryOverrides();
-  overrides[id] = { ...overrides[id], ...data };
-  localStorage.setItem('workHistoryOverrides', JSON.stringify(overrides));
 }
 
 export function TimelineAdminPage() {
@@ -81,6 +69,23 @@ export function TimelineAdminPage() {
     }
   }
 
+  const handleReorder = async (reorderedItems: Timeline[]) => {
+    setTimelines(reorderedItems)
+    try {
+      await Promise.all(
+        reorderedItems.map((item, index) =>
+          fetchAuthenticated(`/api/timeline/${item.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ order: index + 1 }),
+          })
+        )
+      )
+    } catch (error) {
+      console.error('Failed to save order:', error)
+      await loadTimelines()
+    }
+  }
+
   const handleSubmitForm = async (data: Record<string, any>) => {
     setIsSubmitting(true)
     try {
@@ -89,17 +94,9 @@ export function TimelineAdminPage() {
 
       const normalizedData = {
         ...data,
-        order: Number(data.order),
-      }
-
-      // Save frontend-only accent color and emoji to localStorage
-      if (data.emoji || data.accentColor) {
-        // Use the backend id if editing, otherwise use the title as a fallback key
-        const overrideId = editingTimeline ? String(editingTimeline.id) : data.title;
-        setWorkHistoryOverride(overrideId, {
-          emoji: data.emoji,
-          accentColor: data.accentColor,
-        });
+        order: Number(data.order) || 0,
+        emoji: data.emoji || null,
+        accent_color: data.accent_color || null,
       }
 
       const response = await fetchAuthenticated(url, {
@@ -124,12 +121,32 @@ export function TimelineAdminPage() {
     { name: 'start_date', label: 'Start Date', type: 'date', required: true },
     { name: 'end_date', label: 'End Date', type: 'date', required: false },
     { name: 'order', label: 'Order', type: 'number', required: true },
-    // New fields for frontend accent color and emoji
     { name: 'emoji', label: 'Emoji', type: 'text', required: false, placeholder: 'e.g. 🚀' },
-    { name: 'accentColor', label: 'Accent Color', type: 'text', required: false, placeholder: '#ef4444' },
+    { name: 'accent_color', label: 'Accent Color', type: 'color', required: false },
   ]
 
   const columns: GridColumn[] = [
+    {
+      key: 'emoji',
+      label: 'Icon',
+      render: (value, row: Timeline) => (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+          {value && <span style={{ fontSize: '1.2rem' }}>{value}</span>}
+          {row.accent_color && (
+            <span
+              style={{
+                display: 'inline-block',
+                width: 14,
+                height: 14,
+                borderRadius: '50%',
+                background: row.accent_color,
+                border: '1px solid rgba(255,255,255,0.2)',
+              }}
+            />
+          )}
+        </span>
+      ),
+    },
     { key: 'title', label: 'Title' },
     {
       key: 'start_date',
@@ -147,6 +164,14 @@ export function TimelineAdminPage() {
     { label: 'Delete', variant: 'delete', onClick: handleDeleteTimeline },
   ]
 
+  const initialData = editingTimeline
+    ? {
+        ...editingTimeline,
+        emoji: editingTimeline.emoji || '',
+        accent_color: editingTimeline.accent_color || '#8b5cf6',
+      }
+    : { accent_color: '#8b5cf6' }
+
   return (
     <AdminLayout pageTitle="Timeline" onAddClick={handleAddTimeline} addButtonLabel="+ Add Entry">
       <div className={styles.page}>
@@ -158,6 +183,7 @@ export function TimelineAdminPage() {
           onAdd={handleAddTimeline}
           isLoading={isLoading}
           emptyMessage="No timeline entries yet. Create your first one!"
+          onReorder={handleReorder}
         />
 
         <FormModal
@@ -167,11 +193,7 @@ export function TimelineAdminPage() {
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleSubmitForm}
           isSubmitting={isSubmitting}
-          initialData={editingTimeline ? {
-            ...editingTimeline,
-            emoji: getWorkHistoryOverrides()[String(editingTimeline.id)]?.emoji || '',
-            accentColor: getWorkHistoryOverrides()[String(editingTimeline.id)]?.accentColor || '',
-          } : {}}
+          initialData={initialData}
         />
       </div>
     </AdminLayout>
