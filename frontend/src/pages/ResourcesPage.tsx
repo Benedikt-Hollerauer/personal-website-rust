@@ -169,7 +169,12 @@ export function ResourcesPage() {
                 <a
                   className={styles.downloadButton}
                   href={item.href}
-                  download={item.title}
+                  download={(() => {
+                    const lastSegment = item.href.split('/').pop() || ''
+                    const dot = lastSegment.lastIndexOf('.')
+                    const ext = dot !== -1 ? lastSegment.substring(dot + 1) : ''
+                    return ext ? `${item.title}.${ext}` : item.title
+                  })()}
                   rel="noreferrer"
                 >
                   Download
