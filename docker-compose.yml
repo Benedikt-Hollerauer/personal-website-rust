@@ -70,7 +70,7 @@ services:
       - mail_data:/var/mail
       - mail_state:/var/mail-state
       - mail_log:/var/log/mail
-      - mail_config:/tmp/docker-mailserver
+      - ./mailserver-config:/tmp/docker-mailserver
       - caddy_data:/caddy-data:ro
     environment:
       ENABLE_RSPAMD: "1"
@@ -91,4 +91,3 @@ volumes:
   mail_data:
   mail_state:
   mail_log:
-  mail_config:

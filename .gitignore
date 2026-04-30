@@ -22,3 +22,8 @@ target
 node_modules
 .env
 docker-compose.override.yml
+
+# mailserver secrets - never commit these
+mailserver-config/postfix-accounts.cf
+mailserver-config/dovecot-quotas.cf
+mailserver-config/opendkim/

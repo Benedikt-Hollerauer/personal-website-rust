@@ -4,7 +4,10 @@
       "Read(//usr/local/bin/**)",
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(cargo check *)",
-      "Bash(xargs cat *)"
+      "Bash(xargs cat *)",
+      "Bash(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@128.140.91.217 \"ls /var/lib/docker/volumes/personal-website-rust_mail_config/_data/\")",
+      "Bash(scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no /tmp/contact.sieve root@128.140.91.217:/var/lib/docker/volumes/personal-website-rust_mail_config/_data/sieve/contact@benedikt-hollerauer.com.sieve)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }
