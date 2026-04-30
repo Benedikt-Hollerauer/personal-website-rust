@@ -42,7 +42,7 @@ mailer:
     # Enable/Disable smtp mailer.
     enable: true
     # SMTP server host. e.x localhost, smtp.gmail.com
-    host: mail.your-server.de
+    host: mailserver
     # SMTP server port
     port: 587
     # Use secure connection (SSL/TLS).

@@ -2,6 +2,10 @@ benedikt-hollerauer.com {
 	reverse_proxy frontend:80
 }
 
+www.benedikt-hollerauer.com {
+	redir https://benedikt-hollerauer.com{uri} permanent
+}
+
 mail.benedikt-hollerauer.com {
 	redir https://benedikt-hollerauer.com permanent
 }
