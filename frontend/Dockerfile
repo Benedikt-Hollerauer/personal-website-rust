@@ -4,6 +4,16 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 COPY . .
+ARG VITE_RECAPTCHA_SITE_KEY
+ARG VITE_LINK_GITHUB
+ARG VITE_LINK_INSTAGRAM
+ARG VITE_LINK_LINKEDIN
+ARG VITE_LINK_LINKEDIN_SKILLS
+ENV VITE_RECAPTCHA_SITE_KEY=$VITE_RECAPTCHA_SITE_KEY \
+    VITE_LINK_GITHUB=$VITE_LINK_GITHUB \
+    VITE_LINK_INSTAGRAM=$VITE_LINK_INSTAGRAM \
+    VITE_LINK_LINKEDIN=$VITE_LINK_LINKEDIN \
+    VITE_LINK_LINKEDIN_SKILLS=$VITE_LINK_LINKEDIN_SKILLS
 RUN npm run build
 
 # ── Stage 2: serve ───────────────────────────────────────────────────────────

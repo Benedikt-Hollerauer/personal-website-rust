@@ -38,6 +38,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY}
+        VITE_LINK_GITHUB: ${VITE_LINK_GITHUB}
+        VITE_LINK_INSTAGRAM: ${VITE_LINK_INSTAGRAM}
+        VITE_LINK_LINKEDIN: ${VITE_LINK_LINKEDIN}
+        VITE_LINK_LINKEDIN_SKILLS: ${VITE_LINK_LINKEDIN_SKILLS}
     restart: unless-stopped
     depends_on:
       - backend
