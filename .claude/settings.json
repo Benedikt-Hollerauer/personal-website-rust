@@ -7,7 +7,10 @@
       "Bash(xargs cat *)",
       "Bash(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@128.140.91.217 \"ls /var/lib/docker/volumes/personal-website-rust_mail_config/_data/\")",
       "Bash(scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no /tmp/contact.sieve root@128.140.91.217:/var/lib/docker/volumes/personal-website-rust_mail_config/_data/sieve/contact@benedikt-hollerauer.com.sieve)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "Bash(ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@128.140.91.217 \"docker logs personal-website-rust-mailserver-1 2>&1 | tail -40\")",
+      "Bash(ssh -i '~/.ssh/id_rsa' -o StrictHostKeyChecking=no root@128.140.91.217 ' *)",
+      "Bash(scp -i '~/.ssh/id_rsa' -o StrictHostKeyChecking=no /home/user/Personal/develop/personal-website-rust/mailserver-config/user-patches.sh root@128.140.91.217:/srv/personal-website-rust/mailserver-config/user-patches.sh)"
     ]
   }
 }

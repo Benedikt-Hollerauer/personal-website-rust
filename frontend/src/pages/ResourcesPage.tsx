@@ -5,7 +5,6 @@ import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
 import { Direction } from '../types'
-import { ResourcesGrid } from '../components/ResourcesGrid'
 import styles from './ResourcesPage.module.css'
 
 const RESOURCES_HOME_ARROW = (
@@ -33,64 +32,10 @@ type ResourceCard = {
   isCv: boolean
 }
 
-const FALLBACK_RESOURCES: ResourceCard[] = [
-  {
-    id: 'cv',
-    title: 'My CV',
-    description: 'Download my CV here to learn more about my skills and my experience.',
-    href: '/api/resources/cv',
-    isCv: true,
-  },
-  {
-    id: 'scala-advanced',
-    title: 'Scala and Functional Programming Advanced Certificate',
-    description:
-      'A certificate for advanced Scala and functional programming topics with practical coursework.',
-    href: '/api/resources/scala-advanced',
-    isCv: false,
-  },
-  {
-    id: 'linux-lpi',
-    title: 'LPI - Linux Certificate',
-    description:
-      'A Linux certification issued by Linux Professional Institute (LPI) and recognized internationally.',
-    href: '/api/resources/linux-lpi',
-    isCv: false,
-  },
-  {
-    id: 'scala-essentials',
-    title: 'Scala and Functional Programming Essentials Certificate',
-    description:
-      'Core Scala foundations, functional concepts, and problem-solving approaches from foundational coursework.',
-    href: '/api/resources/scala-essentials',
-    isCv: false,
-  },
-  {
-    id: 'work-apprenticeship',
-    title: 'Work and Apprenticeship Certificate',
-    description: 'A certificate documenting my apprenticeship work and final project responsibilities.',
-    href: '/api/resources/work-apprenticeship',
-    isCv: false,
-  },
-  {
-    id: 'completed-apprenticeship',
-    title: 'Certificate For My Completed Apprenticeship',
-    description: 'Official confirmation of my successfully completed apprenticeship.',
-    href: '/api/resources/completed-apprenticeship',
-    isCv: false,
-  },
-]
-
 function normalizeResource(item: ApiResource, index: number): ResourceCard {
   const title = item.title?.trim() || `Resource ${index + 1}`
-  const description =
-    item.description?.trim() || 'A downloadable resource from my portfolio collection.'
-  const href =
-    item.downloadUrl ||
-    item.resource ||
-    item.url ||
-    (item as any).resource_url ||
-    '#'
+  const description = item.description?.trim() || ''
+  const href = item.downloadUrl || item.resource || item.url || (item as any).resource_url || '#'
   const isCv = Boolean(item.isCv) || /\bcv\b/i.test(title)
 
   return {
@@ -103,16 +48,14 @@ function normalizeResource(item: ApiResource, index: number): ResourceCard {
 }
 
 export function ResourcesPage() {
-  const [resources, setResources] = useState<ResourceCard[]>(FALLBACK_RESOURCES)
+  const [resources, setResources] = useState<ResourceCard[]>([])
 
   useEffect(() => {
     const abortController = new AbortController()
 
     fetch('/api/resources-public', { signal: abortController.signal })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to load resources')
-        }
+        if (!response.ok) throw new Error('Failed to load resources')
         return response.json() as Promise<ApiResource[] | { resources?: ApiResource[] }>
       })
       .then((payload) => {
@@ -123,13 +66,9 @@ export function ResourcesPage() {
         }
         setResources(list.map(normalizeResource))
       })
-      .catch(() => {
-        setResources([])
-      })
+      .catch(() => setResources([]))
 
-    return () => {
-      abortController.abort()
-    }
+    return () => abortController.abort()
   }, [])
 
   const sortedResources = useMemo(() => {
@@ -150,7 +89,7 @@ export function ResourcesPage() {
       />
 
       <PageSectionLayout title="Resources" titlePosition="left" navRail="bottom" className={styles.resourcesLayout}>
-        {sortedResources.length > 0 ? (
+        {sortedResources.length > 0 && (
           <motion.section
             className={styles.resourcesGrid}
             initial={{ opacity: 0, x: 24 }}
@@ -165,7 +104,7 @@ export function ResourcesPage() {
                 className={`${styles.resourceCard} ${item.isCv ? styles.resourceCardCv : ''}`}
               >
                 <h2>{item.title}</h2>
-                <p>{item.description}</p>
+                {item.description && <p>{item.description}</p>}
                 <a
                   className={styles.downloadButton}
                   href={(() => {
@@ -186,23 +125,8 @@ export function ResourcesPage() {
               </BackgroundCard>
             ))}
           </motion.section>
-        ) : (
-          <motion.section
-            className={styles.resourcesGrid}
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div style={{ padding: '2rem', textAlign: 'center', color: '#aaa', gridColumn: '1 / -1' }}>
-              <p>No resources available.</p>
-            </div>
-          </motion.section>
         )}
       </PageSectionLayout>
-
-      <section className={styles.databaseDrivenResources}>
-        <ResourcesGrid />
-      </section>
     </main>
   )
 }

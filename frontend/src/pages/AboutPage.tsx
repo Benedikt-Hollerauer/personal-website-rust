@@ -20,19 +20,6 @@ type ApiAbout = {
   paragraphs?: string[]
 }
 
-type ApiSkill = {
-  id?: string | number
-  name?: string
-  title?: string
-  order?: number
-  icon?: string
-  emoji?: string
-  iconUrl?: string
-  link?: string
-  url?: string
-  // backend stores path in snake_case
-  icon_path?: string
-}
 
 type ApiTestimonial = {
   id?: string | number
@@ -84,78 +71,6 @@ type WorkHistoryItem = {
   accentColor: string
 }
 
-const FALLBACK_ABOUT_PARAGRAPHS = [
-  'Hey there, I am Bene.',
-  'I am a software engineer based in Bavaria, Germany.',
-  'I love turning ideas into solid, well-tested software that actually works. I specialize in functional programming and software architecture.',
-  'My mission is to build reliable, professional software while continuously learning and improving.',
-]
-
-const FALLBACK_TESTIMONIALS: TestimonialItem[] = [
-  {
-    id: 't-1',
-    name: 'Thomas Hofer',
-    role: 'Senior Software Engineer',
-    text:
-      'Bene combines technical depth with clear communication. He contributes reliable code and helps teams move faster with pragmatic solutions.',
-  },
-  {
-    id: 't-2',
-    name: 'Markus Ziegler',
-    role: 'Senior Software Engineer',
-    text:
-      'Fast to adapt, calm under pressure, and consistently focused on quality. A strong teammate for challenging engineering tasks.',
-  },
-  {
-    id: 't-3',
-    name: 'Jannik Meier',
-    role: 'Software Developer',
-    text:
-      'Working with Bene is productive and enjoyable. He supports collaboration and keeps delivery standards high.',
-  },
-  {
-    id: 't-4',
-    name: 'Basit Rehman',
-    role: 'Software Developer',
-    text:
-      'Bene quickly understands new stacks and improves existing architecture with practical, maintainable changes.',
-  },
-]
-
-const FALLBACK_WORK_HISTORY: WorkHistoryItem[] = [
-  {
-    id: 'history-1',
-    year: '2021',
-    title: 'Full-Stack Software Engineer',
-    text: 'At boerse.de Group AG, I processed large data sets, built internal tools, and delivered new website features.',
-    emoji: '👨‍💻',
-    accentColor: '#8b5cf6',
-  },
-  {
-    id: 'history-2',
-    year: '2022',
-    title: 'Career Transition',
-    text: 'In a bridging warehouse role, I managed stock, coordinated shipments, and kept operations running smoothly.',
-    emoji: '📦',
-    accentColor: '#f59e0b',
-  },
-  {
-    id: 'history-3',
-    year: '2024',
-    title: 'Software Engineer',
-    text: 'I returned full-time to software and focused on architecture, delivery quality, and maintainable implementations.',
-    emoji: '🧠',
-    accentColor: '#22c55e',
-  },
-  {
-    id: 'history-4',
-    year: '2025',
-    title: 'Software Engineer, Founder',
-    text: 'I started building products independently while continuing to deliver robust software engineering projects.',
-    emoji: '🚀',
-    accentColor: '#ef4444',
-  },
-]
 
 function normalizeExternalLink(value?: string): string | undefined {
   const raw = value?.trim()
@@ -219,20 +134,10 @@ function normalizeWorkHistory(item: ApiWorkHistory, index: number): WorkHistoryI
   }
 }
 
-// Helper to get and merge localStorage overrides for work history
-function getWorkHistoryOverrides(): Record<string, { emoji?: string; accentColor?: string }> {
-  try {
-    return JSON.parse(localStorage.getItem('workHistoryOverrides') || '{}');
-  } catch {
-    return {};
-  }
-}
-
 export function AboutPage() {
-  const [aboutParagraphs, setAboutParagraphs] = useState<string[]>(FALLBACK_ABOUT_PARAGRAPHS)
-  // Remove AboutPage's own skills state, SkillsGallery will handle skills
-  const [testimonials, setTestimonials] = useState<TestimonialItem[]>(FALLBACK_TESTIMONIALS)
-  const [workHistory, setWorkHistory] = useState<WorkHistoryItem[]>(FALLBACK_WORK_HISTORY)
+  const [aboutParagraphs, setAboutParagraphs] = useState<string[]>([])
+  const [testimonials, setTestimonials] = useState<TestimonialItem[]>([])
+  const [workHistory, setWorkHistory] = useState<WorkHistoryItem[]>([])
   const [timelineTrackTop, setTimelineTrackTop] = useState(0)
   const [timelineTrackHeight, setTimelineTrackHeight] = useState(0)
   const [activeTimelineIndices, setActiveTimelineIndices] = useState<Set<number>>(new Set())
@@ -292,32 +197,9 @@ export function AboutPage() {
         }
 
         const sorted = [...list].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
-        // Merge localStorage overrides
-        const overrides = getWorkHistoryOverrides();
-        setWorkHistory(sorted.map((item, idx) => {
-          const normalized = normalizeWorkHistory(item, idx);
-          const override = overrides[normalized.id] || {};
-          return {
-            ...normalized,
-            ...override,
-            emoji: override.emoji || normalized.emoji,
-            accentColor: override.accentColor || normalized.accentColor,
-          };
-        }));
+        setWorkHistory(sorted.map(normalizeWorkHistory))
       })
-      .catch(() => {
-        // If API fails, use fallback and merge overrides
-        const overrides = getWorkHistoryOverrides();
-        setWorkHistory(FALLBACK_WORK_HISTORY.map((item) => {
-          const override = overrides[item.id] || {};
-          return {
-            ...item,
-            ...override,
-            emoji: override.emoji || item.emoji,
-            accentColor: override.accentColor || item.accentColor,
-          };
-        }));
-      })
+      .catch(() => setWorkHistory([]))
 
     return () => {
       abortController.abort()
@@ -445,33 +327,6 @@ export function AboutPage() {
     }
   }, [])
 
-  useEffect(() => {
-    const abortController = new AbortController()
-
-    fetch('/api/skills-public', { signal: abortController.signal })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to load skills')
-        }
-
-        return response.json() as Promise<ApiSkill[] | { skills?: ApiSkill[] }>
-      })
-      .then((payload) => {
-        const list = Array.isArray(payload) ? payload : payload.skills
-        if (!Array.isArray(list) || list.length === 0) {
-          // setSkills removed, SkillsGallery manages skills
-          return
-        }
-
-        // setSkills removed, SkillsGallery manages skills
-      })
-
-    return () => {
-      abortController.abort()
-    }
-  }, [])
-
-  // Remove AboutPage's own skills calculations
 
   return (
     <main className={styles.aboutPage}>
