@@ -27,6 +27,7 @@ jobs:
           command_timeout: 20m
           script: |
             set -e
+            git config --global --add safe.directory /srv/personal-website-rust
             cd /srv/personal-website-rust
             git fetch origin main
             git checkout main
