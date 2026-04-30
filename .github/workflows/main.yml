@@ -32,8 +32,6 @@ jobs:
             git fetch origin main
             git checkout main
             git clean -f -- mailserver-config/
-            chattr -R -i mailserver-config/ 2>/dev/null || true
-            chmod -R u+rw mailserver-config/
             git pull --ff-only origin main
             bash scripts/init-env.sh
             docker compose up -d --build
