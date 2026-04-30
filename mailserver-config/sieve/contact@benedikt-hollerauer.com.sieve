@@ -10,7 +10,7 @@ vacation
 
 Thanks for reaching out to me. I'll get back to you shortly. In the meantime, feel free to explore my website 🌐
 
-https://www.benedikt-hollerauer.com
+https://benedikt-hollerauer.com
 
 Kind regards,
 Bene 😊";
