@@ -98,11 +98,11 @@
   place-items: center;
   text-align: center;
   position: relative;
-  border-radius: 1.3rem;
-  border: 1px solid var(--border-subtle);
+  border-radius: 1.6rem;
+  border: 1px solid var(--border-medium);
   background: var(--bg-surface);
   padding: 1.25rem 1.3rem 1.15rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   text-decoration: none;
   color: inherit;
   cursor: pointer;

@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Read(//usr/local/bin/**)"
+      "Read(//usr/local/bin/**)",
+      "Bash(node_modules/.bin/tsc --noEmit)"
     ]
   }
 }

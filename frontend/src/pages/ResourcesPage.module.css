@@ -15,6 +15,7 @@
   --section-title-inline-size: 22ch;
   --nav-rail-bottom-extra: 0rem;
   --nav-rail-bottom-extra-mobile: 0rem;
+  --content-justify: center;
 }
 
 .resourcesGrid {
@@ -30,11 +31,7 @@
   display: grid;
   align-content: start;
   gap: 0.9rem;
-  border-radius: 1.3rem;
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
-  padding: 1.25rem 1.3rem 1.15rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  padding: 1.4rem 1.5rem;
   min-width: 0;
   transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
 }

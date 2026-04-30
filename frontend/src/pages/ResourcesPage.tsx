@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
+import { BackgroundCard } from '../components/BackgroundCard'
 import { EdgeArrowButton } from '../components/EdgeArrowButton'
 import { HOME_ICON } from '../components/EdgeArrowNav'
 import { PageSectionLayout } from '../components/PageSectionLayout'
@@ -157,8 +158,10 @@ export function ResourcesPage() {
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
             {sortedResources.map((item, index) => (
-              <article
+              <BackgroundCard
                 key={item.id}
+                as="article"
+                size="md"
                 className={`${styles.resourceCard} ${item.isCv ? styles.resourceCardCv : ''}`}
               >
                 <h2>{item.title}</h2>
@@ -173,7 +176,7 @@ export function ResourcesPage() {
                   Download
                 </a>
                 {item.isCv && index === 0 && <span className={styles.cvBadge}>Highlighted</span>}
-              </article>
+              </BackgroundCard>
             ))}
           </motion.section>
         ) : (

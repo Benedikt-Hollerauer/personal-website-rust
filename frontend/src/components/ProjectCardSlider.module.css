@@ -28,7 +28,7 @@
   padding: 0;
   background: var(--bg-surface);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1.5px solid var(--border-accent);
+  border: 1.5px solid var(--border-medium);
   display: flex;
   flex-direction: column;
   overflow: hidden;
