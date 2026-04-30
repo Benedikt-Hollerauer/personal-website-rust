@@ -36,3 +36,4 @@ jobs:
             git pull --ff-only origin main
             bash scripts/init-env.sh
             docker compose up -d --build
+            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile 2>/dev/null || true
