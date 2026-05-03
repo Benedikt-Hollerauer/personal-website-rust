@@ -46,7 +46,7 @@ mailer:
     # SMTP server port
     port: 587
     # Use secure connection (SSL/TLS).
-    secure: false
+    secure: true
     auth:
       user: {{ get_env(name="SMTP_USER", default="") }}
       password: {{ get_env(name="SMTP_PASSWORD", default="") }}

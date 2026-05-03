@@ -96,7 +96,7 @@ export function SkillsGallery() {
                 {skill.iconText}
               </span>
             )}
-            <span className={aboutStyles.skillLabel}>{skill.label}</span>
+            <span className={`${aboutStyles.skillLabel}${skill.iconUrl ? ` ${aboutStyles.skillLabelHidden}` : ''}`}>{skill.label}</span>
           </>
         )
         return (
