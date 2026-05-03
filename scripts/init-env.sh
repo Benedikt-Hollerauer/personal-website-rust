@@ -36,6 +36,9 @@ fi
 
 # Generate frontend/.env from VITE_ vars in root .env (for local Vite dev server)
 if [ -f "$ROOT_ENV" ]; then
-  grep "^VITE_" "$ROOT_ENV" > "$FRONTEND_ENV" 2>/dev/null || true
-  echo "Generated $FRONTEND_ENV from VITE_ vars in $ROOT_ENV."
+  if grep "^VITE_" "$ROOT_ENV" > "$FRONTEND_ENV" 2>/dev/null; then
+    echo "Generated $FRONTEND_ENV from VITE_ vars in $ROOT_ENV."
+  else
+    echo "Skipped $FRONTEND_ENV (not writable — VITE_ vars injected via Docker build args)."
+  fi
 fi

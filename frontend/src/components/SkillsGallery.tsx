@@ -100,7 +100,7 @@ export function SkillsGallery() {
           </>
         )
         return (
-          <div key={skill.id}>
+          <div key={skill.id} className={styles.tooltipWrapper} data-tooltip={skill.label}>
             {skill.link ? (
               <a
                 href={skill.link}

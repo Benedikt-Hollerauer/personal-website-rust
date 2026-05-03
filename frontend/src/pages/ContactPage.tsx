@@ -311,7 +311,7 @@ export function ContactPage() {
 
                 <button className={styles.submitButton} type="submit" disabled={!canSubmit || isSubmitting}>
                   <span aria-hidden="true">{SEND_ICON}</span>
-                  <span>{isSubmitting ? 'Sending...' : 'Send it →'}</span>
+                  <span>{isSubmitting ? 'Sending...' : 'Send it'}</span>
                 </button>
 
                 {submitState === 'success' && <p className={styles.successText}>Got it — I'll be in touch.</p>}

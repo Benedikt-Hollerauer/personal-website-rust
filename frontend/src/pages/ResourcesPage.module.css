@@ -1,7 +1,6 @@
 .resourcesPage {
   position: relative;
   min-height: 100vh;
-  background: var(--bg-primary);
   color: var(--text-primary);
   overflow: hidden;
 }

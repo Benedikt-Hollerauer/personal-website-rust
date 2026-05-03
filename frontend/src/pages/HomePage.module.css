@@ -1,7 +1,6 @@
 .homePage {
   position: relative;
   min-height: 100vh;
-  background: var(--bg-primary);
   overflow: hidden;
   display: flex;
   align-items: center;
