@@ -31,7 +31,9 @@ workers:
   #   - BackgroundQueue - Workers operate asynchronously in the background, processing queued.
   #   - ForegroundBlocking - Workers operate in the foreground and block until tasks are completed.
   #   - BackgroundAsync - Workers operate asynchronously in the background, processing tasks with async capabilities.
-  mode: BackgroundAsync
+  # ForegroundBlocking ensures email errors propagate back to the HTTP response so the contact form
+  # can show an error to the user instead of silently failing.
+  mode: ForegroundBlocking
 
   
 
@@ -42,10 +44,11 @@ mailer:
     # Enable/Disable smtp mailer.
     enable: true
     # SMTP server host. e.x localhost, smtp.gmail.com
-    host: mailserver
+    # Uses the Docker network alias so the TLS cert (mail.benedikt-hollerauer.com) matches.
+    host: mail.benedikt-hollerauer.com
     # SMTP server port
     port: 587
-    # Use secure connection (SSL/TLS).
+    # Use secure connection (SSL/TLS via STARTTLS).
     secure: true
     auth:
       user: {{ get_env(name="SMTP_USER", default="") }}

@@ -4,15 +4,12 @@ use loco_rs::prelude::*;
 use serde_json::json;
 
 static welcome: Dir<'_> = include_dir!("src/mailers/contact/welcome");
+static autoreply: Dir<'_> = include_dir!("src/mailers/contact/autoreply");
 
 #[allow(clippy::module_name_repetitions)]
 pub struct Contact {}
 impl Mailer for Contact {}
 impl Contact {
-    /// Send an email
-    ///
-    /// # Errors
-    /// When email sending is failed
     pub async fn send_contact(ctx: &AppContext, name: &str, sender_email: &str, message: &str) -> Result<()> {
         Self::mail_template(
             ctx,
@@ -29,7 +26,23 @@ impl Contact {
                 ..Default::default()
             },
         ).await?;
+        Ok(())
+    }
 
+    pub async fn send_autoreply(ctx: &AppContext, name: &str, recipient_email: &str) -> Result<()> {
+        Self::mail_template(
+            ctx,
+            &autoreply,
+            mailer::Args {
+                from: Some("contact@benedikt-hollerauer.com".to_string()),
+                to: recipient_email.to_string(),
+                locals: json!({
+                  "name": name,
+                  "domain": ctx.config.server.full_url()
+                }),
+                ..Default::default()
+            },
+        ).await?;
         Ok(())
     }
 }

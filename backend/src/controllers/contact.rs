@@ -129,6 +129,11 @@ pub async fn send(State(ctx): State<AppContext>, Json(params): Json<ContactParam
     tracing::info!(score, action = ?verify.action, min_score, "recaptcha verification passed");
 
     Contact::send_contact(&ctx, &params.name, &params.email, &params.message).await?;
+
+    if let Err(err) = Contact::send_autoreply(&ctx, &params.name, &params.email).await {
+        tracing::warn!(?err, "autoreply failed — contact notification was sent");
+    }
+
     format::json(())
 }
 

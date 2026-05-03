@@ -1,9 +1,15 @@
 import { useEffect, useRef } from 'react'
 import styles from './ParticleBackground.module.css'
 
-const COUNT = 120
 const MAX_DIST = 150
 const SPEED = 0.4
+
+function getCount() {
+  const w = window.innerWidth
+  if (w < 640) return 35
+  if (w < 1024) return 65
+  return 120
+}
 
 interface Dot {
   x: number
@@ -37,7 +43,7 @@ export function ParticleBackground() {
     }
 
     const spawn = () => {
-      dots = Array.from({ length: COUNT }, () => ({
+      dots = Array.from({ length: getCount() }, () => ({
         x: Math.random() * W,
         y: Math.random() * H,
         vx: (Math.random() - 0.5) * SPEED,
@@ -51,8 +57,8 @@ export function ParticleBackground() {
 
       const dark = isDark()
       const rgb = dark ? '139,92,246' : '124,58,237'
-      const dotAlpha = dark ? 0.75 : 0.55
-      const lineMaxAlpha = dark ? 0.38 : 0.25
+      const dotAlpha = dark ? 0.62 : 0.45
+      const lineMaxAlpha = dark ? 0.44 : 0.30
 
       for (const d of dots) {
         d.x = (d.x + d.vx + W) % W

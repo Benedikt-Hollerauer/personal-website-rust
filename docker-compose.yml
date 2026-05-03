@@ -86,6 +86,10 @@ services:
       SSL_TYPE: manual
       SSL_CERT_PATH: /caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mail.benedikt-hollerauer.com/mail.benedikt-hollerauer.com.crt
       SSL_KEY_PATH: /caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/mail.benedikt-hollerauer.com/mail.benedikt-hollerauer.com.key
+    networks:
+      default:
+        aliases:
+          - mail.benedikt-hollerauer.com
     depends_on:
       - caddy
 
