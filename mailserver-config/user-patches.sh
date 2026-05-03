@@ -1,5 +1,10 @@
 #!/bin/bash
 # Runs at every container startup (docker-mailserver hook).
+
+# Prefer IPv4 for outbound SMTP delivery so domains without AAAA records don't
+# cause hard bounces. Falls back to IPv6 if IPv4 is unavailable.
+postconf -e 'smtp_address_preference = ipv4'
+
 # Copies per-user sieve scripts into each user's maildir with correct ownership
 # so Dovecot can compile and execute them.
 SIEVE_DIR="/tmp/docker-mailserver/sieve"

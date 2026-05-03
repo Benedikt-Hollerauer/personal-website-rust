@@ -6,6 +6,10 @@ use serde_json::json;
 static welcome: Dir<'_> = include_dir!("src/mailers/contact/welcome");
 static autoreply: Dir<'_> = include_dir!("src/mailers/contact/autoreply");
 
+fn site_url() -> String {
+    std::env::var("APP_HOST").unwrap_or_else(|_| "https://benedikt-hollerauer.com".to_string())
+}
+
 #[allow(clippy::module_name_repetitions)]
 pub struct Contact {}
 impl Mailer for Contact {}
@@ -21,7 +25,7 @@ impl Contact {
                   "name": name,
                   "email": sender_email,
                   "message": message,
-                  "domain": ctx.config.server.full_url()
+                  "domain": site_url()
                 }),
                 ..Default::default()
             },
@@ -38,7 +42,7 @@ impl Contact {
                 to: recipient_email.to_string(),
                 locals: json!({
                   "name": name,
-                  "domain": ctx.config.server.full_url()
+                  "domain": site_url()
                 }),
                 ..Default::default()
             },
