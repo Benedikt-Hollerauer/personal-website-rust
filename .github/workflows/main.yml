@@ -31,8 +31,7 @@ jobs:
             cd /srv/personal-website-rust
             git fetch origin main
             git checkout main
-            git clean -f -- mailserver-config/
-            sudo chown -R "$(id -u):$(id -g)" /srv/personal-website-rust
+            git clean -f
             PREV_HEAD=$(git rev-parse HEAD)
             git pull --ff-only origin main
             bash scripts/init-env.sh
