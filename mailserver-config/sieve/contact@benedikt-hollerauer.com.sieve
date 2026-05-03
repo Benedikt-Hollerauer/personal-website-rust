@@ -4,13 +4,14 @@ redirect :copy "b.hollerauer@proton.me";
 
 vacation
   :addresses ["contact@benedikt-hollerauer.com"]
-  :subject "📨 Your message is on the way."
+  :subject "Thanks for reaching out!"
   :days 1
-  "Hey there! 👋
+  "Hi,
 
-Thanks for reaching out to me. I'll get back to you shortly. In the meantime, feel free to explore my website 🌐
+Thanks for your message — I've received it and will get back to you within a day or two.
 
-https://benedikt-hollerauer.com
+Best,
+Benedikt
 
-Kind regards,
-Bene 😊";
+---
+benedikt-hollerauer.com";
