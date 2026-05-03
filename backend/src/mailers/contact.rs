@@ -7,7 +7,10 @@ static welcome: Dir<'_> = include_dir!("src/mailers/contact/welcome");
 static autoreply: Dir<'_> = include_dir!("src/mailers/contact/autoreply");
 
 fn site_url() -> String {
-    std::env::var("APP_HOST").unwrap_or_else(|_| "https://benedikt-hollerauer.com".to_string())
+    std::env::var("APP_HOST")
+        .ok()
+        .filter(|v| !v.is_empty() && !v.contains("localhost") && !v.contains("127.0.0.1"))
+        .unwrap_or_else(|| "https://benedikt-hollerauer.com".to_string())
 }
 
 #[allow(clippy::module_name_repetitions)]
