@@ -14,9 +14,9 @@
     gap: 0.2rem;
     padding: 0.35rem 0.5rem;
     border-radius: 1.4rem;
-    background: rgba(22, 27, 34, 0.95);
+    background: var(--nav-glass);
     border: 1px solid var(--border-subtle);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     pointer-events: auto;
     z-index: 8;
   }
@@ -33,16 +33,17 @@
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     transform: none !important;
   }
 
   .edgeNavItem:hover,
   .edgeNavItem:active {
     transform: none !important;
+    color: var(--accent-primary);
   }
 
-  /* Always show the icon (not the arrow) in the mobile bottom bar */
+  /* Always show the icon (not arrow) in the mobile bottom bar */
   .edgeNavItem [data-edge-arrow] {
     display: none;
   }
@@ -51,12 +52,13 @@
     opacity: 1 !important;
   }
 
-  /* Always show and re-flow the label below the icon */
+  /* Always show label below the icon */
   .edgeNavItem [data-edge-label] {
     position: static;
     transform: none !important;
     opacity: 1 !important;
     font-size: 0.6rem;
     text-align: center;
+    color: inherit;
   }
 }

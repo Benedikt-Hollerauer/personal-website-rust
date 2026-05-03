@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { EdgeArrowNav } from '../components/EdgeArrowNav'
 import { RotatingText } from '../components/RotatingText'
+import { ThemeToggle } from '../components/ThemeToggle'
 import styles from './HomePage.module.css'
 
 export function HomePage() {
@@ -9,10 +10,15 @@ export function HomePage() {
       <div className={styles.bgGlow} aria-hidden="true" />
       <EdgeArrowNav />
 
+      <div className={styles.themeToggleWrap}>
+        <ThemeToggle />
+      </div>
+
       <div className={styles.hero}>
         <div className={styles.availability}>
           <span className={styles.availabilityDot} />
-          Available for opportunities
+          <span>Available for opportunities</span>
+          <Link to="/contact" className={styles.availabilityCta}>Let's talk →</Link>
         </div>
 
         <div className={styles.nameBlock}>
@@ -29,8 +35,8 @@ export function HomePage() {
         </section>
 
         <div className={styles.actions}>
-          <Link to="/about" className={styles.btnPrimary}>About Me</Link>
-          <Link to="/contact" className={styles.btnSecondary}>Get In Touch</Link>
+          <Link to="/projects" className={styles.btnPrimary}>View Projects →</Link>
+          <Link to="/about" className={styles.btnSecondary}>About Me</Link>
         </div>
       </div>
     </main>

@@ -266,7 +266,7 @@ export function ContactPage() {
                     setValues((current) => ({ ...current, name: event.target.value }))
                   }}
                   className={styles.textField}
-                  placeholder="NAME"
+                  placeholder="Your name"
                   required
                 />
 
@@ -283,7 +283,7 @@ export function ContactPage() {
                     setValues((current) => ({ ...current, email: event.target.value }))
                   }}
                   className={styles.textField}
-                  placeholder="EMAIL"
+                  placeholder="your@email.com"
                   required
                 />
 
@@ -299,7 +299,7 @@ export function ContactPage() {
                     setValues((current) => ({ ...current, message: event.target.value }))
                   }}
                   className={styles.textArea}
-                  placeholder="MESSAGE"
+                  placeholder="What's on your mind?"
                   required
                 />
 
@@ -311,10 +311,10 @@ export function ContactPage() {
 
                 <button className={styles.submitButton} type="submit" disabled={!canSubmit || isSubmitting}>
                   <span aria-hidden="true">{SEND_ICON}</span>
-                  <span>{isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}</span>
+                  <span>{isSubmitting ? 'Sending...' : 'Send it →'}</span>
                 </button>
 
-                {submitState === 'success' && <p className={styles.successText}>Message sent. Thank you.</p>}
+                {submitState === 'success' && <p className={styles.successText}>Got it — I'll be in touch.</p>}
                 {submitState === 'error' && <p className={styles.errorText}>{formError}</p>}
                 {!recaptchaSiteKey && (
                   <p className={styles.errorText}>
@@ -329,6 +329,12 @@ export function ContactPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.55, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
+                <p className={styles.infoIntro}>
+                  Got a project idea, a question or just want to say hi? I'm easy to reach and happy to chat.
+                </p>
+
+                <div className={styles.infoDivider} />
+
                 <div className={styles.infoRow}>
                   <span className={styles.infoIcon} aria-hidden="true">
                     {LOCATION_ICON}
@@ -366,7 +372,7 @@ export function ContactPage() {
                 </div>
 
                 <div className={styles.infoDivider} />
-                <p className={styles.infoHint}>Feel free to leave me a message</p>
+                <p className={styles.infoHint}>I read every message and usually reply within a day or two.</p>
               </motion.aside>
             </BackgroundCard>
           </motion.div>

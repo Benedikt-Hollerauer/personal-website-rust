@@ -1,4 +1,11 @@
 /* =====================
+   CARD SIZE TOKENS
+   ===================== */
+.sliderShell {
+  --card-min-height: clamp(20rem, 48vh, 30rem);
+}
+
+/* =====================
    SLIDER SHELL
    ===================== */
 .sliderShell {
@@ -21,12 +28,13 @@
    ===================== */
 .projectCard {
   width: 100%;
-  height: clamp(24rem, 55vh, 36rem);
+  min-height: var(--card-min-height);
+  height: auto;
   max-width: min(68rem, 100%);
   border-radius: 1.8rem;
   padding: 0;
   background: var(--bg-surface);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
   border: 1.5px solid var(--border-medium);
   display: flex;
   flex-direction: column;
@@ -39,12 +47,11 @@
    SCROLLABLE CONTENT
    ===================== */
 .projectCardContent {
-  flex: 1;
   overflow-y: auto;
-  padding: 2.2rem 2.4rem 2rem;
+  padding: 2.4rem 2.8rem 2.4rem;
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1.6rem;
   overscroll-behavior: contain;
   scrollbar-width: none;
 }
@@ -78,12 +85,12 @@
 }
 
 .projectTitleBetter {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-size: clamp(1.85rem, 3.5vw, 2.4rem);
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   text-align: left;
   flex: 1 1 auto;
   overflow-wrap: break-word;
@@ -113,7 +120,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-secondary);
   margin: 0;
@@ -132,11 +139,11 @@
    SUMMARY
    ===================== */
 .projectSummaryBetter {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
   font-weight: 400;
   margin: 0;
-  line-height: 1.75;
+  line-height: 1.7;
   text-align: left;
   overflow-wrap: break-word;
 }
@@ -147,8 +154,7 @@
 .projectLinkButtonWrapperImprovedBetter {
   display: flex;
   justify-content: center;
-  margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .githubLinkImproved {
@@ -180,15 +186,15 @@
    KEY POINTS
    ===================== */
 .keyPointsBetterImproved {
-  padding: 1.1rem 1.2rem;
+  padding: 1.3rem 1.5rem;
   background: var(--accent-neon-dim);
   border-radius: 1rem;
   border-left: 3px solid var(--accent-primary);
 }
 
 .keyPointsBetterImproved h3 {
-  margin: 0 0 0.65rem 0;
-  font-size: 0.75rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent-neon);
   text-transform: uppercase;
@@ -205,8 +211,8 @@
 }
 
 .keyPointsBetterImproved li {
-  font-size: 0.93rem;
-  line-height: 1.55;
+  font-size: 1.02rem;
+  line-height: 1.6;
   color: var(--text-secondary);
   display: flex;
   align-items: flex-start;
@@ -258,12 +264,13 @@
    ===================== */
 .githubCard {
   width: 100%;
-  min-height: 22rem;
-  max-width: 68rem;
-  border-radius: 1.6rem;
+  min-height: var(--card-min-height);
+  height: auto;
+  max-width: min(68rem, 100%);
+  border-radius: 1.8rem;
   padding: 3rem 2.5rem;
   background: var(--accent-neon-dim);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 1.5px dashed var(--border-accent);
   display: flex;
   flex-direction: column;

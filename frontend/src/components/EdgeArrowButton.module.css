@@ -3,7 +3,7 @@
   display: grid;
   place-items: center;
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   text-decoration: none;
   pointer-events: auto;
   overflow: visible;
@@ -12,8 +12,8 @@
 }
 
 .edgeArrow:hover {
-  color: var(--accent-neon);
-  transform: scale(1.05);
+  color: var(--accent-primary);
+  transform: scale(1.08);
 }
 
 .edgeArrow:active {
@@ -21,12 +21,11 @@
 }
 
 .edgeArrow:focus-visible {
-  outline: 2px solid var(--accent-neon);
+  outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
 }
 
 .edgeArrowContent {
-  /* Grid overlay: both arrow and icon share the same cell so they stack perfectly */
   display: grid;
   place-items: center;
   line-height: 1;
@@ -68,12 +67,13 @@
   stroke-width: 1.75;
 }
 
+/* Label: always faintly visible — full opacity on hover */
 .edgeArrowLabel {
   position: absolute;
   font-size: 0.7rem;
   font-weight: 700;
   white-space: nowrap;
-  opacity: 0;
+  opacity: 0.4;
   transition: all 200ms ease;
   pointer-events: none;
   letter-spacing: 0.1em;
@@ -82,8 +82,10 @@
 
 .edgeArrow:hover .edgeArrowLabel {
   opacity: 1;
+  color: var(--accent-primary);
 }
 
+/* Label positions per direction */
 .edgeArrowLabelTop {
   bottom: -2rem;
   left: 50%;
@@ -124,6 +126,7 @@
   transform: translateY(-50%) translateX(0.3rem);
 }
 
+/* Directional placement */
 .edgeArrowTop {
   top: 1.2rem;
   left: 6rem;
@@ -172,7 +175,7 @@
   }
 }
 
-/* Mobile: return-to-home button converts to compact bottom bar */
+/* Mobile: return-to-home button → compact bottom bar */
 @media (max-width: 1100px) {
   .returnBtn {
     inset: auto 1rem max(0.85rem, env(safe-area-inset-bottom)) 1rem !important;
@@ -184,9 +187,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.2rem;
-    background: rgba(22, 27, 34, 0.95);
+    background: var(--nav-glass);
     border: 1px solid var(--border-subtle);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     color: var(--text-primary);
     padding: 0.4rem 1.5rem;
     z-index: 8;

@@ -5,6 +5,10 @@ import './styles/globals.css'
 import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 
+// Initialize theme synchronously before first render to avoid flash
+const savedTheme = localStorage.getItem('theme') ?? 'light'
+document.documentElement.setAttribute('data-theme', savedTheme)
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>

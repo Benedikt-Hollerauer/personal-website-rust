@@ -34,7 +34,11 @@ export function SkillsGallery() {
         setSkills(sorted.map((skill: any, idx: number) => {
           const label = skill.name?.trim() || skill.title?.trim() || `Skill ${idx + 1}`
           const iconUrl = skill.iconUrl?.trim() || skill.icon_path?.trim() || skill.icon?.trim() || skill.emoji?.trim()
-          const iconText = skill.icon?.trim() || skill.emoji?.trim() || label.slice(0, 2).toUpperCase()
+          const words = label.trim().split(/\s+/)
+          const fallbackAbbr = words.length > 1
+            ? words.slice(0, 2).map((w: string) => w[0].toUpperCase()).join('')
+            : label.slice(0, 2).toUpperCase()
+          const iconText = skill.icon?.trim() || skill.emoji?.trim() || fallbackAbbr
           const link = skill.link?.trim() || skill.url?.trim() || skill.href?.trim() || skill.website?.trim()
           return {
             id: String(skill.id ?? `skill-${idx}`),
@@ -103,7 +107,8 @@ export function SkillsGallery() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${aboutStyles.skillTile} ${aboutStyles.skillTileClickable}`}
-                title={`Learn more about ${skill.label}`}
+                title={skill.label}
+                aria-label={`${skill.label} — open in new tab`}
                 onClick={(event) => {
                   event.preventDefault()
                   window.open(skill.link, '_blank', 'noopener,noreferrer')
@@ -112,13 +117,15 @@ export function SkillsGallery() {
                 {skillContent}
               </a>
             ) : (
-              <BackgroundCard
-                as="article"
-                size="sm"
-                className={aboutStyles.skillTile}
-              >
-                {skillContent}
-              </BackgroundCard>
+              <div title={skill.label} aria-label={skill.label}>
+                <BackgroundCard
+                  as="article"
+                  size="sm"
+                  className={aboutStyles.skillTile}
+                >
+                  {skillContent}
+                </BackgroundCard>
+              </div>
             )}
           </div>
         )

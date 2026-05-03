@@ -32,6 +32,15 @@
   display: grid;
   gap: 0.85rem;
   min-height: 100%;
+  align-content: start;
+}
+
+.formTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 .visuallyHidden {
@@ -63,7 +72,7 @@
 .textArea::placeholder {
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .textField:focus,
@@ -137,19 +146,18 @@
 .contactInfo {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   text-align: center;
-  gap: 2rem;
+  gap: 1.25rem;
   padding: 1.2rem 0.9rem 1.2rem 1.8rem;
   border-left: 1px solid var(--border-subtle);
 }
 
 .infoRow {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  justify-content: center;
-  gap: 0.75rem;
+  display: flex;
   align-items: center;
+  gap: 0.65rem;
+  justify-content: center;
 }
 
 .infoIcon {
@@ -239,11 +247,20 @@
   display: block;
 }
 
+.infoIntro {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
 .infoHint {
-  margin: auto 0 0;
-  opacity: 0.72;
-  font-size: var(--contact-info-size);
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
   text-align: center;
+  font-style: italic;
 }
 
 .contactPageReturn {

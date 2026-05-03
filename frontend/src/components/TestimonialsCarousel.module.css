@@ -43,6 +43,16 @@
   color: var(--text-primary);
 }
 
+.name a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.name a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .role {
   font-size: 0.9rem;
   color: var(--text-secondary);
@@ -58,7 +68,7 @@
 .button {
   padding: 0.5rem 1rem;
   background: var(--accent-primary);
-  color: var(--text-primary);
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -66,8 +76,8 @@
 }
 
 .button:hover:not(:disabled) {
-  background: #388BFD;
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+  background: var(--accent-hover);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .button:disabled {
