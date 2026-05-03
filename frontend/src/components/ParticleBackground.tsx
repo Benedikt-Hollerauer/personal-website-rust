@@ -6,7 +6,7 @@ const SPEED = 0.4
 
 function getCount() {
   const w = window.innerWidth
-  if (w < 640) return 35
+  if (w < 640) return 25
   if (w < 1024) return 65
   return 120
 }
