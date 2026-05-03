@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
+import { ParticleBackground } from './components/ParticleBackground'
 import styles from './App.module.css'
 import { HomePage } from './pages/HomePage'
 import { AboutPage } from './pages/AboutPage'
@@ -168,6 +169,7 @@ function App() {
 
   return (
     <div className={styles.appCanvas}>
+      <ParticleBackground />
       <AnimatePresence mode="sync" initial={false} custom={direction}>
         <motion.div
           key={location.pathname}
