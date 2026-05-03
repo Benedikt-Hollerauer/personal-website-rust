@@ -24,24 +24,32 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          envs: SUDO_PASSWORD # Pass the environment variable to the SSH session
           command_timeout: 20m
           script: |
             set -e
-            # 1. Reclaim ownership of the directory so Git can modify files touched by Docker
+            
+            # This works now because of your visudo change
             sudo chown -R $USER:$USER /srv/personal-website-rust
+            
             git config --global --add safe.directory /srv/personal-website-rust
             cd /srv/personal-website-rust
-            # 2. Fetch latest state from GitHub
+            
+            # Fetch and Force Reset
             git fetch origin main
-            # 3. Force the local repo to exactly match the remote
             git checkout main
             git reset --hard origin/main
             git clean -fd
-            # 4. Continue with deployment
+            
+            # Capture the hash for the mailserver check
             PREV_HEAD=$(git rev-parse HEAD)
+            
+            # Build and Deploy
             bash scripts/init-env.sh
             docker compose up -d --build
             docker compose restart caddy
+            
+            # Conditional restart for mailserver
             if git diff --name-only "$PREV_HEAD" HEAD | grep -q "^mailserver-config/"; then
               docker compose restart mailserver
             fi
