@@ -27,14 +27,18 @@ jobs:
           command_timeout: 20m
           script: |
             set -e
+            # 1. Reclaim ownership of the directory so Git can modify files touched by Docker
+            sudo chown -R $USER:$USER /srv/personal-website-rust
             git config --global --add safe.directory /srv/personal-website-rust
             cd /srv/personal-website-rust
+            # 2. Fetch latest state from GitHub
             git fetch origin main
+            # 3. Force the local repo to exactly match the remote
             git checkout main
             git reset --hard origin/main
             git clean -fd
+            # 4. Continue with deployment
             PREV_HEAD=$(git rev-parse HEAD)
-            git pull --ff-only origin main
             bash scripts/init-env.sh
             docker compose up -d --build
             docker compose restart caddy
