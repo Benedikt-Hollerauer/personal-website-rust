@@ -1,1 +1,1 @@
-Thanks for reaching out, {{name}}!
+Thanks for reaching out, {{name}}! 👋
