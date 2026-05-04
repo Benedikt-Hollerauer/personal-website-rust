@@ -32,7 +32,7 @@ services:
       RECAPTCHA_SECRET_KEY: ${RECAPTCHA_SECRET_KEY}
       APP_HOST: ${APP_HOST}
     volumes:
-      - uploads:/app/uploads
+      - uploads:/usr/app/uploads
 
   frontend:
     build:

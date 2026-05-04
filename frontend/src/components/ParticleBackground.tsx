@@ -57,8 +57,8 @@ export function ParticleBackground() {
 
       const dark = isDark()
       const rgb = dark ? '139,92,246' : '124,58,237'
-      const dotAlpha = dark ? 0.40 : 0.30
-      const lineMaxAlpha = dark ? 0.27 : 0.20
+      const dotAlpha = dark ? 0.43 : 0.33
+      const lineMaxAlpha = dark ? 0.30 : 0.23
 
       for (const d of dots) {
         d.x = (d.x + d.vx + W) % W
