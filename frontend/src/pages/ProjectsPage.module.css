@@ -1,12 +1,14 @@
 .projectsPage {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--text-primary);
   overflow: hidden;
 }
 
 .projectsLayout {
   min-height: 100vh;
+  min-height: 100dvh;
   --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
   --nav-rail-bottom-extra: 3.75rem;
   --nav-rail-bottom-extra-mobile: 3.2rem;

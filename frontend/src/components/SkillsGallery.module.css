@@ -1,12 +1,12 @@
 .skillsGallery {
   padding: 3rem 2rem;
-  max-width: 1200px;
+  max-width: min(100%, 75rem);
   margin: 0 auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 40vw), 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -30,8 +30,8 @@
 }
 
 .skillIcon {
-  width: 80px;
-  height: 80px;
+  width: clamp(48px, 12vw, 80px);
+  height: clamp(48px, 12vw, 80px);
   margin-bottom: 1rem;
   object-fit: contain;
   filter: brightness(0.9);

@@ -9,6 +9,7 @@
   --nav-rail-bottom-extra: 3.75rem;
   --nav-rail-bottom-extra-mobile: 3.2rem;
   height: 100vh;
+  height: 100dvh;
   display: grid;
   align-items: stretch;
   row-gap: 2rem;

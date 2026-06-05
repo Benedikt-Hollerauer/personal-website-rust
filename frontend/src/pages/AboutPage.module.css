@@ -13,12 +13,14 @@
 .aboutPage {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--text-primary);
   overflow: hidden;
 }
 
 .aboutLayout {
   min-height: 100vh;
+  min-height: 100dvh;
   --section-block-space: clamp(1rem, 2vh, 1.5rem);
   --section-title-gap: clamp(0.5rem, 1.5vh, 1rem);
   --nav-rail-bottom-extra: 0rem;
